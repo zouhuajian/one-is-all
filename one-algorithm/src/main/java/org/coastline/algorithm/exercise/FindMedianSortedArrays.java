@@ -11,5 +11,4 @@ package org.coastline.algorithm.exercise;
 public class FindMedianSortedArrays extends Object {
 
 
-
 }

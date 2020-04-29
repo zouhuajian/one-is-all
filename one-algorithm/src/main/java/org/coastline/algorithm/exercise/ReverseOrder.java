@@ -1,5 +1,7 @@
 package org.coastline.algorithm.exercise;
 
+import org.coastline.algorithm.exercise.model.ListNode;
+
 import java.util.Stack;
 
 /**
@@ -22,7 +24,7 @@ public class ReverseOrder<T> {
             return;
         }
         ListNode<Integer> currentNode = head;
-        Stack<ListNode<Integer>> stack = new Stack<>();
+        Stack<ListNode<Integer>> stack = new Stack<ListNode<Integer>>();
         while (currentNode != null) {
             stack.push(currentNode);
             ListNode<Integer> tempNode = currentNode.next;
@@ -94,29 +96,17 @@ public class ReverseOrder<T> {
         ListNode<Integer> node = null;
         for (int i = 1; i < size; i++) {
             if (node == null) {
-                node = new ListNode<>(i);
+                node = new ListNode<Integer>(i);
                 head = node;
             } else {
                 node = node.next;
             }
-            node.next = new ListNode<>(i + 1);
+            node.next = new ListNode<Integer>(i + 1);
         }
         print(head);
         System.out.println();
         ListNode<Integer> integerListNode = reverseIterate(head);
         print(integerListNode);
     }
-
-}
-
-class ListNode<T> {
-
-    T val;
-
-    public ListNode(T val) {
-        this.val = val;
-    }
-
-    ListNode<T> next;
 
 }
