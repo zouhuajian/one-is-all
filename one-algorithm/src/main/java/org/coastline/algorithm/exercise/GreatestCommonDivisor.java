@@ -33,12 +33,34 @@ public class GreatestCommonDivisor {
      * @return
      */
     public static int calculate2(int a, int b) {
-        if (a - b == 0) {
+        if (a == b) {
             return a;
         }
         int big = Math.max(a, b);
         int small = Math.min(a, b);
         return calculate2(big - small, small);
+    }
+
+    public static int calculate3(int a, int b) {
+        if (a == b) {
+            return a;
+        }
+        // (a & 1) == 0 则说明 a 为偶数
+        if ((a & 1) == 0 && (b & 1) == 0) {
+            return calculate3(a >> 1, b >> 1) << 1;
+        } else if ((a & 1) == 0 && (b & 1) != 0) {
+            return calculate3(a >> 1, b);
+        } else if ((a & 1) != 0 && (b & 1) == 0) {
+            return calculate3(a, b >> 1);
+        } else {
+            int big = Math.max(a, b);
+            int small = Math.min(a, b);
+            return calculate3(big - small, small);
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(calculate(250000000, 5));
     }
 
 }
