@@ -1,5 +1,6 @@
 package org.coastline.algorithm.exercise;
 
+
 import org.coastline.algorithm.exercise.model.ListNode;
 
 /**
