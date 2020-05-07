@@ -1,7 +1,7 @@
 package org.coastline.algorithm.exercise;
 
 
-import org.coastline.algorithm.exercise.model.ListNode;
+import org.coastline.algorithm.exercise.entity.ListNode;
 
 import java.util.Stack;
 

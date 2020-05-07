@@ -1,4 +1,6 @@
-package org.coastline.algorithm.structure;
+package org.coastline.algorithm.exercise.lru;
+
+import org.coastline.algorithm.exercise.lru.entity.Node;
 
 import java.util.HashMap;
 
@@ -112,18 +114,4 @@ public class OneLRUCache {
     }
 }
 
-class Node {
 
-    public Node pre;
-
-    public Node next;
-
-    public String key;
-
-    public String value;
-
-    Node(String key, String value) {
-        this.key = key;
-        this.value = value;
-    }
-}
