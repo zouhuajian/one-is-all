@@ -50,15 +50,65 @@ public class OneLRUCache {
         }
     }
 
-    private void addNode(Node node) {
+    public void remove(String key) {
+        Node node = hashMap.get(key);
+        removeNode(node);
+        hashMap.remove(key);
     }
 
+    /**
+     * 刷新被访问节点的位置
+     *
+     * @param node
+     */
     private void refreshNode(Node node) {
-
+        if (node == null) {
+            return;
+        }
+        removeNode(node);
+        addNode(node);
     }
 
-    private String removeNode(Node head) {
-        return head.key;
+    /**
+     * 添加节点
+     *
+     * @param node
+     */
+    private void addNode(Node node) {
+        if (end != null) {
+            end.next = node;
+            node.pre = end;
+            node.next = null;
+        }
+        end = node;
+        if (head == null) {
+            head = node;
+        }
+    }
+
+    /**
+     * 删除节点
+     *
+     * @param node
+     * @return
+     */
+    private String removeNode(Node node) {
+        if (node == head && node == end) {
+            head = null;
+            end = null;
+        } else if (node == end) {
+            // 断开 end node 的链
+            end = end.pre;
+            end.next = null;
+        } else if (node == head) {
+            head = head.next;
+            head.pre = null;
+        } else {
+            // 中间节点
+            node.pre.next = node.next;
+            node.next.pre = node.pre;
+        }
+        return node.key;
     }
 }
 
