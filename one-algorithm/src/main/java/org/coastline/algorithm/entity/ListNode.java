@@ -1,4 +1,4 @@
-package org.coastline.algorithm.exercise.entity;
+package org.coastline.algorithm.entity;
 
 /**
  * @author Jay.H.Zou
