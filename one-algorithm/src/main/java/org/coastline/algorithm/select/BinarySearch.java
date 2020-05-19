@@ -27,7 +27,7 @@ public class BinarySearch {
             index = mid;
             return mid;
         }
-        if (low > high) {
+            if (low > high) {
             return -1;
         } else if (target > array[mid]) {
             return search(array, mid + 1, high, target);
