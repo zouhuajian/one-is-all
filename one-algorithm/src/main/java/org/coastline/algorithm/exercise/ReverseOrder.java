@@ -44,7 +44,7 @@ public class ReverseOrder<T> {
     }
 
     /**
-     * 时间复杂度：O(n)，假设 nn 是列表的长度，时间复杂度是 O(n)。
+     * 时间复杂度：O(n)，假设 n 是列表的长度，时间复杂度是 O(n)。
      * 空间复杂度：O(1)。
      *
      * @param head

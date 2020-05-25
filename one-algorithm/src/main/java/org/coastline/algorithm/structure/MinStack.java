@@ -17,7 +17,7 @@ public class MinStack {
 
     public int pop() {
         // 如果出栈的是最小值，则将 minStack 中的最小值也移除
-        if (mainStack.peek().equals(minStack.peek())) {
+        if (!minStack.isEmpty() && mainStack.peek().equals(minStack.peek())) {
             minStack.pop();
         }
         // emptyException

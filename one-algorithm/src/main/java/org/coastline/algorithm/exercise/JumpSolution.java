@@ -17,16 +17,16 @@ public class JumpSolution {
         }
         int one = 1;
         int two = 2;
-        int sum;
-        for (int i = 3; i < n; i++) {
-           sum = two;
-           two = one + two;
-           one = sum;
+        int result = 0;
+        for (int i = 3; i <= n; i++) {
+            result = one + two;
+            one = two;
+            two = result;
         }
-        return one + two;
+        return result;
     }
 
     public static void main(String[] args) {
-        System.out.println(jump(10));
+        System.out.println(jump(5));
     }
 }

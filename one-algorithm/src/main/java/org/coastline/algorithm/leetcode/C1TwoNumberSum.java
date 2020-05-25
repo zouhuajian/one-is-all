@@ -28,7 +28,7 @@ public class C1TwoNumberSum {
         while (p != null || q != null) {
             int x = p != null ? p.val : 0;
             int y = q != null ? p.val : 0;
-            int sum = x + y;
+            int sum = x + y + carry;
             carry = sum > 9 ? sum / 10 : 0;
             current.next = new ListNode<>(sum % 10);
             current = current.next;
