@@ -10,7 +10,7 @@ package org.coastline.algorithm.leetcode;
  * @author Jay.H.Zou
  * @date 2020/5/17
  */
-public class C2FindMedianSortedArrays {
+public class FindMedianSortedArrays {
 
     /**
      * O(m + n)

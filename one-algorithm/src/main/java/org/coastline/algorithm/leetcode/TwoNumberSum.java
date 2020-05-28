@@ -17,7 +17,7 @@ import org.coastline.algorithm.entity.ListNode;
  * @author Jay.H.Zou
  * @date 2020/5/12
  */
-public class C1TwoNumberSum {
+public class TwoNumberSum {
 
     public ListNode<Integer> addTwoNumbers(ListNode<Integer> l1, ListNode<Integer> l2) {
         ListNode<Integer> result = new ListNode<>(0);
