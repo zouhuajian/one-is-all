@@ -7,7 +7,7 @@ package org.coastline.algorithm.sort;
 public class QuickSort {
     public static void main(String[] args) {
         int[] arr = {5, 1, 7, 3, 20, 6, 9, 4};
-        quickSort(arr, 0, arr.length - 1);
+        quickSort2(arr, 0, arr.length - 1);
         for (int i : arr) {
             System.out.print(i + ", ");
         }
@@ -78,4 +78,29 @@ public class QuickSort {
         quickSort2(arr, startIndex, mark - 1);
         quickSort2(arr, mark + 1, endIndex);
     }
+
+
+/*    private static void sort(int[] array, int leftIndex, int rightIndex) {
+        if (leftIndex >= rightIndex) {
+            return;
+        }
+        int left = leftIndex;
+        int right = rightIndex;
+        int key = array[leftIndex];
+        while (leftIndex < rightIndex) {
+            // 从右往左
+            while (leftIndex < rightIndex && key > array[rightIndex]) {
+                rightIndex--;
+            }
+            array[leftIndex] = array[rightIndex];
+            // 从左往右
+            while (leftIndex < rightIndex && key < array[leftIndex]) {
+                leftIndex++;
+            }
+            array[rightIndex] = array[leftIndex];
+        }
+        array[leftIndex] = key;
+        sort(array, left, leftIndex - 1);
+        sort(array, rightIndex + 1, right);
+    }*/
 }

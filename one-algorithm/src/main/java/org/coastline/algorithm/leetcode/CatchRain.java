@@ -17,14 +17,14 @@ public class CatchRain {
                 if (arr[left] >= leftMax) {
                     leftMax = arr[left];
                 } else {
-                    ans += (rightMax - arr[left]);
+                    ans += leftMax - arr[left];
                 }
                 left++;
             } else {
                 if (arr[right] >= rightMax) {
                     rightMax = arr[right];
                 } else {
-                    ans += (rightMax - arr[right]);
+                    ans += rightMax - arr[right];
                 }
                 right--;
             }
