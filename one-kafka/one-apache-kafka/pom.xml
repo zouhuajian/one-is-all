@@ -7,8 +7,8 @@
 	<artifactId>one-kafka-producer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>one-kafka-producer</name>
-	<description>one-kafka-producer</description>
+	<name>one-kafka</name>
+	<description>one-kafka</description>
 
 	<properties>
 		<java.version>1.8</java.version>
