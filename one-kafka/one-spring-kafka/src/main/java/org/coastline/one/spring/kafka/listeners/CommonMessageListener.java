@@ -1,5 +1,6 @@
 package org.coastline.one.spring.kafka.listeners;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -10,8 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CommonMessageListener {
 
-    @KafkaListener(topics = {""})
-    public void listenerCommonMessage() {
+    @KafkaListener(id = "common-consumer", topics = {""}, concurrency = "1", clientIdPrefix = "my-consumer")
+    public void listenerCommonMessage(ConsumerRecord<String, String> record) {
 
     }
 
