@@ -76,11 +76,12 @@ public class RedisClusterScan {
                 count.addAndGet(keys.size());
                 process(keys);
             }
-            return null;
+            return count.get();
         }
     }
 
     public static void main(String[] args) {
+        initResource();
         Partitions partitions = CONNECTION.getPartitions();
         List<String> masterIds = new LinkedList<>();
         for (RedisClusterNode node : partitions) {
@@ -95,14 +96,16 @@ public class RedisClusterScan {
         for (String masterId : masterIds) {
             futures.add(THREAD_POOL.submit(new ScanCallback(masterId)));
         }
-
+        // 计数
+        AtomicInteger count = new AtomicInteger();
         futures.forEach(future -> {
             try {
-                future.get();
+                count.addAndGet(future.get());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
+
     }
 
 
