@@ -28,7 +28,7 @@ public class MyTableJob {
             "    'connector.topic' = 'bigdata-test', " +
             "    'connector.properties.group.id' = 'one-flink-sql',  " +
             "    'connector.startup-mode' = 'earliest-offset'," +
-            "    'connector.properties.bootstrap.servers' = '10.16.236.127:9092'," +
+            "    'connector.properties.bootstrap.servers' = 'xxxx'," +
             "    'update-mode' = 'append'," +
             "    'format.type' = 'json', " +
             "    'format.derive-schema' = 'true' " +
