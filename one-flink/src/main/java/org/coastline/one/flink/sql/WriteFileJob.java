@@ -42,7 +42,7 @@ public class WriteFileJob {
         StreamTableEnvironment tableEnvironment = StreamTableEnvironment.create(streamExecutionEnvironment, settings);
         DataStreamSource<ItemBase> itemBaseDataStreamSource = streamExecutionEnvironment.addSource(new MySource());
 
-        TableResult sinkResult = tableEnvironment.executeSql(SINK_SQL);
+        TableResult sinkResult = tableEnvironment.executeSql(SINK_PRINT);
         sinkResult.print();
 
         tableEnvironment.createTemporaryView("item_base", itemBaseDataStreamSource);
