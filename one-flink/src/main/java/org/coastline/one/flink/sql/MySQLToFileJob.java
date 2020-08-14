@@ -20,7 +20,7 @@ public class MySQLToFileJob {
             "  PRIMARY KEY (info_id) NOT ENFORCED" +
             ") WITH (" +
             "   'connector' = 'jdbc'," +
-            "   'url' = 'jdbc:mysql://xxxx:3306/redis_manager_refactor'," +
+            "   'url' = 'jdbc:mysql://server:3306/redis_manager_refactor'," +
             "   'table-name' = 'node_info_1'," +
             "   'username' = 'root'," +
             "   'password' = 'xxx'," +
@@ -28,7 +28,7 @@ public class MySQLToFileJob {
             ")";
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         EnvironmentSettings settings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
 
         TableEnvironment tableEnvironment = TableEnvironment.create(settings);
