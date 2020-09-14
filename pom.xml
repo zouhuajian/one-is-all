@@ -4,21 +4,34 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.coastline.one.jedis</groupId>
-        <artifactId>one-redis</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
-    <artifactId>one-jedis</artifactId>
+    <groupId>org.coastline.one</groupId>
+    <artifactId>one-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>3.3.0</version>
-        </dependency>
-    </dependencies>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <curator.version>5.0.0</curator.version>
+    </properties>
+
+    <modules>
+        <module>one-common</module>
+        <module>one-algorithm</module>
+        <module>one-dubbo</module>
+        <module>one-flink</module>
+        <module>one-kafka</module>
+        <module>one-redis</module>
+        <module>one-sentinel</module>
+        <module>one-zookeeper</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>

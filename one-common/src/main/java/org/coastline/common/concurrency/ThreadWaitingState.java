@@ -29,7 +29,7 @@ public class ThreadWaitingState {
             }
         };
 
-        new Thread(task, "t1").start();
+        new Thread(task, "tz1").start();
         new Thread(task, "t2").start();
     }
 }

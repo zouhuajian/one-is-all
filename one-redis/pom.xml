@@ -6,20 +6,16 @@
 
     <parent>
         <groupId>org.coastline.one</groupId>
-        <artifactId>one-parent</artifactId>
+        <artifactId>one-redis</artifactId>
         <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>one-common</artifactId>
+    <artifactId>one-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>29.0-jre</version>
-        </dependency>
-
-    </dependencies>
-
+    <modules>
+        <module>one-lettuce</module>
+        <module>one-jedis</module>
+    </modules>
 </project>
