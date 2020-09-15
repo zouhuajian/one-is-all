@@ -9,7 +9,6 @@
         <version>1.0.0-RELEASE</version>
     </parent>
 
-    <groupId>org.coastline.one.spring.kafka</groupId>
     <artifactId>one-spring-kafka</artifactId>
 
     <name>one-spring-kafka</name>
