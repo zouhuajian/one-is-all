@@ -6,13 +6,12 @@
 
     <parent>
         <groupId>org.coastline.one</groupId>
-        <artifactId>one-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <artifactId>one-is-all</artifactId>
+        <version>1.0.0-RELEASE</version>
     </parent>
 
     <artifactId>one-redis</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${project.version}</version>
 
     <modules>
         <module>one-lettuce</module>

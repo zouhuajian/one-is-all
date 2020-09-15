@@ -7,10 +7,10 @@
     <parent>
         <groupId>org.coastline.one.jedis</groupId>
         <artifactId>one-redis</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0-RELEASE</version>
     </parent>
     <artifactId>one-jedis</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-RELEASE</version>
 
     <dependencies>
         <dependency>

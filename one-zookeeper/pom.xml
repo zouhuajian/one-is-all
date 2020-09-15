@@ -6,12 +6,12 @@
 
     <parent>
         <groupId>org.coastline.one</groupId>
-        <artifactId>one-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <artifactId>one-is-all</artifactId>
+        <version>1.0.0-RELEASE</version>
     </parent>
 
     <artifactId>one-zookeeper</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-RELEASE</version>
 
     <properties>
         <curator.version>5.0.0</curator.version>
