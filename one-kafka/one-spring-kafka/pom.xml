@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.coastline.one</groupId>
         <artifactId>one-kafka</artifactId>
+        <groupId>org.coastline.one</groupId>
         <version>1.0.0-RELEASE</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>one-spring-kafka</artifactId>
-
-    <name>one-spring-kafka</name>
-    <description>one-spring-kafka</description>
-
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -34,8 +27,5 @@
             <artifactId>spring-kafka</artifactId>
             <version>2.5.3.RELEASE</version>
         </dependency>
-
-
-
     </dependencies>
 </project>

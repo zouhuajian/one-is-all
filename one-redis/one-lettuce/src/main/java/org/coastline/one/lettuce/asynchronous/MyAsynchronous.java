@@ -1,10 +1,5 @@
 package org.coastline.one.lettuce.asynchronous;
 
-import io.lettuce.core.RedisFuture;
-import io.lettuce.core.cluster.api.StatefulRedisClusterConnection;
-import io.lettuce.core.cluster.api.async.RedisAdvancedClusterAsyncCommands;
-import org.coastline.one.lettuce.connection.ConnectionUtils;
-
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -16,9 +11,7 @@ import java.util.function.Consumer;
 public class MyAsynchronous {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        StatefulRedisClusterConnection<String, String> connection = ConnectionUtils.getConnection();
-        RedisAdvancedClusterAsyncCommands<String, String> command = connection.async();
-        RedisFuture<String> one = command.get("one");
+
     }
 
     private static void showCompleteFuture1() throws ExecutionException, InterruptedException {

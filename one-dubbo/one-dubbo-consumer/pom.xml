@@ -2,23 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <parent>
-        <groupId>org.coastline.one</groupId>
         <artifactId>one-dubbo</artifactId>
+        <groupId>org.coastline.one</groupId>
         <version>1.0.0-RELEASE</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
-
-   <!-- <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.6.RELEASE</version>
-        <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;
-    </parent>-->
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.coastline.one</groupId>
     <artifactId>one-dubbo-consumer</artifactId>
 
     <properties>
@@ -81,5 +71,4 @@
         </dependency>
 
     </dependencies>
-
 </project>

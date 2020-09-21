@@ -2,18 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <parent>
-        <groupId>org.coastline.one</groupId>
         <artifactId>one-dubbo</artifactId>
+        <groupId>org.coastline.one</groupId>
         <version>1.0.0-RELEASE</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>one-dubbo-provider</artifactId>
-    <version>${project.version}</version>
 
     <properties>
         <dubbo.version>2.7.7</dubbo.version>
@@ -70,5 +66,4 @@
         </dependency>
 
     </dependencies>
-
 </project>

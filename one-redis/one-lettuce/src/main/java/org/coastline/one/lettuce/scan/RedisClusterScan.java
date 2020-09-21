@@ -1,6 +1,6 @@
 package org.coastline.one.lettuce.scan;
 
-import io.lettuce.core.KeyScanCursor;
+import  io.lettuce.core.KeyScanCursor;
 import io.lettuce.core.RedisURI;
 import io.lettuce.core.ScanArgs;
 import io.lettuce.core.api.StatefulRedisConnection;
