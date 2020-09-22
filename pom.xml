@@ -14,10 +14,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <guava.version>29.0-jre</guava.version>
+        <!--redis client-->
         <jedis.version>3.3.0</jedis.version>
         <lettuce.version>5.3.0.RELEASE</lettuce.version>
-        <curator.version>5.0.0</curator.version>
+        <!--zookeeper client-->
+        <curator.version>4.2.0</curator.version>
         <kafka.version>2.5.0</kafka.version>
+        <spring-kafka.version>2.5.3.RELEASE</spring-kafka.version>
+        <dubbo-spring.version>2.7.7</dubbo-spring.version>
+
         <spring-boot.version>2.3.3.RELEASE</spring-boot.version>
         <spring-cloud.version>2.2.2.RELEASE</spring-cloud.version>
     </properties>
@@ -63,26 +68,35 @@
                 <version>${kafka.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka</artifactId>
+                <version>${spring-kafka.version}</version>
+            </dependency>
+            <!--zookeeper client-->
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-recipes</artifactId>
+                <version>${curator.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-parent</artifactId>
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!--<dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-web</artifactId>
-                <version>${spring-boot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-actuator</artifactId>
-                <version>${spring-boot.version}</version>
-            </dependency>-->
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring.cloud.version}</version>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo-spring.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
