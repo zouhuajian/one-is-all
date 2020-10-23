@@ -14,10 +14,8 @@ public class ThreadBlockState {
             public void run() {
                 synchronized (object) {
                     long begin = System.currentTimeMillis();
-
                     long end = System.currentTimeMillis();
-
-                    // 让线程运行5分钟,会一直持有object的监视器  
+                    // 让线程运行5分钟,会一直持有object的监视器
                     while ((end - begin) <= 5 * 60 * 1000) {
 
                     }
