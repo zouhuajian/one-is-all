@@ -14,6 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <guava.version>29.0-jre</guava.version>
+        <fastjson.version>1.2.47</fastjson.version>
         <!--redis client-->
         <jedis.version>3.3.0</jedis.version>
         <lettuce.version>5.3.0.RELEASE</lettuce.version>
@@ -51,7 +52,11 @@
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
             <dependency>
                 <groupId>redis.clients</groupId>
                 <artifactId>jedis</artifactId>
