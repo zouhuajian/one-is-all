@@ -82,13 +82,13 @@ public class Cache<K, V> {
     public V get(K k) {
 //        lock.lock();
 //        try {
-            V v = cacheMap.get(k);
-            if (v == null) {
-                return null;
-            }
-            AtomicInteger count = countMap.get(k);
-            count.incrementAndGet();
-            return v;
+        V v = cacheMap.get(k);
+        if (v == null) {
+            return null;
+        }
+        AtomicInteger count = countMap.get(k);
+        count.incrementAndGet();
+        return v;
 //        } finally {
 //            lock.unlock();
 //        }
@@ -116,15 +116,15 @@ public class Cache<K, V> {
         public void run() {
 //            lock.lock();
 //            try {
-                K minKey = getMinKey();
-                if (minKey == null) {
-                    return;
-                }
-                int min = countMap.get(minKey).get();
-                if (min < trimThreshold) {
-                    countMap.remove(minKey);
-                    cacheMap.remove(minKey);
-                }
+            K minKey = getMinKey();
+            if (minKey == null) {
+                return;
+            }
+            int min = countMap.get(minKey).get();
+            if (min < trimThreshold) {
+                countMap.remove(minKey);
+                cacheMap.remove(minKey);
+            }
 //            } finally {
 //                lock.unlock();
 //            }

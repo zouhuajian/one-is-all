@@ -36,6 +36,7 @@
         <module>one-kafka</module>
         <module>one-dubbo</module>
         <module>one-flink</module>
+        <module>one-spring</module>
     </modules>
 
     <dependencyManagement>
