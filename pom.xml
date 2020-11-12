@@ -20,7 +20,7 @@
         <lettuce.version>5.3.0.RELEASE</lettuce.version>
         <!--zookeeper client-->
         <curator.version>4.2.0</curator.version>
-        <kafka.version>2.5.0</kafka.version>
+        <kafka.version>2.6.0</kafka.version>
         <spring-kafka.version>2.5.3.RELEASE</spring-kafka.version>
         <dubbo-spring.version>2.7.7</dubbo-spring.version>
 
@@ -38,6 +38,7 @@
         <module>one-dubbo</module>
         <module>one-flink</module>
         <module>one-spring</module>
+        <module>one-prometheus</module>
     </modules>
 
     <dependencyManagement>
@@ -72,6 +73,12 @@
                 <artifactId>kafka-clients</artifactId>
                 <version>${kafka.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-streams</artifactId>
+                <version>${kafka.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.kafka</groupId>
                 <artifactId>spring-kafka</artifactId>
