@@ -4,6 +4,7 @@ import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jay.H.Zou
@@ -11,20 +12,23 @@ import java.util.Properties;
  */
 public class OneKafkaProducer {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "<one or more servers separated by comma>");
-        props.put(ProducerConfig.CLIENT_ID_CONFIG, "<group_id>");
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         // ... set additional producer properties (optional)
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
-        producer.send(new ProducerRecord<>("topic", "key", "value"), new Callback() {
-            @Override
-            public void onCompletion(RecordMetadata recordMetadata, Exception e) {
+        for (int i = 0; i < 10; i++) {
+            TimeUnit.SECONDS.sleep(1);
+            producer.send(new ProducerRecord<>("order_service", "one", String.valueOf(i)), new Callback() {
+                @Override
+                public void onCompletion(RecordMetadata recordMetadata, Exception e) {
+                    System.out.println(recordMetadata);
+                }
+            });
+        }
 
-            }
-        });
     }
 
 }
