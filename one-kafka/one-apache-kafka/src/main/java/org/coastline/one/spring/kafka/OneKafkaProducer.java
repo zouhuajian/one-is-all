@@ -19,9 +19,9 @@ public class OneKafkaProducer {
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         // ... set additional producer properties (optional)
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100000; i++) {
             TimeUnit.SECONDS.sleep(1);
-            producer.send(new ProducerRecord<>("order_service", "one", String.valueOf(i)), new Callback() {
+            producer.send(new ProducerRecord<>("order_service", "one", String.valueOf((int) (Math.random() * 100))), new Callback() {
                 @Override
                 public void onCompletion(RecordMetadata recordMetadata, Exception e) {
                     System.out.println(recordMetadata);

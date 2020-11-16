@@ -3,10 +3,12 @@ package org.coastline.one.spring.kafka.stream;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KafkaStreams;
-import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
-import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.kstream.TimeWindows;
+import org.apache.kafka.streams.kstream.Windowed;
 import org.apache.kafka.streams.state.WindowStore;
 import org.coastline.one.spring.kafka.model.StreamParam;
 
@@ -58,25 +60,33 @@ public class KafkaWindowProcess {
 
         KStream<Windowed<String>, Double> windowStream = source
                 .mapValues((value) -> {
-                    System.out.println(value);
+                    // System.out.println(value);
                     return Double.valueOf(value);
                 })
                 .groupByKey()
 
-                .windowedBy(TimeWindows.of(Duration.ofSeconds(5L)))
+                .windowedBy(TimeWindows.of(Duration.ofSeconds(1L)))
                 .aggregate(() -> 0D,
                         (aggKey, newValue, value) -> newValue + value,
                         Materialized.<String, Double,
                                 WindowStore<Bytes, byte[]>>as("window-aggregate-statistics").withValueSerde((Serdes.Double())
                         ))
-                .toStream();
+                .toStream()
+                .mapValues(value -> {
+                    System.out.println("origin => " + value);
+                    return value;
+                })
+                .filter((key, value) -> value > 60)
+                .mapValues(value -> {
+                    System.err.println("after filter => " + value);
+                    return value;
+                });
         // 计算平均值
         // .mapValues((v) -> {v});
 
-
+        windowStream.foreach(((key, value) -> System.out.println(key + " = " + value)));
         //将stream写回到Kafka
-        windowStream.foreach((key, value) -> System.out.println(key + " => " + value));
-        windowStream.to("stockStatsOutput", Produced.keySerde(WindowedSerdes.timeWindowedSerdeFrom(String.class)));
+        // windowStream.to("order_service", Produced.with(WindowedSerdes.timeWindowedSerdeFrom(Double.class)));
         //创建Streams客户端
         streams = new KafkaStreams(builder.build(), properties);
     }
