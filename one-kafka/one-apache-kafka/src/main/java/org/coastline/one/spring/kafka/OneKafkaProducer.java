@@ -20,13 +20,8 @@ public class OneKafkaProducer {
         // ... set additional producer properties (optional)
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
         for (int i = 0; i < 100000; i++) {
-            TimeUnit.SECONDS.sleep(1);
-            producer.send(new ProducerRecord<>("order_service", "one", String.valueOf((int) (Math.random() * 100))), new Callback() {
-                @Override
-                public void onCompletion(RecordMetadata recordMetadata, Exception e) {
-                    System.out.println(recordMetadata);
-                }
-            });
+            TimeUnit.MILLISECONDS.sleep(100);
+            producer.send(new ProducerRecord<>("order_service", "one-" + i, "ONE-" + i));
         }
 
     }
