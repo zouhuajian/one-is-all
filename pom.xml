@@ -41,6 +41,7 @@
         <module>one-spring</module>
         <module>one-prometheus</module>
         <module>one-spring-cloud</module>
+        <module>one-beam</module>
     </modules>
 
     <dependencyManagement>

@@ -1,4 +1,4 @@
-package org.coastline.one.flink.beam;
+package org.coastline.one.beam.beam;
 
 import org.apache.beam.sdk.transforms.DoFn;
 

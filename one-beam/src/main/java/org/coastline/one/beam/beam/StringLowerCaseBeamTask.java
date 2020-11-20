@@ -1,4 +1,4 @@
-package org.coastline.one.flink.beam;
+package org.coastline.one.beam.beam;
 
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.options.PipelineOptions;
@@ -7,6 +7,9 @@ import org.apache.beam.sdk.transforms.Create;
 import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.values.PCollection;
 
+/**
+ * @author zouhuajian
+ */
 public class StringLowerCaseBeamTask {
     public static void main(String[] args) {
         // 建立选项
