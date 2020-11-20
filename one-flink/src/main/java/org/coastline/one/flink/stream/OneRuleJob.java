@@ -42,7 +42,7 @@ public class OneRuleJob {
                     }
                 })
                 .print()
-                .setParallelism(2);
+                .setParallelism(1);
 
         env.execute("influxdb-task");
     }
