@@ -1,15 +1,11 @@
 package org.coastline.one.flink.stream;
 
 import com.alibaba.fastjson.JSONObject;
-import org.apache.flink.api.common.functions.AggregateFunction;
-import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.windowing.assigners.SlidingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import org.coastline.one.flink.stream.model.AggregateData;
 
 /**
  * @author zouhuajian
@@ -38,10 +34,11 @@ public class OneRuleJob {
                 .timeWindow(Time.minutes(1), Time.seconds(10))
                 .reduce(new ReduceFunction<JSONObject>() {
                     @Override
-                    public JSONObject reduce(JSONObject value1, JSONObject value2) throws Exception {
-                        Double value = value2.getDouble("value");
-
-                        return null;
+                    public JSONObject reduce(JSONObject computed, JSONObject data) throws Exception {
+                        double newData = data.getDoubleValue("value");
+                        double computedValue = computed.getDoubleValue("value");
+                        computed.put("value", newData + computedValue);
+                        return computed;
                     }
                 })
                 .print()
