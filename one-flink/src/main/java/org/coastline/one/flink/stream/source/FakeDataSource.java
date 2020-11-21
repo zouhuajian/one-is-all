@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  * @author zouhuajian
  * @date 2020/11/20
  */
-public class NumberSource extends RichSourceFunction<JSONObject> {
+public class FakeDataSource extends RichSourceFunction<JSONObject> {
 
     private transient static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
