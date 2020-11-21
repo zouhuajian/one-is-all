@@ -13,6 +13,6 @@ public class AlertEmailSinkFunction implements SinkFunction<AggregateData> {
     @Override
     public void invoke(AggregateData value, Context context) throws Exception {
         // TODO: 如果达到阈值，则发送告警，发送成功与否都存入 DB
-        System.out.println("Email: " + JSONObject.toJSONString(value));
+        System.err.println("Email: " + JSONObject.toJSONString(value));
     }
 }

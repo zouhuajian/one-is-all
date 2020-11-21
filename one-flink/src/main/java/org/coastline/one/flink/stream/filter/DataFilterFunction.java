@@ -1,4 +1,4 @@
-package org.coastline.one.flink.stream;
+package org.coastline.one.flink.stream.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.flink.api.common.functions.FilterFunction;

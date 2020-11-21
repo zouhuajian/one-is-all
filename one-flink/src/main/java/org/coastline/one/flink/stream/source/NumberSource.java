@@ -1,4 +1,4 @@
-package org.coastline.one.flink.stream;
+package org.coastline.one.flink.stream.source;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
