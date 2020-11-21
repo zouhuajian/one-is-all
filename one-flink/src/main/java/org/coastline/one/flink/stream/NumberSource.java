@@ -13,16 +13,24 @@ import java.util.concurrent.TimeUnit;
  */
 public class NumberSource extends RichSourceFunction<JSONObject> {
 
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private transient static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
     @Override
     public void run(SourceContext<JSONObject> ctx) throws Exception {
         for (int i = 0; i < 10000; i++) {
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.MILLISECONDS.sleep(500);
             JSONObject data = new JSONObject();
-            data.put("host", "127.0.0.1");
-            data.put("value", 1);
-            data.put("time", dateTimeFormatter.format(LocalDateTime.now()));
+            if (i % 2 == 0) {
+                data.put("host", "127.0.0.1");
+                data.put("value", 1);
+            } else {
+                data.put("host", "127.0.0.2");
+                data.put("value", 22);
+            }
+
+            String time = dateTimeFormatter.format(LocalDateTime.now());
+            data.put("time", time);
+            data.put("count", 1);
             ctx.collect(data);
         }
     }
