@@ -45,5 +45,9 @@ public class CompareJson {
             }
 
         });
+        JSONArray origin = new JSONArray();
+        JSONArray replay = new JSONArray();
+        origin.equals(replay);
     }
+
 }
