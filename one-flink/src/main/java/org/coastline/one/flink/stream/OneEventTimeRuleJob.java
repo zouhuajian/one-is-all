@@ -1,6 +1,7 @@
 package org.coastline.one.flink.stream;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -58,15 +59,15 @@ public class OneEventTimeRuleJob {
                 return jsonObject;
             }
         }).setParallelism(4)
-                .keyBy((KeySelector<JSONObject, String>) value -> value.getString("host"))
+                .keyBy((KeySelector<JSONObject, String>) value -> value.getString("host"), TypeInformation.of(String.class))
                 // 设置滑动窗口/滚动窗口，5秒窗口，1秒步长
-                .timeWindow(Time.seconds(2), Time.milliseconds(200))
+                .timeWindow(Time.seconds(5), Time.milliseconds(100))
                 // 增量式累加
                 .reduce(new RuleReduceTimeFunction()).setParallelism(4).name("reduce_process")
                 // 使用增量式的结果进行计算
-                .process(new RuleProcessFunction()).setParallelism(1).name("process_all_data")
+                .process(new RuleProcessFunction()).setParallelism(2).name("process_all_data")
                 // add sink operator
-                .addSink(new NullSinkFunction()).name("null_sink");
+                .addSink(new NullSinkFunction()).setParallelism(1).name("null_sink");
 
         env.execute("one-rule-time-job");
     }
