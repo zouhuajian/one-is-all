@@ -44,7 +44,7 @@ public class OneRuleJob {
                         out.collect(value);
                         ctx.output(outputTag, value);
                     }
-                }).setParallelism(2).name("side_out");
+                }).setParallelism(8).name("side_out");
 
         // 分出一个支流并存储进 HBase/Others
         DataStream<JSONObject> sideOutput = singleOutputStream.getSideOutput(outputTag);
@@ -54,11 +54,11 @@ public class OneRuleJob {
         SingleOutputStreamOperator<AggregateData> outputStream = singleOutputStream
                 .keyBy((KeySelector<JSONObject, String>) value -> value.getString("host"))
                 // 设置滑动窗口/滚动窗口，5秒窗口，1秒步长
-                .timeWindow(Time.seconds(5), Time.seconds(1))
+                .timeWindow(Time.seconds(2), Time.seconds(1))
                 // 增量式累加
-                .reduce(new RuleReduceFunction()).setParallelism(2).name("reduce_process")
+                .reduce(new RuleReduceFunction()).setParallelism(6).name("reduce_process")
                 // 使用增量式的结果进行计算
-                .process(new RuleProcessFunction()).setParallelism(4).name("process_all_data")
+                .process(new RuleProcessFunction()).setParallelism(8).name("process_all_data")
                 // 过滤没有超过阈值的数据
                 .filter(new CompareFilterFunction()).setParallelism(1).name("filter_good");
 
