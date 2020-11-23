@@ -21,7 +21,7 @@ public class FakeDataTimeSource extends RichSourceFunction<JSONObject> {
             TimeUnit.MILLISECONDS.sleep(10);
             JSONObject data = new JSONObject();
             data.put("source", "11111111");
-            data.put("host", "127.0.0.1" + i % 6);
+            data.put("host",  (i % 8));
             data.put("value", 1);
             String time = dateTimeFormatter.format(LocalDateTime.now());
             data.put("time", time);

@@ -58,14 +58,14 @@ public class OneEventTimeRuleJob {
             public JSONObject map2(JSONObject jsonObject) throws Exception {
                 return jsonObject;
             }
-        }).setParallelism(4)
+        }).setParallelism(6)
                 .keyBy((KeySelector<JSONObject, String>) value -> value.getString("host"), TypeInformation.of(String.class))
                 // 设置滑动窗口/滚动窗口，5秒窗口，1秒步长
                 .timeWindow(Time.seconds(5), Time.milliseconds(100))
                 // 增量式累加
-                .reduce(new RuleReduceTimeFunction()).setParallelism(4).name("reduce_process")
+                .reduce(new RuleReduceTimeFunction()).setParallelism(10).name("reduce_process")
                 // 使用增量式的结果进行计算
-                .process(new RuleProcessFunction()).setParallelism(2).name("process_all_data")
+                .process(new RuleProcessFunction()).setParallelism(16).name("process_all_data")
                 // add sink operator
                 .addSink(new NullSinkFunction()).setParallelism(1).name("null_sink");
 
