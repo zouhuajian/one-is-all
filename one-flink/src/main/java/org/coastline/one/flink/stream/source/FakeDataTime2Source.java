@@ -18,10 +18,10 @@ public class FakeDataTime2Source extends RichSourceFunction<JSONObject> {
     @Override
     public void run(SourceContext<JSONObject> ctx) throws Exception {
         for (int i = 0; i < 1000000; i++) {
-            TimeUnit.MILLISECONDS.sleep((5));
+            TimeUnit.MILLISECONDS.sleep((50));
             JSONObject data = new JSONObject();
             data.put("source", "22222222");
-            data.put("host",  (i % 8));
+            data.put("host", 1);
             data.put("value", 1);
             String time = dateTimeFormatter.format(LocalDateTime.now());
             data.put("time", time);
