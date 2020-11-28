@@ -20,21 +20,13 @@ public class RuleReduceTimeFunction implements ReduceFunction<JSONObject> {
 
     @Override
     public JSONObject reduce(JSONObject computed, JSONObject data) throws Exception {
-        /*if (cache.size() % 10 == 0) {
-            System.out.println(cache);
-            System.out.println("================================================");
-            cache.clear();
-        }
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("source", data.getString("source"));
-        jsonObject.put("time",data.getString("time").split(" ")[1]);
-        cache.add(jsonObject);*/
-        System.out.println(data);
-        double newData = data.getDoubleValue("value");
-        double computedValue = computed.getDoubleValue("value");
-        computed.put("value", newData + computedValue);
         computed.put("count", computed.getDoubleValue("count") + 1);
+        /*Long currentTme = data.getLong("time");
+        Long lastTime = computed.getLong("time");
+        if (lastTime > currentTme) {
+            System.err.println("comp: " + computed.getString("source") + " " + computed.getString("time") + " index=" + computed.getInteger("index")
+                    + " \ndata: " + data.getString("source") + " " + data.getString("time") + " index=" + data.getInteger("index"));
+        }*/
         computed.put("time", data.getString("time"));
         return computed;
     }
