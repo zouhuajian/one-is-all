@@ -8,6 +8,7 @@ import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 import org.apache.flink.streaming.api.functions.windowing.ProcessAllWindowFunction;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -66,7 +67,7 @@ public class OneWaterMarkJob {
                         // 而实际发射的水印为通过覆写extractTimestamp()方法提取出来的时间戳减去乱序区间，
                         // 相当于让水印把步调“放慢一点”。
                         // 这是Flink为迟到数据提供的第一重保障。
-                        .<JSONObject>forBoundedOutOfOrderness(Duration.ofSeconds(3))
+                        .<JSONObject>forBoundedOutOfOrderness(Duration.ofMillis(3))
                         // 许用户在配置的时间内（即超时时间内）没有记录到达时将一个流标记为空闲。这样就意味着下游的数据不需要等待水印的到来。
                         //.withIdleness(Duration.ofMinutes(1))
                         .withTimestampAssigner(new SerializableTimestampAssigner<JSONObject>() {
@@ -105,9 +106,16 @@ public class OneWaterMarkJob {
                                 long start = timeWindow.getStart();
                                 long end = timeWindow.getEnd();
                                 System.err.println("sta: " + Instant.ofEpochMilli(start).toString() + "  end: " + Instant.ofEpochMilli(end).toString());
-                                System.out.println(elements);
+                                System.err.println(elements);
+                                out.collect(elements.iterator().next());
                             }
                         })
+                .process(new ProcessFunction<JSONObject, JSONObject>() {
+                    @Override
+                    public void processElement(JSONObject value, Context ctx, Collector<JSONObject> out) throws Exception {
+                        System.out.println(value);
+                    }
+                })
                 /*.apply(new AllWindowFunction<JSONObject, Object, TimeWindow>() {
                     @Override
                     public void apply(TimeWindow timeWindow, Iterable<JSONObject> iterable, Collector<Object> collector) throws Exception {
