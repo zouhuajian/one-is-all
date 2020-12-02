@@ -7,26 +7,17 @@ import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.TimeCharacteristic;
-import org.apache.flink.streaming.api.datastream.ConnectedStreams;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.ProcessFunction;
-import org.apache.flink.streaming.api.functions.co.RichCoMapFunction;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
-import org.apache.flink.streaming.api.functions.windowing.AllWindowFunction;
-import org.apache.flink.streaming.api.functions.windowing.ReduceApplyAllWindowFunction;
+import org.apache.flink.streaming.api.functions.windowing.ProcessAllWindowFunction;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
-import org.coastline.one.flink.stream.sink.NullSinkFunction;
-import org.coastline.one.flink.stream.source.FakeDataTime2Source;
-import org.coastline.one.flink.stream.source.FakeDataTimeSource;
-import org.coastline.one.flink.stream.window.RuleProcessFunction;
-import org.coastline.one.flink.stream.window.RuleReduceTimeFunction;
 
-import java.time.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -35,7 +26,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class OneWaterMarkJob {
 
+
     public static void main(String[] args) throws Exception {
+        System.out.println("job start time: " + LocalDateTime.now().minusDays(1));
         Configuration configuration = new Configuration();
         configuration.setInteger("rest.port", 8002);
         ExecutionConfig config = new ExecutionConfig();
@@ -47,12 +40,17 @@ public class OneWaterMarkJob {
 
             @Override
             public void run(SourceContext<JSONObject> sourceContext) throws Exception {
-                for (int i = 0; i < 10; i++) {
-                    TimeUnit.SECONDS.sleep(1);
+                System.out.println("source start time: " + LocalDateTime.now().minusDays(1));
+                for (int i = 0; i < 100; i++) {
+                    TimeUnit.MILLISECONDS.sleep(200);
                     Instant instant = LocalDateTime.now().minusDays(1).toInstant(ZoneOffset.UTC);
                     long time = instant.toEpochMilli();
                     JSONObject data = new JSONObject();
                     data.put("time", time);
+                    /*if (i == 3) {
+                        data.put("time", LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli());
+                    }*/
+
                     data.put("format_time", instant.toString());
                     data.put("value", i);
                     sourceContext.collect(data);
@@ -68,7 +66,7 @@ public class OneWaterMarkJob {
                         // 而实际发射的水印为通过覆写extractTimestamp()方法提取出来的时间戳减去乱序区间，
                         // 相当于让水印把步调“放慢一点”。
                         // 这是Flink为迟到数据提供的第一重保障。
-                        .<JSONObject>forBoundedOutOfOrderness(Duration.ofSeconds(0))
+                        .<JSONObject>forBoundedOutOfOrderness(Duration.ofSeconds(3))
                         // 许用户在配置的时间内（即超时时间内）没有记录到达时将一个流标记为空闲。这样就意味着下游的数据不需要等待水印的到来。
                         //.withIdleness(Duration.ofMinutes(1))
                         .withTimestampAssigner(new SerializableTimestampAssigner<JSONObject>() {
@@ -81,12 +79,48 @@ public class OneWaterMarkJob {
                 )
                 //.keyBy((KeySelector<JSONObject, String>) value -> value.getString("host"), TypeInformation.of(String.class))
                 // 设置滑动窗口/滚动窗口，5秒窗口，1秒步长
-                .timeWindowAll(Time.seconds(3))
-
+                .timeWindowAll(Time.seconds(5))
+                /*.process(new ProcessAllWindowFunction<JSONObject, Object, TimeWindow>() {
+                    @Override
+                    public void process(Context context, Iterable<JSONObject> elements, Collector<Object> out) throws Exception {
+                        TimeWindow window = context.window();
+                        long start = window.getStart();
+                        long end = window.getEnd();
+                        System.err.println("sta: " + Instant.ofEpochMilli(start).toString() + "  end: " + Instant.ofEpochMilli(end).toString());
+                        System.out.println(elements);
+                    }
+                })*/
+                .reduce(new ReduceFunction<JSONObject>() {
+                            @Override
+                            public JSONObject reduce(JSONObject jsonObject, JSONObject t1) throws Exception {
+                                // System.out.println(jsonObject.toJSONString() + " " + t1.toJSONString());
+                                jsonObject.put("count", jsonObject.getIntValue("count") + 1);
+                                return jsonObject;
+                            }
+                        },
+                        new ProcessAllWindowFunction<JSONObject, JSONObject, TimeWindow>() {
+                            @Override
+                            public void process(Context context, Iterable<JSONObject> elements, Collector<JSONObject> out) throws Exception {
+                                TimeWindow timeWindow = context.window();
+                                long start = timeWindow.getStart();
+                                long end = timeWindow.getEnd();
+                                System.err.println("sta: " + Instant.ofEpochMilli(start).toString() + "  end: " + Instant.ofEpochMilli(end).toString());
+                                System.out.println(elements);
+                            }
+                        })
+                /*.apply(new AllWindowFunction<JSONObject, Object, TimeWindow>() {
+                    @Override
+                    public void apply(TimeWindow timeWindow, Iterable<JSONObject> iterable, Collector<Object> collector) throws Exception {
+                        long start = timeWindow.getStart();
+                        long end = timeWindow.getEnd();
+                        System.err.println("sta: " + Instant.ofEpochMilli(start).toString() + "  end: " + Instant.ofEpochMilli(end).toString());
+                        System.out.println(iterable);
+                    }
+                })*/
                 // 允许窗口延迟销毁，等待1分钟内，如果再有数据进入，则会触发新的计算
                 //.allowedLateness(Time.minutes(1))
                 // 增量式累加
-                .reduce(new ReduceFunction<JSONObject>() {
+                /*.reduce(new ReduceFunction<JSONObject>() {
                     @Override
                     public JSONObject reduce(JSONObject computed, JSONObject data) throws Exception {
                         System.out.println("comp: " + computed.toJSONString());
@@ -102,7 +136,7 @@ public class OneWaterMarkJob {
                     System.out.println(context);
                         System.err.println("aggr: " + aggregate.toJSONString());
                     }
-                }).name("process_all_data")
+                }).name("process_all_data")*/
                 // add sink operator
                 .print();
 
