@@ -81,16 +81,7 @@ public class OneWaterMarkJob {
                 //.keyBy((KeySelector<JSONObject, String>) value -> value.getString("host"), TypeInformation.of(String.class))
                 // 设置滑动窗口/滚动窗口，5秒窗口，1秒步长
                 .timeWindowAll(Time.seconds(5))
-                /*.process(new ProcessAllWindowFunction<JSONObject, Object, TimeWindow>() {
-                    @Override
-                    public void process(Context context, Iterable<JSONObject> elements, Collector<Object> out) throws Exception {
-                        TimeWindow window = context.window();
-                        long start = window.getStart();
-                        long end = window.getEnd();
-                        System.err.println("sta: " + Instant.ofEpochMilli(start).toString() + "  end: " + Instant.ofEpochMilli(end).toString());
-                        System.out.println(elements);
-                    }
-                })*/
+
                 .reduce(new ReduceFunction<JSONObject>() {
                             @Override
                             public JSONObject reduce(JSONObject jsonObject, JSONObject t1) throws Exception {
@@ -116,15 +107,6 @@ public class OneWaterMarkJob {
                         System.out.println(value);
                     }
                 })
-                /*.apply(new AllWindowFunction<JSONObject, Object, TimeWindow>() {
-                    @Override
-                    public void apply(TimeWindow timeWindow, Iterable<JSONObject> iterable, Collector<Object> collector) throws Exception {
-                        long start = timeWindow.getStart();
-                        long end = timeWindow.getEnd();
-                        System.err.println("sta: " + Instant.ofEpochMilli(start).toString() + "  end: " + Instant.ofEpochMilli(end).toString());
-                        System.out.println(iterable);
-                    }
-                })*/
                 // 允许窗口延迟销毁，等待1分钟内，如果再有数据进入，则会触发新的计算
                 //.allowedLateness(Time.minutes(1))
                 // 增量式累加

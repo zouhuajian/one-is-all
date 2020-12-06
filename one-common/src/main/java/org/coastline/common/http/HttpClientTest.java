@@ -1,11 +1,13 @@
 package org.coastline.common.http;
 
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.config.SocketConfig;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -15,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class HttpClientTest {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         CloseableHttpClient httpClient;
 
         PoolingHttpClientConnectionManager connManager;
@@ -40,7 +42,15 @@ public class HttpClientTest {
                 .setConnectionManager(connManager)
                 .setMaxConnPerRoute(4)
                 //.setMaxConnTotal(10)
-                .setConnectionTimeToLive(1,TimeUnit.HOURS)
+                .setConnectionTimeToLive(1, TimeUnit.HOURS)
                 .build();
+        for (int i = 0; i < 10; i++) {
+            HttpGet httpGet = new HttpGet("localhost:8080/first");
+            String responseBody = httpClient.execute(httpGet, httpResponse -> {
+                System.out.println(httpResponse);
+                return null;
+            });
+        }
+
     }
 }
