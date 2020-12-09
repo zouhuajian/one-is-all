@@ -1,8 +1,11 @@
 package org.coastline.common.http;
 
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.config.SocketConfig;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -17,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class HttpClientTest {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         CloseableHttpClient httpClient;
 
         PoolingHttpClientConnectionManager connManager;
@@ -38,18 +41,26 @@ public class HttpClientTest {
         connManager.setDefaultMaxPerRoute(10);
         httpClient = HttpClientBuilder.create()
                 .setDefaultRequestConfig(requestConfig)
-                .setDefaultSocketConfig(socketConfig)
-                .setConnectionManager(connManager)
-                .setMaxConnPerRoute(4)
-                //.setMaxConnTotal(10)
+                /*.setDefaultSocketConfig(socketConfig)
+                .setConnectionManager(connManager)*/
                 .setConnectionTimeToLive(1, TimeUnit.HOURS)
                 .build();
         for (int i = 0; i < 10; i++) {
-            HttpGet httpGet = new HttpGet("localhost:8080/first");
-            String responseBody = httpClient.execute(httpGet, httpResponse -> {
+            TimeUnit.SECONDS.sleep(1);
+            HttpPost post = new HttpPost("");
+            post.setEntity(new StringEntity("{\n" +
+                    "    \"msgtype\": \"text\",\n" +
+                    "    \"text\": {\n" +
+                    "        \"content\": \"广州今日天气：29度，大部分多云，降雨概率：60%\"\n" +
+                    "    }\n" +
+                    "}\n", ContentType.APPLICATION_JSON));
+            /*String responseBody = httpClient.execute(post, httpResponse -> {
                 System.out.println(httpResponse);
                 return null;
-            });
+            });*/
+
+            CloseableHttpResponse execute = httpClient.execute(post);
+            System.out.println(execute);
         }
 
     }

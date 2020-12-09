@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FirstController {
 
     @RequestMapping("/first")
-    public Object first() {
+    public String first() {
         return "first controller";
     }
 
