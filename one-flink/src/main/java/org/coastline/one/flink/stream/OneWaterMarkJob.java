@@ -43,7 +43,7 @@ public class OneWaterMarkJob {
             public void run(SourceContext<JSONObject> sourceContext) throws Exception {
                 System.out.println("source start time: " + LocalDateTime.now().minusDays(1));
                 for (int i = 0; i < 100; i++) {
-                    TimeUnit.MILLISECONDS.sleep(200);
+                    TimeUnit.MILLISECONDS.sleep(100);
                     Instant instant = LocalDateTime.now().minusDays(1).toInstant(ZoneOffset.UTC);
                     long time = instant.toEpochMilli();
                     JSONObject data = new JSONObject();
@@ -85,7 +85,6 @@ public class OneWaterMarkJob {
                 .reduce(new ReduceFunction<JSONObject>() {
                             @Override
                             public JSONObject reduce(JSONObject jsonObject, JSONObject t1) throws Exception {
-                                // System.out.println(jsonObject.toJSONString() + " " + t1.toJSONString());
                                 jsonObject.put("count", jsonObject.getIntValue("count") + 1);
                                 return jsonObject;
                             }
@@ -109,24 +108,6 @@ public class OneWaterMarkJob {
                 })
                 // 允许窗口延迟销毁，等待1分钟内，如果再有数据进入，则会触发新的计算
                 //.allowedLateness(Time.minutes(1))
-                // 增量式累加
-                /*.reduce(new ReduceFunction<JSONObject>() {
-                    @Override
-                    public JSONObject reduce(JSONObject computed, JSONObject data) throws Exception {
-                        System.out.println("comp: " + computed.toJSONString());
-                        System.out.println("data: " + data.toJSONString());
-                        return data;
-                    }
-                }).name("reduce_process")
-                // 使用增量式的结果进行计算
-                .process(new ProcessFunction<JSONObject, JSONObject>() {
-                    @Override
-                    public void processElement(JSONObject aggregate, Context context, Collector<JSONObject> collector) throws Exception {
-                        long l = context.timerService().currentWatermark();
-                    System.out.println(context);
-                        System.err.println("aggr: " + aggregate.toJSONString());
-                    }
-                }).name("process_all_data")*/
                 // add sink operator
                 .print();
 
