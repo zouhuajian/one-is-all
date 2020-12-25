@@ -81,7 +81,6 @@ public class OneWaterMarkJob {
                 //.keyBy((KeySelector<JSONObject, String>) value -> value.getString("host"), TypeInformation.of(String.class))
                 // 设置滑动窗口/滚动窗口，5秒窗口，1秒步长
                 .timeWindowAll(Time.seconds(5))
-
                 .reduce(new ReduceFunction<JSONObject>() {
                             @Override
                             public JSONObject reduce(JSONObject jsonObject, JSONObject t1) throws Exception {
