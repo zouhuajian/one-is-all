@@ -42,6 +42,7 @@
         <module>one-prometheus</module>
         <module>one-spring-cloud</module>
         <module>one-beam</module>
+        <module>one-flink-stream</module>
     </modules>
 
     <dependencyManagement>

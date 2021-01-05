@@ -1,5 +1,6 @@
 package org.coastline.one.spring.controller;
 
+import org.coastline.one.spring.annotation.RequestMonitor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 /**
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class FirstController {
 
-
+    @RequestMonitor("firsttttt")
     @RequestMapping("/first")
     public String first() {
         return "first controller";

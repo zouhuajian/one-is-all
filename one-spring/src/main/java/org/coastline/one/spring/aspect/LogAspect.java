@@ -13,8 +13,8 @@ import java.util.Arrays;
  * @author Jay.H.Zou
  * @date 2020/11/13
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class LogAspect {
 
     @Pointcut("execution(public * org.coastline.one.spring.controller.*.*(..))")

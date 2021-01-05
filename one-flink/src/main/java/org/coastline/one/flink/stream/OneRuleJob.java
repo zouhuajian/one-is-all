@@ -33,6 +33,8 @@ public class OneRuleJob {
         Configuration configuration = new Configuration();
         configuration.setInteger("rest.port", 8002);
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(configuration);
+        StreamExecutionEnvironment.createRemoteEnvironment("", 1, "");
+
         env.setParallelism(1);
         // add source
         SingleOutputStreamOperator<JSONObject> singleOutputStream = env.addSource(new FakeDataSource())
