@@ -13,8 +13,8 @@ import javax.servlet.http.HttpSession;
  * @author Jay.H.Zou
  * @date 2020/12/25
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class RequestInterceptor {
 
     public RequestInterceptor() {

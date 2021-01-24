@@ -11,6 +11,6 @@ import java.lang.instrument.Instrumentation;
 public class ByteBuddyTest {
     public static void main(String[] args) {
         Instrumentation instrumentation = ByteBuddyAgent.install();
-
+        System.out.println(System.getProperty("java.home"));
     }
 }

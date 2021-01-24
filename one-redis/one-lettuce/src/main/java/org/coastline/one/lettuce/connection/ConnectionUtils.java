@@ -19,7 +19,7 @@ public class ConnectionUtils {
     }
 
     public static StatefulRedisClusterConnection<String, String> getConnection() {
-        RedisURI redisUri = RedisURI.Builder.redis("192.168.1.112").withPort(9000).build();
+        RedisURI redisUri = RedisURI.Builder.redis("192.168.3.112").withPort(9000).build();
         client = RedisClusterClient.create(redisUri);
         connect = client.connect();
         return connect;
