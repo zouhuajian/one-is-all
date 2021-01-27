@@ -1,28 +1,15 @@
 package org.coastline.one.flink.stream;
 
-import com.alibaba.fastjson.JSONObject;
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
-import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.streaming.api.TimeCharacteristic;
+import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.ProcessFunction;
-import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
-import org.apache.flink.streaming.api.functions.windowing.ProcessAllWindowFunction;
-import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
-import org.apache.flink.util.Collector;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jay.H.Zou
@@ -41,8 +28,12 @@ public class OneKafkaJob {
         Properties properties = new Properties();
         properties.setProperty("bootstrap.servers", "localhost:9092");
         properties.setProperty("group.id", "test");
-        env.addSource(new FlinkKafkaConsumer<>("topic", new SimpleStringSchema(), properties)).print();
+        DataStreamSource<String> dataStreamSource = env.addSource(new FlinkKafkaConsumer<>("topic", new SimpleStringSchema(), properties));
 
+        // 至少一次
+        FlinkKafkaProducer<String> myProducer = new FlinkKafkaProducer<String>("my-topic", new SimpleStringSchema(), properties);
+        dataStreamSource.addSink(myProducer);
+        dataStreamSource.print();
         env.execute("one-kafka-job");
     }
 }
