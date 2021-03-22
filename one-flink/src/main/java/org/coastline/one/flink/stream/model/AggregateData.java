@@ -14,7 +14,12 @@ public class AggregateData {
 
     private Double value;
 
-    private Double computedValue;
+
+    public AggregateData(String host, String time, Double value) {
+        this.host = host;
+        this.time = time;
+        this.value = value;
+    }
 
     public String getHost() {
         return host;
@@ -48,14 +53,6 @@ public class AggregateData {
         this.value = value;
     }
 
-    public Double getComputedValue() {
-        return computedValue;
-    }
-
-    public void setComputedValue(Double computedValue) {
-        this.computedValue = computedValue;
-    }
-
     @Override
     public String toString() {
         return "AggregateData{" +
@@ -63,7 +60,6 @@ public class AggregateData {
                 ", time='" + time + '\'' +
                 ", count=" + count +
                 ", value=" + value +
-                ", computedValue=" + computedValue +
                 '}';
     }
 }

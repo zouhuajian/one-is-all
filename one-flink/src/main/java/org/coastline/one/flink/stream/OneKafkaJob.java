@@ -28,12 +28,13 @@ public class OneKafkaJob {
         Properties properties = new Properties();
         properties.setProperty("bootstrap.servers", "localhost:9092");
         properties.setProperty("group.id", "test");
-        DataStreamSource<String> dataStreamSource = env.addSource(new FlinkKafkaConsumer<>("topic", new SimpleStringSchema(), properties));
+        DataStreamSource<String> dataStreamSource = env.addSource(new FlinkKafkaConsumer<>("one-topic", new SimpleStringSchema(), properties));
 
         // 至少一次
-        FlinkKafkaProducer<String> myProducer = new FlinkKafkaProducer<String>("my-topic", new SimpleStringSchema(), properties);
+        FlinkKafkaProducer<String> myProducer = new FlinkKafkaProducer<>("new-topic", new SimpleStringSchema(), properties);
         dataStreamSource.addSink(myProducer);
         dataStreamSource.print();
         env.execute("one-kafka-job");
     }
+
 }
