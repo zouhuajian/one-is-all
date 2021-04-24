@@ -7,26 +7,12 @@
         <groupId>org.coastline.one</groupId>
         <version>1.0.0-RELEASE</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>one-spring</artifactId>
+    <packaging>pom</packaging>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>one-spring-kafka</module>
+    </modules>
 </project>
