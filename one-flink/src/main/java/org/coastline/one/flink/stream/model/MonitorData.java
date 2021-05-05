@@ -12,6 +12,8 @@ public class MonitorData {
 
     private String name;
 
+    private String value;
+
     public MonitorData(long time, long duration, String name) {
         this.time = time;
         this.duration = duration;
@@ -40,5 +42,23 @@ public class MonitorData {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "MonitorData{" +
+                "time=" + time +
+                ", duration=" + duration +
+                ", name='" + name + '\'' +
+                ", value='" + value + '\'' +
+                '}';
     }
 }
