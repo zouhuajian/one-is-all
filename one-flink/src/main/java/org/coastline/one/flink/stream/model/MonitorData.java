@@ -14,9 +14,16 @@ public class MonitorData {
 
     private String value;
 
+
+
     public MonitorData(long time, long duration, String name) {
         this.time = time;
         this.duration = duration;
+        this.name = name;
+    }
+
+    public MonitorData(long time, String name) {
+        this.time = time;
         this.name = name;
     }
 
