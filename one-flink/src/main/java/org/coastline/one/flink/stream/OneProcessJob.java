@@ -1,14 +1,12 @@
 package org.coastline.one.flink.stream;
 
-import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.calcite.shaded.com.google.common.collect.Lists;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
+import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
-import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
@@ -40,8 +38,8 @@ public class OneProcessJob {
             @Override
             public void run(SourceContext<MonitorData> ctx) throws Exception {
                 for (int i = 0; i < 1000000000000L; i++) {
-                    TimeUnit.MILLISECONDS.sleep(5);
-                    MonitorData data = new MonitorData(TimeUtil.getCurrentTime(), "name_" + i % 4);
+                    TimeUnit.MILLISECONDS.sleep(1);
+                    MonitorData data = new MonitorData(TimeUtil.getCurrentTime(), "name_" + i % 2);
                     ctx.collect(data);
                 }
             }
@@ -53,20 +51,28 @@ public class OneProcessJob {
 
                 .keyBy((KeySelector<MonitorData, String>) data -> data.getName())
                 // 设置滑动窗口/滚动窗口，5秒窗口，1秒步长
-                .timeWindow(Time.seconds(1))
+                .timeWindow(Time.milliseconds(200))
                 .process(new ProcessWindowFunction<MonitorData, List<MonitorData>, String, TimeWindow>() {
                     @Override
                     public void process(String key, Context context, Iterable<MonitorData> elements, Collector<List<MonitorData>> out) throws Exception {
                         out.collect(Lists.newArrayList(elements));
                     }
-                }).name("pre_process").setParallelism(4)
+                }).name("pre_process").setParallelism(8)
+                // 因为算子链化后不再
+                .rebalance()
                 .process(new ProcessFunction<List<MonitorData>, MonitorData>() {
                     @Override
                     public void processElement(List<MonitorData> value, Context ctx, Collector<MonitorData> out) throws Exception {
-                        out.collect(value.get(0));
+                        int indexOfThisSubtask = getRuntimeContext().getIndexOfThisSubtask();
+                        System.out.println(indexOfThisSubtask + " - " + value.get(0));
                     }
-                }).setParallelism(12)
-                .print().setParallelism(8);
+                }).setParallelism(8)
+                .addSink(new SinkFunction<MonitorData>() {
+                    @Override
+                    public void invoke(MonitorData value, Context context) throws Exception {
+
+                    }
+                }).setParallelism(1);
 
         env.execute("one-rule-time-job");
     }
