@@ -47,14 +47,10 @@ public class OneProcessJob {
             }
 
             @Override
-            public void cancel() {}
-        })
-                .map(new MapFunction<MonitorData, MonitorData>() {
-                    @Override
-                    public MonitorData map(MonitorData value) throws Exception {
-                        return value;
-                    }
-                }).setParallelism(8)
+            public void cancel() {
+            }
+        }).name("one_source")
+
                 .keyBy((KeySelector<MonitorData, String>) data -> data.getName())
                 // 设置滑动窗口/滚动窗口，5秒窗口，1秒步长
                 .timeWindow(Time.seconds(1))
@@ -63,11 +59,11 @@ public class OneProcessJob {
                     public void process(String key, Context context, Iterable<MonitorData> elements, Collector<List<MonitorData>> out) throws Exception {
                         out.collect(Lists.newArrayList(elements));
                     }
-                }).name("window_process").setParallelism(16)
+                }).name("pre_process").setParallelism(4)
                 .process(new ProcessFunction<List<MonitorData>, MonitorData>() {
                     @Override
                     public void processElement(List<MonitorData> value, Context ctx, Collector<MonitorData> out) throws Exception {
-                        out.collect( value.get(0));
+                        out.collect(value.get(0));
                     }
                 }).setParallelism(12)
                 .print().setParallelism(8);
