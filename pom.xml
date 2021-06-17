@@ -40,6 +40,7 @@
         <module>one-flink</module>
         <module>one-spring</module>
         <module>one-spring-cloud</module>
+        <module>one-opentracing</module>
     </modules>
 
     <dependencyManagement>
