@@ -32,10 +32,7 @@ public class OneKafkaConsumer {
                             "\n" +
                             JSON.parseObject(record.value()).toJSONString());*/
                     System.out.println(data.getString("group") + "  " + data.getString("service"));
-
-
             });
         }
-
     }
 }
