@@ -41,6 +41,7 @@
         <module>one-spring</module>
         <module>one-spring-cloud</module>
         <module>one-opentracing</module>
+        <module>one-clickhouse</module>
     </modules>
 
     <dependencyManagement>

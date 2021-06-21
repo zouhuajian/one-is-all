@@ -1,11 +1,10 @@
 package org.coastline.one.spring.kafka;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.*;
-import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -18,20 +17,25 @@ import java.util.Properties;
 public class OneKafkaConsumer {
 
     public static void main(String[] args) {
-
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "z_one");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "local5");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Collections.singletonList("order_service"));
-        while (true){
+        consumer.subscribe(Collections.singletonList("monitor_tree"));
+        while (true) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(2));
-            records.forEach(record -> System.out.println(record.key() + " " + record.value()));
+            records.forEach(record -> {
+                JSONObject data = JSON.parseObject(record.value());
+                   /* System.out.println(TimeUtil.timestampToDateTime(record.timestamp()) +
+                            "\n" +
+                            JSON.parseObject(record.value()).toJSONString());*/
+                    System.out.println(data.getString("group") + "  " + data.getString("service"));
+
+
+            });
         }
-
-
 
     }
 }
