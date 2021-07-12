@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>one-fairytracing</artifactId>
+    <artifactId>one-opentelemetry</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -17,11 +17,15 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>io.jaegertracing</groupId>
-            <artifactId>jaeger-client</artifactId>
-            <version>1.6.0</version>
-        </dependency>
+        <!--implementation 'io.opentelemetry:opentelemetry-api:0.12.0'
+        implementation('io.opentelemetry:opentelemetry-sdk-metrics:0.12.0')
+        implementation('io.opentelemetry:opentelemetry-sdk-trace:0.12.0')
+        implementation('io.opentelemetry:opentelemetry-sdk:0.12.0')
+        implementation('io.opentelemetry:opentelemetry-exporter-jaeger:0.12.0')
+        implementation('io.grpc:grpc-netty:1.28.0')
+        implementation('io.grpc:grpc-api:1.28.0')
+        implementation('io.grpc:grpc-protobuf:1.28.0')
+        implementation('io.grpc:grpc-stub:1.28.0')-->
     </dependencies>
 
 </project>

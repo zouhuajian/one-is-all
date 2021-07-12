@@ -14,7 +14,7 @@
     <modules>
         <module>one-jaegertracing</module>
         <module>one-opentracing-api</module>
-        <module>one-fairytracing</module>
+        <module>one-opentelemetry</module>
     </modules>
 
     <properties>

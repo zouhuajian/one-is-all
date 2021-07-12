@@ -4,18 +4,19 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.ConnectedStreams;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.RichCoMapFunction;
+import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import org.coastline.one.flink.stream.sink.NullSinkFunction;
+import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
+import org.apache.flink.util.Collector;
 import org.coastline.one.flink.stream.source.FakeDataTime2Source;
 import org.coastline.one.flink.stream.source.FakeDataTimeSource;
-import org.coastline.one.flink.stream.window.RuleProcessFunction;
-import org.coastline.one.flink.stream.window.RuleReduceTimeFunction;
 
 import java.time.Duration;
 
@@ -26,7 +27,7 @@ import java.time.Duration;
  * @author zouhuajian
  * @date 2020/11/19
  */
-public class OneEventTimeRuleJob {
+public class OneEventTimeJob {
 
     public static void main(String[] args) throws Exception {
         Configuration configuration = new Configuration();
@@ -61,31 +62,47 @@ public class OneEventTimeRuleJob {
                         // 而实际发射的水印为通过覆写extractTimestamp()方法提取出来的时间戳减去乱序区间，
                         // 相当于让水印把步调“放慢一点”。
                         // 这是Flink为迟到数据提供的第一重保障。
-                        .<JSONObject>forBoundedOutOfOrderness(Duration.ofMillis(5))
+                        .<JSONObject>forBoundedOutOfOrderness(Duration.ofSeconds(10))
                         // 许用户在配置的时间内（即超时时间内）没有记录到达时将一个流标记为空闲。这样就意味着下游的数据不需要等待水印的到来。
                         //.withIdleness(Duration.ofMinutes(1))
-                        .withTimestampAssigner(new SerializableTimestampAssigner<JSONObject>() {
-
-                            @Override
-                            public long extractTimestamp(JSONObject data, long recordTimestamp) {
-                                return data.getLongValue("time"); //指定EventTime对应的字段
-                            }
-                        })
+                        .withTimestampAssigner(new MyTimestampAssigner())
                 )
-                .setParallelism(4)
-                //.keyBy((KeySelector<JSONObject, String>) value -> value.getString("host"), TypeInformation.of(String.class))
+                .keyBy(new MyKeySelector())
                 // 设置滑动窗口/滚动窗口，5秒窗口，1秒步长
-                .timeWindowAll(Time.milliseconds(10))
+                .timeWindow(Time.milliseconds(10))
                 // 允许窗口延迟销毁，等待1分钟内，如果再有数据进入，则会触发新的计算
                 //.allowedLateness(Time.minutes(1))
-                // 增量式累加
-                .reduce(new RuleReduceTimeFunction()).setParallelism(1).name("reduce_process")
-                // 使用增量式的结果进行计算
-                .process(new RuleProcessFunction()).setParallelism(4).name("process_all_data")
+                .process(new FirstWindowProcessFunction()).name("process_all_data")
                 // add sink operator
-                .addSink(new NullSinkFunction()).setParallelism(1).name("null_sink");
+                .print();
 
         env.execute("one-rule-time-job");
+    }
+
+    static class MyTimestampAssigner implements SerializableTimestampAssigner<JSONObject> {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public long extractTimestamp(JSONObject element, long recordTimestamp) {
+            return element.getLongValue("time");
+        }
+    }
+
+    static class MyKeySelector implements KeySelector<JSONObject, String> {
+        @Override
+        public String getKey(JSONObject value) throws Exception {
+            return value.getString("host");
+        }
+    }
+
+    static class FirstWindowProcessFunction extends ProcessWindowFunction<JSONObject, JSONObject, String, TimeWindow> {
+
+        @Override
+        public void process(String s, Context context, Iterable<JSONObject> elements, Collector<JSONObject> out) throws Exception {
+
+        }
+
+
     }
 
 }

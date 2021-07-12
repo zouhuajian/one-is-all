@@ -70,24 +70,17 @@ public class OneWaterMarkJob {
                         .<JSONObject>forBoundedOutOfOrderness(Duration.ofMillis(3))
                         // 许用户在配置的时间内（即超时时间内）没有记录到达时将一个流标记为空闲。这样就意味着下游的数据不需要等待水印的到来。
                         //.withIdleness(Duration.ofMinutes(1))
-                        .withTimestampAssigner(new SerializableTimestampAssigner<JSONObject>() {
-
-                            @Override
-                            public long extractTimestamp(JSONObject data, long recordTimestamp) {
-                                return data.getLongValue("time"); //指定EventTime对应的字段
-                            }
+                        .withTimestampAssigner((SerializableTimestampAssigner<JSONObject>) (data, recordTimestamp) -> {
+                            return data.getLongValue("time"); //指定EventTime对应的字段
                         })
                 )
                 //.keyBy((KeySelector<JSONObject, String>) value -> value.getString("host"), TypeInformation.of(String.class))
                 // 设置滑动窗口/滚动窗口，5秒窗口，1秒步长
                 .timeWindowAll(Time.seconds(5))
-                .reduce(new ReduceFunction<JSONObject>() {
-                            @Override
-                            public JSONObject reduce(JSONObject jsonObject, JSONObject t1) throws Exception {
-                                jsonObject.put("count", jsonObject.getIntValue("count") + 1);
-                                return jsonObject;
-                            }
-                        },
+                .reduce((ReduceFunction<JSONObject>) (jsonObject, t1) -> {
+                    jsonObject.put("count", jsonObject.getIntValue("count") + 1);
+                    return jsonObject;
+                },
                         new ProcessAllWindowFunction<JSONObject, JSONObject, TimeWindow>() {
                             @Override
                             public void process(Context context, Iterable<JSONObject> elements, Collector<JSONObject> out) throws Exception {
