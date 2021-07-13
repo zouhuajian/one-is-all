@@ -56,17 +56,16 @@ public class OneEventTimeJob {
                 jsonObject.put("index", indexOfThisSubtask);
                 return jsonObject;
             }
-        }).setParallelism(6)
-                .assignTimestampsAndWatermarks(WatermarkStrategy
-                        // 参数maxOutOfOrderness就是乱序区间的长度，
-                        // 而实际发射的水印为通过覆写extractTimestamp()方法提取出来的时间戳减去乱序区间，
-                        // 相当于让水印把步调“放慢一点”。
-                        // 这是Flink为迟到数据提供的第一重保障。
-                        .<JSONObject>forBoundedOutOfOrderness(Duration.ofSeconds(10))
-                        // 许用户在配置的时间内（即超时时间内）没有记录到达时将一个流标记为空闲。这样就意味着下游的数据不需要等待水印的到来。
-                        //.withIdleness(Duration.ofMinutes(1))
-                        .withTimestampAssigner(new MyTimestampAssigner())
-                )
+        }).assignTimestampsAndWatermarks(WatermarkStrategy
+                // 参数maxOutOfOrderness就是乱序区间的长度，
+                // 而实际发射的水印为通过覆写extractTimestamp()方法提取出来的时间戳减去乱序区间，
+                // 相当于让水印把步调“放慢一点”。
+                // 这是Flink为迟到数据提供的第一重保障。
+                .<JSONObject>forBoundedOutOfOrderness(Duration.ofSeconds(10))
+                // 许用户在配置的时间内（即超时时间内）没有记录到达时将一个流标记为空闲。这样就意味着下游的数据不需要等待水印的到来。
+                //.withIdleness(Duration.ofMinutes(1))
+                .withTimestampAssigner(new MyTimestampAssigner())
+        )
                 .keyBy(new MyKeySelector())
                 // 设置滑动窗口/滚动窗口，5秒窗口，1秒步长
                 .timeWindow(Time.milliseconds(10))

@@ -6,8 +6,6 @@ import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author zouhuajian
