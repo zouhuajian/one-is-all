@@ -18,14 +18,16 @@
 
     <dependencies>
         <!-- opentelemetry sdk -->
-        <!--<dependency>
+        <dependency>
             <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-api</artifactId>
-        </dependency>-->
+            <artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>
+            <version>1.3.0-alpha</version>
+        </dependency>
 
         <dependency>
             <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-sdk-metrics</artifactId>
+            <artifactId>opentelemetry-exporter-otlp</artifactId>
+            <version>1.3.0</version>
         </dependency>
 
         <dependency>

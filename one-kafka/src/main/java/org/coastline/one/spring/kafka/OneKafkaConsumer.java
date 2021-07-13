@@ -19,19 +19,17 @@ public class OneKafkaConsumer {
     public static void main(String[] args) {
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "local5");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "local");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Collections.singletonList("monitor_tree"));
+        consumer.subscribe(Collections.singletonList("otlp_spans"));
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(2));
             records.forEach(record -> {
                 JSONObject data = JSON.parseObject(record.value());
-                   /* System.out.println(TimeUtil.timestampToDateTime(record.timestamp()) +
-                            "\n" +
-                            JSON.parseObject(record.value()).toJSONString());*/
-                    System.out.println(data.getString("group") + "  " + data.getString("service"));
+                System.out.println(data.toJSONString());
+                System.out.println("============================================================================");
             });
         }
     }

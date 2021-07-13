@@ -1,9 +1,16 @@
 package org.coastline.one.spring.metrics;
 
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.Labels;
 import io.opentelemetry.api.metrics.LongCounter;
 import io.opentelemetry.api.metrics.Meter;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.autoconfigure.OpenTelemetrySdkAutoConfiguration;
 import io.opentelemetry.sdk.metrics.MeterSdkProvider;
+import io.opentelemetry.sdk.resources.Resource;
+
+import static io.opentelemetry.api.common.AttributeKey.stringKey;
 
 /**
  * @author Jay.H.Zou
@@ -11,8 +18,16 @@ import io.opentelemetry.sdk.metrics.MeterSdkProvider;
  */
 public class LongValueObserverExample {
     public static void main(String[] args) {
+        Attributes attributes = Attributes.of(stringKey("otel.resource.attributes"), "resource_value",
+                stringKey("resource_key"), "resource_value",
+                stringKey("resource_key"), "resource_value");
+        Resource resource = Resource.create(attributes);
+        OpenTelemetry.builder().setMeterProvider(MeterSdkProvider.builder().setResource(resource).build());
+        Meter meter = OpenTelemetry.getGlobalMeter("instrumentation-library-name","semver:1.0.0");
+
+
+        OpenTelemetrySdk sdk = OpenTelemetrySdkAutoConfiguration.initialize();
         MeterSdkProvider meterProvider = MeterSdkProvider.builder().build();
-        Meter meter = meterProvider.get("instrumentation-library-name", "1.0.0");
 
         // Build counter e.g. LongCounter
         LongCounter counter = meter
