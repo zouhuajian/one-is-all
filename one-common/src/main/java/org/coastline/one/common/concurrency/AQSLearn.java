@@ -1,4 +1,4 @@
-package org.coastline.common.concurrency;
+package org.coastline.one.common.concurrency;
 
 import java.util.concurrent.locks.ReentrantLock;
 

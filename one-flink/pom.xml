@@ -21,7 +21,7 @@
     <dependencies>
         <dependency>
             <groupId>org.coastline.one</groupId>
-            <artifactId>one-common</artifactId>
+            <artifactId>one-core</artifactId>
             <version>1.0.0-RELEASE</version>
         </dependency>
 
@@ -32,17 +32,17 @@
         </dependency>
 
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.influxdb</groupId>
             <artifactId>influxdb-java</artifactId>
             <version>2.18</version>
-        </dependency>
+        </dependency>-->
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-json</artifactId>
             <version>${flink.version}</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>org.apache.flink</groupId>
@@ -151,14 +151,10 @@
              <version>${flink.version}</version>
          </dependency>
 
-        <!-- <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-metrics-prometheus_${scala.binary.version}</artifactId>
-            <version>${flink.version}</version>
-        </dependency>-->
+
     </dependencies>
 
-    <build>
+    <!--<build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -199,8 +195,8 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- 指定在打包节点执行jar包合并操作 -->
+                        <id>make-assembly</id> &lt;!&ndash; this is used for inheritance merges &ndash;&gt;
+                        <phase>package</phase> &lt;!&ndash; 指定在打包节点执行jar包合并操作 &ndash;&gt;
                         <goals>
                             <goal>single</goal>
                         </goals>
@@ -222,7 +218,7 @@
                 </executions>
             </plugin>
             <plugin>
-                <!-- explicitly define maven-deploy-plugin after other to force exec order -->
+                &lt;!&ndash; explicitly define maven-deploy-plugin after other to force exec order &ndash;&gt;
                 <artifactId>maven-deploy-plugin</artifactId>
                 <executions>
                     <execution>
@@ -236,5 +232,5 @@
             </plugin>
 
         </plugins>
-    </build>
+    </build>-->
 </project>

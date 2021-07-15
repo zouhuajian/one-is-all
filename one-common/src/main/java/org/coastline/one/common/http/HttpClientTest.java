@@ -1,4 +1,4 @@
-package org.coastline.common.http;
+package org.coastline.one.common.http;
 
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;

@@ -11,7 +11,7 @@ import java.time.Instant;
  * @author zouhuajian
  * @date 2021/6/16
  */
-public class MyTrace {
+public class OneTrace {
     public static void main(String[] args) throws InterruptedException {
         Configuration config = new Configuration("one-jaeger");
         // 设置数据发送方式

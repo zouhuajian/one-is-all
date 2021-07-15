@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>org.coastline.one</groupId>
-            <artifactId>one-common</artifactId>
+            <artifactId>one-core</artifactId>
             <version>1.0.0-RELEASE</version>
         </dependency>
         <dependency>
