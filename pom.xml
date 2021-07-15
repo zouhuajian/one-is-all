@@ -16,17 +16,7 @@
         <guava.version>29.0-jre</guava.version>
         <fastjson.version>1.2.47</fastjson.version>
         <junit.version>4.13.1</junit.version>
-        <!--redis client-->
-        <jedis.version>3.3.0</jedis.version>
-        <lettuce.version>5.3.0.RELEASE</lettuce.version>
-        <!--zookeeper client-->
-        <curator.version>4.2.0</curator.version>
-        <kafka.version>2.6.0</kafka.version>
-        <spring-kafka.version>2.5.3.RELEASE</spring-kafka.version>
-        <dubbo-spring.version>2.7.7</dubbo-spring.version>
-
         <spring-boot.version>2.3.3.RELEASE</spring-boot.version>
-        <spring-cloud.version>2.2.2.RELEASE</spring-cloud.version>
     </properties>
 
     <modules>
@@ -63,38 +53,6 @@
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
-            <dependency>
-                <groupId>redis.clients</groupId>
-                <artifactId>jedis</artifactId>
-                <version>${jedis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.lettuce</groupId>
-                <artifactId>lettuce-core</artifactId>
-                <version>${lettuce.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.kafka</groupId>
-                <artifactId>kafka-clients</artifactId>
-                <version>${kafka.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.kafka</groupId>
-                <artifactId>kafka-streams</artifactId>
-                <version>${kafka.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.kafka</groupId>
-                <artifactId>spring-kafka</artifactId>
-                <version>${spring-kafka.version}</version>
-            </dependency>
-            <!--zookeeper client-->
-            <dependency>
-                <groupId>org.apache.curator</groupId>
-                <artifactId>curator-recipes</artifactId>
-                <version>${curator.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -102,18 +60,6 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-spring-boot-starter</artifactId>
-                <version>${dubbo-spring.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
