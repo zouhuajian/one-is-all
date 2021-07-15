@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>one-spring-kafka</module>
         <module>one-spring-demo</module>
     </modules>
 </project>
