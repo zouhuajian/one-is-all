@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>one-jaegertracing</module>
-        <module>one-opentracing-api</module>
         <module>one-opentelemetry</module>
     </modules>
 

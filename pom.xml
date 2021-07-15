@@ -32,15 +32,11 @@
     <modules>
         <module>one-common</module>
         <module>one-algorithm</module>
-        <module>one-zookeeper</module>
         <module>one-redis</module>
-        <module>one-sentinel</module>
         <module>one-kafka</module>
-        <module>one-dubbo</module>
         <module>one-flink</module>
         <module>one-spring</module>
         <module>one-opentracing</module>
-        <module>one-clickhouse</module>
     </modules>
 
     <dependencyManagement>
