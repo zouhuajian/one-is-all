@@ -1,5 +1,8 @@
 package org.coastline.one.spring.controller;
 
+import org.coastline.one.spring.model.Result;
+import org.coastline.one.spring.service.ItemService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -15,14 +18,17 @@ public class RedisController {
     //@Autowired
     private StringRedisTemplate redisTemplate;
 
+    @Autowired
+    private ItemService itemService;
+
     @RequestMapping(value = "/redis/set")
-    public void setKey(@RequestParam("key") String key, @RequestParam("value") String value) {
-        System.out.println("set success");
+    public Result<String> setKey(@RequestParam("key") String key, @RequestParam("value") String value) {
+        return Result.ofSuccess(value);
     }
 
     @GetMapping(value = "/redis/get")
-    public String getList(@RequestParam("key") String key) {
-        return key;
+    public Result<String> getList(@RequestParam("key") String key) {
+        return Result.ofSuccess(key);
     }
 
     //@Bean
