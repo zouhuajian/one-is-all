@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2020/11/13
  */
 @RestController
-public class FirstController {
+public class HelloController {
 
-    @RequestMonitor("my_api")
+    @RequestMonitor("")
     @GetMapping("/hello")
     public String hello(@RequestParam("key") String key) {
         return key;

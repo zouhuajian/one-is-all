@@ -7,13 +7,11 @@ import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@RequestMapping("/item")
 @RestController
-public class RedisController {
+public class ItemController {
 
     //@Autowired
     private StringRedisTemplate redisTemplate;
@@ -21,14 +19,15 @@ public class RedisController {
     @Autowired
     private ItemService itemService;
 
-    @RequestMapping(value = "/redis/set")
+    @PostMapping(value = "/set")
     public Result<String> setKey(@RequestParam("key") String key, @RequestParam("value") String value) {
         return Result.ofSuccess(value);
     }
 
-    @GetMapping(value = "/redis/get")
+    @GetMapping(value = "/get")
     public Result<String> getList(@RequestParam("key") String key) {
-        return Result.ofSuccess(key);
+        String item = itemService.getItem(key);
+        return Result.ofSuccess(item);
     }
 
     //@Bean
