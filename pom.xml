@@ -14,6 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <guava.version>29.0-jre</guava.version>
+        <gson.verson>2.8.7</gson.verson>
         <hutool.version>5.7.4</hutool.version>
         <fastjson.version>1.2.47</fastjson.version>
         <junit.version>4.13.1</junit.version>
@@ -30,6 +31,7 @@
         <module>one-spring</module>
         <module>one-opentracing</module>
         <module>one-common</module>
+        <module>one-rpc</module>
     </modules>
 
     <dependencyManagement>
@@ -40,6 +42,13 @@
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.verson}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>cn.hutool</groupId>
