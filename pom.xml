@@ -31,7 +31,7 @@
         <module>one-spring</module>
         <module>one-opentracing</module>
         <module>one-common</module>
-        <module>one-rpc</module>
+        <module>one-grpc</module>
     </modules>
 
     <dependencyManagement>

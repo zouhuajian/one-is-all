@@ -64,6 +64,7 @@ public class OneGrpcServer {
             System.out.println("new span coming...");
             List<ResourceSpans> resourceSpansList = request.getResourceSpansList();
             System.out.println(resourceSpansList);
+            // TODO: storage process and response suitable STATUS
             ServerCalls.asyncUnimplementedUnaryCall(TraceServiceGrpc.getExportMethod(), responseObserver);
         }
 
