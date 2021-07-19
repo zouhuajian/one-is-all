@@ -29,9 +29,8 @@
         <module>one-kafka</module>
         <module>one-flink</module>
         <module>one-spring</module>
-        <module>one-opentracing</module>
+        <module>one-monitor</module>
         <module>one-common</module>
-        <module>one-grpc</module>
     </modules>
 
     <dependencyManagement>

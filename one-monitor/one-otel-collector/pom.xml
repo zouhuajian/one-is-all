@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>one-is-all</artifactId>
+        <artifactId>one-monitor</artifactId>
         <groupId>org.coastline.one</groupId>
         <version>1.0.0-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>one-grpc</artifactId>
+    <artifactId>one-otel-collector</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -31,7 +31,6 @@
             <version>${grpc-version}</version>
         </dependency>-->
 
-        <!-- 序列化 -->
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-protobuf</artifactId>
@@ -44,7 +43,6 @@
             </exclusions>
         </dependency>
 
-        <!-- 反序列化 -->
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-stub</artifactId>
@@ -69,7 +67,6 @@
             <version>${protobuf.version}</version>
         </dependency>-->
     </dependencies>
-
 
     <build>
         <extensions>
@@ -105,4 +102,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

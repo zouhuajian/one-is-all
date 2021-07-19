@@ -1,11 +1,14 @@
 package org.coastline.one.spring.service;
 
 import cn.hutool.core.net.NetUtil;
-import io.opentelemetry.api.metrics.DoubleCounter;
 import io.opentelemetry.api.metrics.GlobalMeterProvider;
 import io.opentelemetry.api.metrics.LongCounter;
 import io.opentelemetry.api.metrics.common.Labels;
 import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Context;
+import io.opentelemetry.context.Scope;
+import org.coastline.one.spring.config.OTelConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,7 @@ public class ItemService {
         String localHostName = NetUtil.getLocalHostName();
         longCounter.add(10, Labels.of("host", localHostName, "key", key));
         logger.info("get item, key = {}", key);
+        // do stuff
         return this.getClass().getName();
     }
 

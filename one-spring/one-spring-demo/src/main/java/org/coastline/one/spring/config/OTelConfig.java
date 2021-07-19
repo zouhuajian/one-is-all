@@ -3,6 +3,7 @@ package org.coastline.one.spring.config;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
 import io.opentelemetry.context.propagation.ContextPropagators;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
@@ -44,6 +45,10 @@ public class OTelConfig {
 
     public static OpenTelemetry getOpenTelemetry() {
         return openTelemetry;
+    }
+
+    public static Tracer getTracer() {
+        return openTelemetry.getTracer("otel-sdk", "1.4.1");
     }
 
 

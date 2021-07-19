@@ -1,9 +1,12 @@
-package org.coastline.one.spring.config.filter;
+package org.coastline.one.spring.filter;
 
+import cn.hutool.core.net.NetUtil;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.metrics.common.Labels;
 import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
@@ -15,21 +18,20 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.Instant;
 
 /**
  * @author Jay.H.Zou
  * @date 2021/7/19
  */
-public class OTelFilter implements Filter {
+public class OtelFilter implements Filter {
 
-    private static final Logger logger = LoggerFactory.getLogger(OTelFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(OtelFilter.class);
 
     private static final String SPAN_NAME_URL = "monitor_provider";
-    private OpenTelemetry openTelemetry;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        openTelemetry = OTelConfig.getOpenTelemetry();
     }
 
     @Override
@@ -46,8 +48,8 @@ public class OTelFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         int status = response.getStatus();
         logger.info("method = {}, url = {}, code = {}", method, requestURI, status);
-        Tracer tracer = openTelemetry.getTracer("otel-sdk", "1.4.1");
-        Span span = tracer.spanBuilder(SPAN_NAME_URL).startSpan();
+        Tracer tracer = OTelConfig.getTracer();
+        Span span = tracer.spanBuilder(SPAN_NAME_URL).setSpanKind(SpanKind.PRODUCER).startSpan();
 
         try (Scope scope = span.makeCurrent()) {
             // your use case
@@ -56,6 +58,14 @@ public class OTelFilter implements Filter {
                     AttributeKey.stringKey("http_code"), String.valueOf(status));
             span.setAllAttributes(attributes);
             span.addEvent("test_event");
+            span.addEvent("event_2", Instant.now());
+
+            Span childSpan = tracer.spanBuilder("child").startSpan();
+            try (Scope scopeChildren = childSpan.makeCurrent()) {
+                System.out.println("build child span");
+            } finally {
+                childSpan.end();
+            }
         } catch (Exception t) {
             span.setStatus(StatusCode.ERROR, t.getMessage());
         } finally {

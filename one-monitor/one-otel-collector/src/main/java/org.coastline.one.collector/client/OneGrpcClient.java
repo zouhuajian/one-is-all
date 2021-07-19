@@ -1,4 +1,4 @@
-package org.coastline.one.grpc.client;
+package org.coastline.one.collector.client;
 
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
 

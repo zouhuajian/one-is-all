@@ -1,4 +1,4 @@
-package org.coastline.one.grpc.server;
+package org.coastline.one.collector.server;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -8,7 +8,7 @@ import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc;
 import io.opentelemetry.proto.trace.v1.ResourceSpans;
-import org.coastline.one.grpc.onfig.GrpcConfig;
+import org.coastline.one.collector.config.CollectorConfig;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,8 +35,7 @@ public class OneGrpcServer {
      */
     private void start() throws IOException {
         // 给server添加监听端口号，添加 包含业务处理逻辑的类，然后启动
-
-        server = ServerBuilder.forPort(GrpcConfig.SERVER_PORT)
+        server = ServerBuilder.forPort(CollectorConfig.DEFAULT_PORT_TRACE)
                 .addService(new TraceService())
                 .build()
                 .start();
@@ -52,21 +51,21 @@ public class OneGrpcServer {
         }
     }
     /**
-     * proto文件被编译后，在生成的HelloGrpc的抽象内部类HelloImplBase中包含了 proto中定义的服务接口的简单实现
-     * 该HelloImpl类需要重写这些方法，添加需要的处理逻辑
+     * proto文件被编译后，在生成的 TraceServiceGrpc 的抽象内部类 TraceServiceImplBase 中包含了 proto 中定义的服务接口的简单实现
+     * 该 TraceServiceImplBase 类需要重写这些方法，添加需要的处理逻辑
      */
     static class TraceService extends TraceServiceGrpc.TraceServiceImplBase {
-        // proto文件中的sayHello服务接口被编译后，在生成的HelloGrpc的抽象内部类HelloImplBase中有一个简单的实现
-        // 因此，在server端需要重写这个方法，添加上相应的逻辑
 
         @Override
         public void export(ExportTraceServiceRequest request, StreamObserver<ExportTraceServiceResponse> responseObserver) {
             System.out.println("new span coming...");
+            int resourceSpansCount = request.getResourceSpansCount();
+            System.out.println("span count " + resourceSpansCount);
             List<ResourceSpans> resourceSpansList = request.getResourceSpansList();
             System.out.println(resourceSpansList);
-            // TODO: storage process and response suitable STATUS
+            // TODO: data process
             ServerCalls.asyncUnimplementedUnaryCall(TraceServiceGrpc.getExportMethod(), responseObserver);
         }
-
     }
+
 }
