@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * OTLP HTTP
+ *
  * @author Jay.H.Zou
  * @date 2021/7/16
  */

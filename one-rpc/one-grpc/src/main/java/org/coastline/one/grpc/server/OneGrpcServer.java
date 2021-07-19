@@ -2,8 +2,6 @@ package org.coastline.one.grpc.server;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import io.grpc.ServerServiceDefinition;
-import io.grpc.ServiceDescriptor;
 import io.grpc.stub.ServerCalls;
 import io.grpc.stub.StreamObserver;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;

@@ -10,5 +10,9 @@ import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
 public class OneGrpcClient {
 
     public static void main(String[] args) {
+
+        ExportTraceServiceRequest protoRequest =
+                ExportTraceServiceRequest.newBuilder()
+                        .build();
     }
 }

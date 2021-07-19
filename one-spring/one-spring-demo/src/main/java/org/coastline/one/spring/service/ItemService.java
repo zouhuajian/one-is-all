@@ -5,6 +5,7 @@ import io.opentelemetry.api.metrics.DoubleCounter;
 import io.opentelemetry.api.metrics.GlobalMeterProvider;
 import io.opentelemetry.api.metrics.LongCounter;
 import io.opentelemetry.api.metrics.common.Labels;
+import io.opentelemetry.api.trace.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,5 @@ public class ItemService {
     public void updateItem() {
         System.out.println(this.getClass().getName());
     }
-
 
 }
