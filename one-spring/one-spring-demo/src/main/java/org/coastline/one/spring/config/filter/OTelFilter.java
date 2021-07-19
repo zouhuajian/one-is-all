@@ -7,7 +7,7 @@ import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
-import org.coastline.one.spring.config.TraceConfig;
+import org.coastline.one.spring.config.OTelConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ public class OTelFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        openTelemetry = TraceConfig.getOpenTelemetry();
+        openTelemetry = OTelConfig.getOpenTelemetry();
     }
 
     @Override
@@ -54,7 +54,6 @@ public class OTelFilter implements Filter {
             Attributes attributes = Attributes.of(AttributeKey.stringKey("http_method"), method,
                     AttributeKey.stringKey("http_url"), requestURI,
                     AttributeKey.stringKey("http_code"), String.valueOf(status));
-
             span.setAllAttributes(attributes);
             span.addEvent("test_event");
         } catch (Exception t) {

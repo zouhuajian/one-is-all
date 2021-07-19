@@ -7,9 +7,11 @@ import io.grpc.stub.StreamObserver;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc;
+import io.opentelemetry.proto.trace.v1.ResourceSpans;
 import org.coastline.one.grpc.onfig.GrpcConfig;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Jay.H.Zou
@@ -59,6 +61,9 @@ public class OneGrpcServer {
 
         @Override
         public void export(ExportTraceServiceRequest request, StreamObserver<ExportTraceServiceResponse> responseObserver) {
+            System.out.println("new span coming...");
+            List<ResourceSpans> resourceSpansList = request.getResourceSpansList();
+            System.out.println(resourceSpansList);
             ServerCalls.asyncUnimplementedUnaryCall(TraceServiceGrpc.getExportMethod(), responseObserver);
         }
 
