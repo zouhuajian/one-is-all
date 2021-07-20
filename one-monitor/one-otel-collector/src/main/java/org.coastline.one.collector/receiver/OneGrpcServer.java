@@ -1,7 +1,8 @@
-package org.coastline.one.collector.server;
+package org.coastline.one.collector.receiver;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.Status;
 import io.grpc.stub.ServerCalls;
 import io.grpc.stub.StreamObserver;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
@@ -9,6 +10,7 @@ import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc;
 import io.opentelemetry.proto.trace.v1.ResourceSpans;
 import org.coastline.one.collector.config.CollectorConfig;
+import org.coastline.one.collector.config.ReceiverConfig;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,7 +37,7 @@ public class OneGrpcServer {
      */
     private void start() throws IOException {
         // 给server添加监听端口号，添加 包含业务处理逻辑的类，然后启动
-        server = ServerBuilder.forPort(CollectorConfig.DEFAULT_PORT_TRACE)
+        server = ServerBuilder.forPort(ReceiverConfig.DEFAULT_PORT_TRACE)
                 .addService(new TraceService())
                 .build()
                 .start();
@@ -64,7 +66,10 @@ public class OneGrpcServer {
             List<ResourceSpans> resourceSpansList = request.getResourceSpansList();
             System.out.println(resourceSpansList);
             // TODO: data process
-            ServerCalls.asyncUnimplementedUnaryCall(TraceServiceGrpc.getExportMethod(), responseObserver);
+            ExportTraceServiceResponse response = ExportTraceServiceResponse.getDefaultInstance();
+            //ServerCalls.asyncUnimplementedUnaryCall(TraceServiceGrpc.getExportMethod(), responseObserver);
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
         }
     }
 

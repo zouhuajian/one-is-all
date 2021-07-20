@@ -55,6 +55,7 @@
             <version>${grpc.version}</version>
         </dependency>
 
+
         <!--<dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
@@ -66,9 +67,15 @@
             <artifactId>protobuf-java-util</artifactId>
             <version>${protobuf.version}</version>
         </dependency>-->
+
+        <!-- base tool, need simple this dependency -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
     </dependencies>
 
-    <build>
+    <!--<build>
         <extensions>
             <extension>
                 <groupId>kr.motd.maven</groupId>
@@ -101,6 +108,6 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 
 </project>
