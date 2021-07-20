@@ -1,0 +1,5 @@
+receivers:
+  trace:
+    port: 4317
+  metrics:
+    port: 4318

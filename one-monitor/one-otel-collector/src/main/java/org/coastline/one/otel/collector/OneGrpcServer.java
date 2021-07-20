@@ -1,16 +1,12 @@
-package org.coastline.one.collector.receiver;
+package org.coastline.one.otel.collector;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import io.grpc.Status;
-import io.grpc.stub.ServerCalls;
 import io.grpc.stub.StreamObserver;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc;
 import io.opentelemetry.proto.trace.v1.ResourceSpans;
-import org.coastline.one.collector.config.CollectorConfig;
-import org.coastline.one.collector.config.ReceiverConfig;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,6 +15,7 @@ import java.util.List;
  * @author Jay.H.Zou
  * @date 2021/7/17
  */
+@Deprecated
 public class OneGrpcServer {
 
     // 定义一个Server对象，监听端口来获取rpc请求，以进行下面的处理
@@ -37,7 +34,7 @@ public class OneGrpcServer {
      */
     private void start() throws IOException {
         // 给server添加监听端口号，添加 包含业务处理逻辑的类，然后启动
-        server = ServerBuilder.forPort(ReceiverConfig.DEFAULT_PORT_TRACE)
+        server = ServerBuilder.forPort(4317)
                 .addService(new TraceService())
                 .build()
                 .start();
