@@ -1,15 +1,20 @@
 package org.coastline.one.otel.collector;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.coastline.one.otel.collector.component.impl.DefaultComponentFactory;
 import org.coastline.one.otel.collector.config.CollectorConfig;
+import org.coastline.one.otel.collector.config.QueueConfig;
+import org.coastline.one.otel.collector.config.ReceiverConfig;
 import org.coastline.one.otel.collector.exception.ConfigException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Map;
 
 /**
@@ -25,9 +30,8 @@ public class CollectorApplication {
     private static final String DEFAULT_CONFIG_NAME = "application.yaml";
 
     public static void main(String[] args) throws Exception {
-        CollectorApplication application = new CollectorApplication();
-        CollectorConfig config = application.loadConfig();
-
+        loadBanner();
+        CollectorConfig config = loadConfig();
         DefaultComponentFactory.createTraceComponents(config);
         DefaultComponentFactory.createMetricsComponents(config);
     }
@@ -35,7 +39,7 @@ public class CollectorApplication {
     /**
      * local server config
      */
-    private CollectorConfig loadConfig() {
+    private static CollectorConfig loadConfig() {
         Yaml yaml = new Yaml();
         // 文件路径是相对类目录(src/main/java)的相对路径
         ClassLoader classLoader = CollectorApplication.class.getClassLoader();
@@ -45,12 +49,32 @@ public class CollectorApplication {
         }
         InputStream in = classLoader.getResourceAsStream(DEFAULT_CONFIG_NAME);
         Gson gson = new Gson();
-        JsonElement jsonElement = gson.toJsonTree(yaml.loadAs(in, Map.class));
-        logger.info("start config: {}", jsonElement);
+        JsonObject jsonObject = gson.toJsonTree(yaml.loadAs(in, Map.class)).getAsJsonObject();
 
         CollectorConfig config = new CollectorConfig();
-        config.setQueueConfig(null);
+        // logger.info("start config: {}", jsonElement);
+        JsonObject receivers = jsonObject.getAsJsonObject("receivers");
+        JsonObject traceReceiver = receivers.getAsJsonObject("trace");
+        ReceiverConfig traceReceiverConfig = gson.fromJson(traceReceiver, ReceiverConfig.class);
+        logger.info("trace receiver config = {}", traceReceiver.toString());
+        ReceiverConfig metricsReceiverConfig = gson.fromJson(receivers.getAsJsonObject("metrics"), ReceiverConfig.class);
+        config.setTraceReceiverConfig(traceReceiverConfig);
+        config.setQueueConfig(new QueueConfig());
         return config;
+    }
+
+    private static void loadBanner() {
+        String banner = "banner.txt";
+        ClassLoader classLoader = CollectorApplication.class.getClassLoader();
+        if (classLoader.getResource(banner) == null) {
+            return;
+        }
+        InputStream in = classLoader.getResourceAsStream(banner);
+        try {
+            String result = CharStreams.toString(new InputStreamReader(in, Charsets.UTF_8));
+            logger.info(result);
+        } catch (Exception ignored) {
+        }
     }
 
 }

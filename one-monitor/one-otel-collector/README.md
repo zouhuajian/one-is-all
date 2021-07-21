@@ -19,8 +19,8 @@
 * data export: only support `Kafka`
 
 ### Extension
+* health check
 * server register: `standalone`, `cluster`
 * sever config: `local`, `remote`
-* health check
 
 

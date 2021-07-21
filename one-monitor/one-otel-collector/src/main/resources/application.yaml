@@ -3,3 +3,21 @@ receivers:
     port: 4317
   metrics:
     port: 4318
+
+exporters:
+  kafka:
+    trace:
+      brokers: "xxx"
+      topic:
+    metrics:
+      brokers: "xxx"
+      topic:
+
+# TODO: 未设计好
+extensions:
+  server:
+    # `standalone`, `cluster`, default `standalone`
+    model: cluster
+  config:
+      # `local`, `remote`, default `local`
+      model: remote
