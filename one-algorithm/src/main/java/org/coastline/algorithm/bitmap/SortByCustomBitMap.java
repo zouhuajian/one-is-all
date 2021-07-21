@@ -1,4 +1,4 @@
-package org.coastline.one.common.bitmap;
+package org.coastline.algorithm.bitmap;
 
 
 import java.util.ArrayList;

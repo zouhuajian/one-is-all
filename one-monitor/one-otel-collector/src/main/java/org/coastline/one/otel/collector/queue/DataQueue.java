@@ -12,7 +12,9 @@ public interface DataQueue<T> {
 
     void destroy();
 
-    boolean put();
+    boolean put(T data);
+
+    boolean put(List<T> dataList);
 
     T get();
 

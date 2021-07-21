@@ -11,4 +11,11 @@
 
     <artifactId>one-algorithm</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.roaringbitmap</groupId>
+            <artifactId>RoaringBitmap</artifactId>
+            <version>0.9.15</version>
+        </dependency>
+    </dependencies>
 </project>

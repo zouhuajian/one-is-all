@@ -4,7 +4,7 @@ package org.coastline.one.otel.collector.model;
  * @author Jay.H.Zou
  * @date 2021/7/20
  */
-public enum DataSourceType {
+public enum DataType {
 
     TRACE("trace"),
 
@@ -14,7 +14,7 @@ public enum DataSourceType {
 
     private String name;
 
-    DataSourceType(String name) {
+    DataType(String name) {
         this.name = name;
     }
 

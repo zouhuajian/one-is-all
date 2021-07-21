@@ -3,11 +3,15 @@ package org.coastline.one.otel.collector.receiver;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.opentelemetry.proto.trace.v1.ResourceSpans;
 import org.coastline.one.otel.collector.config.ReceiverConfig;
+import org.coastline.one.otel.collector.processor.DataProcessor;
+import org.coastline.one.otel.collector.queue.DataQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 数据接收端
@@ -15,23 +19,46 @@ import java.io.IOException;
  * @author Jay.H.Zou
  * @date 2021/7/20
  */
-public abstract class AbstractDataReceiver implements DataReceiver {
+public abstract class AbstractDataReceiver<T> implements DataReceiver<T> {
 
     protected static final Logger logger = LoggerFactory.getLogger(AbstractDataReceiver.class);
+
+    private ReceiverConfig config;
+
+    private List<DataProcessor<T>> processors;
+
+    private DataQueue<T> dataQueue;
 
     /**
      * 定义一个Server对象，监听端口来获取rpc请求，以进行下面的处理
      */
     private Server server;
 
+    public AbstractDataReceiver(ReceiverConfig config, List<DataProcessor<T>> processors, DataQueue<T> dataQueue) {
+        this.config = config;
+        this.processors = processors;
+        this.dataQueue = dataQueue;
+    }
+
+
     @Override
-    public void start(ReceiverConfig config) throws IOException {
+    public void initialize() throws Exception {
         // 给server添加监听端口号，添加 包含业务处理逻辑的类，然后启动
         server = ServerBuilder.forPort(config.getPort())
                 .addService(buildService())
                 .build()
                 .start();
-        logger.info("{} started at port {}", config.getDataSourceType().getName(), config.getPort());
+        logger.info("receiver started at port {}", config.getPort());
+    }
+
+    @Override
+    public boolean consume(T data) {
+        for (DataProcessor<T> processor : processors) {
+            if (!processor.process(data)) {
+                return false;
+            }
+        }
+        return dataQueue.put(data);
     }
 
     /**
@@ -43,9 +70,15 @@ public abstract class AbstractDataReceiver implements DataReceiver {
     protected abstract BindableService buildService();
 
     @Override
-    public void shutdown() throws InterruptedException {
+    public void close() {
         if (server != null) {
-            server.awaitTermination();
+            try {
+                server.awaitTermination();
+            } catch (Exception e) {
+                logger.error("close server error", e);
+            }
         }
     }
+
+
 }

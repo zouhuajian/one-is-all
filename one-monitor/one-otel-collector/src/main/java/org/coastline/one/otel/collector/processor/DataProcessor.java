@@ -6,6 +6,6 @@ package org.coastline.one.otel.collector.processor;
  */
 public interface DataProcessor<T> {
 
-    void process(T t);
+    boolean process(T data);
 
 }

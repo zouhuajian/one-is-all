@@ -8,5 +8,5 @@ import org.coastline.one.otel.collector.processor.DataProcessor;
  */
 public interface DataFilter<T> extends DataProcessor<T> {
 
-    boolean filter(T t);
+    boolean filter(T data);
 }

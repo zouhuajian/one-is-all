@@ -8,5 +8,5 @@ import org.coastline.one.otel.collector.processor.DataProcessor;
  */
 public interface DataFormat<T> extends DataProcessor<T> {
 
-    void format(T t);
+    void format(T data);
 }
