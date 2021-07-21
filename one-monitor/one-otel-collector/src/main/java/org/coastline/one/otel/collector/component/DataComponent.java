@@ -14,4 +14,8 @@ public interface DataComponent {
      */
     default void close() {
     }
+
+    default void doClose() {
+        Runtime.getRuntime().addShutdownHook(new Thread(this::close));
+    }
 }

@@ -32,6 +32,7 @@ public class DefaultComponentFactory implements ComponentFactory {
 
     @Override
     public void buildTraceComponents(CollectorConfig config) throws Exception {
+
         // processors
         List<DataProcessor<ResourceSpans>> processors = Lists.newArrayList();
         processors.add(new DefaultTraceFilter());
@@ -39,7 +40,7 @@ public class DefaultComponentFactory implements ComponentFactory {
         // queue
         DataQueue<ResourceSpans> dataQueue = new MemTraceQueue();
         TraceReceiver.create(config.getTraceReceiverConfig(), processors, dataQueue);
-        TraceKafkaExporter.create(config.getTraceKafkaExporterConfig(), dataQueue);
+        TraceKafkaExporter.create(config.getTraceExportersConfig(), dataQueue);
     }
 
     @Override

@@ -1,6 +1,9 @@
 package org.coastline.one.otel.collector.config;
 
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * collector base config
@@ -8,13 +11,39 @@ import java.util.List;
  * @author Jay.H.Zou
  * @date 2021/7/18
  */
+@Configuration
 public class CollectorConfig {
 
+    @Autowired
     private ReceiverConfig traceReceiverConfig;
 
-    private QueueConfig queueConfig;
+    @Autowired
+    private ReceiverConfig metricsReceiverConfig;
 
-    private KafkaExporterConfig traceKafkaExporterConfig;
+    @Autowired
+    private ExporterConfig traceExporterConfig;
+
+    private QueueConfig traceDataQueue;
+
+    @Bean(name = "traceReceiverConfig")
+    @ConfigurationProperties(prefix = "receivers.otlp.trace")
+    public ReceiverConfig createTraceReceiverConfig() {
+        return new ReceiverConfig();
+    }
+
+    @Bean(name = "metricsReceiverConfig")
+    @ConfigurationProperties(prefix = "receivers.otlp.metrics")
+    public ReceiverConfig createMetricsReceiverConfig() {
+        return new ReceiverConfig();
+    }
+
+    @Bean(name = "traceExporterConfig")
+    @ConfigurationProperties(prefix = "receivers.kafka.trace")
+    public ExporterConfig createTraceExporterConfig() {
+        return new ExporterConfig();
+    }
+
+
 
     public ReceiverConfig getTraceReceiverConfig() {
         return traceReceiverConfig;
@@ -24,19 +53,27 @@ public class CollectorConfig {
         this.traceReceiverConfig = traceReceiverConfig;
     }
 
-    public QueueConfig getQueueConfig() {
-        return queueConfig;
+    public ReceiverConfig getMetricsReceiverConfig() {
+        return metricsReceiverConfig;
     }
 
-    public void setQueueConfig(QueueConfig queueConfig) {
-        this.queueConfig = queueConfig;
+    public void setMetricsReceiverConfig(ReceiverConfig metricsReceiverConfig) {
+        this.metricsReceiverConfig = metricsReceiverConfig;
     }
 
-    public KafkaExporterConfig getTraceKafkaExporterConfig() {
-        return traceKafkaExporterConfig;
+    public ExporterConfig getTraceExportersConfig() {
+        return traceExporterConfig;
     }
 
-    public void setTraceKafkaExporterConfig(KafkaExporterConfig traceKafkaExporterConfig) {
-        this.traceKafkaExporterConfig = traceKafkaExporterConfig;
+    public void setTraceExportersConfig(ExporterConfig traceExporterConfig) {
+        this.traceExporterConfig = traceExporterConfig;
+    }
+
+    public QueueConfig getTraceDataQueue() {
+        return traceDataQueue;
+    }
+
+    public void setTraceDataQueue(QueueConfig traceDataQueue) {
+        this.traceDataQueue = traceDataQueue;
     }
 }

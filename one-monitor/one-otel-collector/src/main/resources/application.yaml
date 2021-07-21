@@ -1,8 +1,9 @@
 receivers:
-  trace:
-    port: 4317
-  metrics:
-    port: 4318
+  otlp:
+    trace:
+      port: 4317
+    metrics:
+      port: 4318
 
 exporters:
   kafka:
@@ -19,5 +20,5 @@ extensions:
     # `standalone`, `cluster`, default `standalone`
     model: cluster
   config:
-      # `local`, `remote`, default `local`
-      model: remote
+    # `local`, `remote`, default `local`
+    model: remote

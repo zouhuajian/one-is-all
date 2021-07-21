@@ -1,7 +1,7 @@
 package org.coastline.one.otel.collector.exporter.impl;
 
 import io.opentelemetry.proto.trace.v1.ResourceSpans;
-import org.coastline.one.otel.collector.config.KafkaExporterConfig;
+import org.coastline.one.otel.collector.config.ExporterConfig;
 import org.coastline.one.otel.collector.exporter.DataExporter;
 import org.coastline.one.otel.collector.queue.DataQueue;
 
@@ -13,16 +13,16 @@ import java.util.List;
  */
 public class TraceKafkaExporter implements DataExporter<ResourceSpans> {
 
-    private KafkaExporterConfig config;
+    private ExporterConfig config;
 
     private DataQueue<ResourceSpans> dataQueue;
 
-    public TraceKafkaExporter(KafkaExporterConfig config, DataQueue<ResourceSpans> dataQueue) {
+    public TraceKafkaExporter(ExporterConfig config, DataQueue<ResourceSpans> dataQueue) {
         this.config = config;
         this.dataQueue = dataQueue;
     }
 
-    public static final void create(KafkaExporterConfig config, DataQueue<ResourceSpans> dataQueue) throws Exception {
+    public static void create(ExporterConfig config, DataQueue<ResourceSpans> dataQueue) throws Exception {
         TraceKafkaExporter exporter = new TraceKafkaExporter(config, dataQueue);
         exporter.initialize();
     }

@@ -31,6 +31,7 @@ public class TraceReceiver extends AbstractDataReceiver<ResourceSpans> {
                               DataQueue<ResourceSpans> dataQueue) throws Exception {
         TraceReceiver receiver = new TraceReceiver(config, processors, dataQueue);
         receiver.initialize();
+        logger.info("trace receiver started at port {}", config.getPort());
     }
 
     @Override

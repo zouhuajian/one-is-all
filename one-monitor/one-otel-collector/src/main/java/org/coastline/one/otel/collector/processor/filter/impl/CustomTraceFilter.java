@@ -7,7 +7,17 @@ import org.coastline.one.otel.collector.processor.filter.DataFilter;
  * @author Jay.H.Zou
  * @date 2021/7/21
  */
-public class DefaultTraceFilter implements DataFilter<ResourceSpans> {
+public class CustomTraceFilter implements DataFilter<ResourceSpans> {
+
+    @Override
+    public void initialize() throws Exception {
+        DataFilter.super.initialize();
+    }
+
+    @Override
+    public void close() {
+        DataFilter.super.close();
+    }
 
     @Override
     public boolean process(ResourceSpans data) {

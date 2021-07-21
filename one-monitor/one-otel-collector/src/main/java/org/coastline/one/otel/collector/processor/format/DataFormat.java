@@ -8,5 +8,7 @@ import org.coastline.one.otel.collector.processor.DataProcessor;
  */
 public interface DataFormat<T> extends DataProcessor<T> {
 
-    void format(T data);
+    default boolean format(T data) {
+        return process(data);
+    }
 }

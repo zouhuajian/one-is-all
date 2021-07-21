@@ -1,26 +1,23 @@
 package org.coastline.one.otel.collector.config;
 
-import org.coastline.one.otel.collector.model.DataType;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
+ *
  * @author Jay.H.Zou
  * @date 2021/7/20
  */
 public class ReceiverConfig {
 
-    public static final int DEFAULT_PORT_TRACE = 4317;
+    private Integer port;
 
-    public static final int DEFAULT_PORT_METRICS = 4318;
-
-    public static final int DEFAULT_PORT_LOG = 4319;
-
-    private int port;
-
-    public int getPort() {
+    public Integer getPort() {
         return port;
     }
 
-    public void setPort(int port) {
+    public void setPort(Integer port) {
         this.port = port;
     }
 }

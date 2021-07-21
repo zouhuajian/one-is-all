@@ -3,14 +3,12 @@ package org.coastline.one.otel.collector.receiver;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import io.opentelemetry.proto.trace.v1.ResourceSpans;
 import org.coastline.one.otel.collector.config.ReceiverConfig;
 import org.coastline.one.otel.collector.processor.DataProcessor;
 import org.coastline.one.otel.collector.queue.DataQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -43,12 +41,10 @@ public abstract class AbstractDataReceiver<T> implements DataReceiver<T> {
 
     @Override
     public void initialize() throws Exception {
-        // 给server添加监听端口号，添加 包含业务处理逻辑的类，然后启动
         server = ServerBuilder.forPort(config.getPort())
                 .addService(buildService())
                 .build()
                 .start();
-        logger.info("receiver started at port {}", config.getPort());
     }
 
     @Override
