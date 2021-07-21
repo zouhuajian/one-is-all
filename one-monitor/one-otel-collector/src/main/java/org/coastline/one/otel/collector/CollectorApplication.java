@@ -13,11 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CollectorApplication {
 
     public static void main(String[] args) throws Exception {
-
         SpringApplication.run(CollectorApplication.class, args);
     }
-
-
-
 
 }

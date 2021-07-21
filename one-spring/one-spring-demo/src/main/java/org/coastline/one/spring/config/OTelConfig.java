@@ -4,6 +4,7 @@ import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.api.trace.TracerProvider;
 import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
 import io.opentelemetry.context.propagation.ContextPropagators;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
@@ -29,7 +30,9 @@ public class OTelConfig {
     private static final OtlpGrpcSpanExporter exporter = OtlpGrpcSpanExporter.builder().setEndpoint(DEFAULT_ENDPOINT_URL).build();
     private static final SpanProcessor spanProcessor = SimpleSpanProcessor.create(exporter);
 
-    private static final Resource resource = Resource.create(Attributes.of(AttributeKey.stringKey("service.name"), "one-spring-demo"));
+    private static final Resource resource = Resource.create(Attributes.of(AttributeKey.stringKey("service.name"), "one-spring-demo",
+            AttributeKey.stringKey("service.zone"), "LOCAL"));
+
     private static final SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
             .setResource(resource)
             .addSpanProcessor(spanProcessor)

@@ -25,7 +25,6 @@ public class CollectorServer implements InitializingBean {
     @Autowired
     private CollectorConfig config;
 
-
     @Override
     public void afterPropertiesSet() throws Exception {
         Gson gson = new Gson();
@@ -34,10 +33,10 @@ public class CollectorServer implements InitializingBean {
         logger.info("metrics receiver config: {}", gson.toJsonTree(config.getMetricsReceiverConfig()));
         logger.info("metrics export config: {}", gson.toJsonTree(config.getTraceExportersConfig()));
 
-        start(config);
+        startServers(config);
     }
 
-    public static void start(CollectorConfig config) throws Exception {
+    public void startServers(CollectorConfig config) throws Exception {
         DefaultComponentFactory.createTraceComponents(config);
         DefaultComponentFactory.createMetricsComponents(config);
     }

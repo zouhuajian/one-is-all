@@ -7,7 +7,9 @@ import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc;
 import io.opentelemetry.proto.trace.v1.ResourceSpans;
 import org.coastline.one.otel.collector.config.ReceiverConfig;
-import org.coastline.one.otel.collector.processor.DataProcessor;
+import org.coastline.one.otel.collector.model.TraceModel;
+import org.coastline.one.otel.collector.processor.filter.DataFilter;
+import org.coastline.one.otel.collector.processor.formatter.DataFormatter;
 import org.coastline.one.otel.collector.queue.DataQueue;
 import org.coastline.one.otel.collector.receiver.AbstractDataReceiver;
 
@@ -17,21 +19,24 @@ import java.util.List;
  * @author Jay.H.Zou
  * @date 2021/7/20
  */
-public class TraceReceiver extends AbstractDataReceiver<ResourceSpans> {
+public class TraceReceiver extends AbstractDataReceiver<ResourceSpans, TraceModel> {
 
-    public TraceReceiver(ReceiverConfig config,
-                         List<DataProcessor<ResourceSpans>> processors,
-                         DataQueue<ResourceSpans> dataQueue) {
-        super(config, processors, dataQueue);
+    private TraceReceiver(ReceiverConfig config,
+                          DataFormatter<ResourceSpans, TraceModel> formatter,
+                          List<DataFilter<TraceModel>> filters,
+                          DataQueue<TraceModel> dataQueue) {
+        super(config, formatter, filters, dataQueue);
         logger.info("trace receiver start to initialize...");
     }
 
-    public static void create(ReceiverConfig config,
-                              List<DataProcessor<ResourceSpans>> processors,
-                              DataQueue<ResourceSpans> dataQueue) throws Exception {
-        TraceReceiver receiver = new TraceReceiver(config, processors, dataQueue);
+    public static TraceReceiver create(ReceiverConfig config,
+                                       DataFormatter<ResourceSpans, TraceModel> formatter,
+                                       List<DataFilter<TraceModel>> filters,
+                                       DataQueue<TraceModel> dataQueue) throws Exception {
+        TraceReceiver receiver = new TraceReceiver(config, formatter, filters, dataQueue);
         receiver.initialize();
         logger.info("trace receiver started at port {}", config.getPort());
+        return receiver;
     }
 
     @Override
@@ -39,13 +44,15 @@ public class TraceReceiver extends AbstractDataReceiver<ResourceSpans> {
         return new TraceService();
     }
 
+
+
     class TraceService extends TraceServiceGrpc.TraceServiceImplBase {
 
         @Override
         public void export(ExportTraceServiceRequest request, StreamObserver<ExportTraceServiceResponse> responseObserver) {
             logger.info("span count = {}", request.getResourceSpansCount());
             List<ResourceSpans> resourceSpansList = request.getResourceSpansList();
-            logger.info("data = \n{}", resourceSpansList);
+            // logger.info("data = \n{}", resourceSpansList);
             // process
             try {
                 resourceSpansList.parallelStream().forEach(resourceSpans -> {

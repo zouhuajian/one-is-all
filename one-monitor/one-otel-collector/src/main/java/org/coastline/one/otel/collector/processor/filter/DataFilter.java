@@ -1,14 +1,12 @@
 package org.coastline.one.otel.collector.processor.filter;
 
-import org.coastline.one.otel.collector.processor.DataProcessor;
+import org.coastline.one.otel.collector.component.DataComponent;
 
 /**
  * @author Jay.H.Zou
  * @date 2021/7/20
  */
-public interface DataFilter<T> extends DataProcessor<T> {
+public interface DataFilter<T> extends DataComponent {
 
-    default boolean filter(T data) {
-        return process(data);
-    }
+    boolean filter(T data);
 }

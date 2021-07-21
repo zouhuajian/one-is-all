@@ -69,20 +69,14 @@ public class OtelFilter implements Filter {
                     AttributeKey.stringKey("http_code"), String.valueOf(status));
             span.setAllAttributes(attributes);
             span.addEvent("test_event");
-            span.addEvent("event_2", Instant.now());
-
-            Span childSpan = tracer.spanBuilder("child").startSpan();
-            try (Scope scopeChildren = childSpan.makeCurrent()) {
-                System.out.println("build child span");
-            } finally {
-                childSpan.end();
-            }
+            span.addEvent("have_attr", Attributes.of(AttributeKey.stringKey("event_attr_key"), "event_attr_value"));
+            span.setStatus(StatusCode.OK, "this is ok");
         } catch (Exception t) {
             span.setStatus(StatusCode.ERROR, t.getMessage());
         } finally {
             span.end(); // closing the scope does not end the span, this has to be done manually
         }
-        customSend((ReadWriteSpan)span);
+        // customSend((ReadWriteSpan)span);
         filterChain.doFilter(servletRequest,servletResponse);
     }
 

@@ -1,20 +1,22 @@
 package org.coastline.one.otel.collector.component.impl;
 
 import com.google.common.collect.Lists;
-import io.opentelemetry.proto.trace.v1.ResourceSpans;
 import org.coastline.one.otel.collector.component.ComponentFactory;
 import org.coastline.one.otel.collector.config.CollectorConfig;
 import org.coastline.one.otel.collector.exporter.impl.TraceKafkaExporter;
-import org.coastline.one.otel.collector.processor.DataProcessor;
+import org.coastline.one.otel.collector.model.TraceModel;
+import org.coastline.one.otel.collector.processor.filter.DataFilter;
 import org.coastline.one.otel.collector.processor.filter.impl.DefaultTraceFilter;
-import org.coastline.one.otel.collector.processor.format.impl.DefaultTraceDataFormat;
+import org.coastline.one.otel.collector.processor.formatter.impl.DefaultTraceDataFormatter;
 import org.coastline.one.otel.collector.queue.DataQueue;
-import org.coastline.one.otel.collector.queue.impl.MemTraceQueue;
+import org.coastline.one.otel.collector.queue.impl.DefaultTraceQueue;
 import org.coastline.one.otel.collector.receiver.impl.TraceReceiver;
 
 import java.util.List;
 
 /**
+ * 构建整体处理流程
+ *
  * @author Jay.H.Zou
  * @date 2021/7/21
  */
@@ -32,24 +34,17 @@ public class DefaultComponentFactory implements ComponentFactory {
 
     @Override
     public void buildTraceComponents(CollectorConfig config) throws Exception {
-
         // processors
-        List<DataProcessor<ResourceSpans>> processors = Lists.newArrayList();
-        processors.add(new DefaultTraceFilter());
-        processors.add(new DefaultTraceDataFormat());
+        DefaultTraceDataFormatter formatter = DefaultTraceDataFormatter.create();
+        List<DataFilter<TraceModel>> filters = Lists.newArrayList(DefaultTraceFilter.create());
         // queue
-        DataQueue<ResourceSpans> dataQueue = new MemTraceQueue();
-        TraceReceiver.create(config.getTraceReceiverConfig(), processors, dataQueue);
+        DataQueue<TraceModel> dataQueue = DefaultTraceQueue.create();
+        TraceReceiver.create(config.getTraceReceiverConfig(), formatter, filters, dataQueue);
         TraceKafkaExporter.create(config.getTraceExportersConfig(), dataQueue);
     }
 
     @Override
     public void buildMetricsComponents(CollectorConfig config) throws Exception {
-
-    }
-
-    @Override
-    public void buildExtensionComponents(CollectorConfig config) throws Exception {
 
     }
 }

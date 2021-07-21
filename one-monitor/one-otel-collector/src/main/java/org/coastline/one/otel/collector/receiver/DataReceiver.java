@@ -8,8 +8,8 @@ import org.coastline.one.otel.collector.component.DataComponent;
  * @author Jay.H.Zou
  * @date 2021/7/20
  */
-public interface DataReceiver<T> extends DataComponent {
+public interface DataReceiver<I, O> extends DataComponent {
 
-    boolean consume(T data);
+    boolean consume(I data);
 
 }

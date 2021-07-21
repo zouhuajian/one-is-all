@@ -4,7 +4,8 @@ import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import org.coastline.one.otel.collector.config.ReceiverConfig;
-import org.coastline.one.otel.collector.processor.DataProcessor;
+import org.coastline.one.otel.collector.processor.filter.DataFilter;
+import org.coastline.one.otel.collector.processor.formatter.DataFormatter;
 import org.coastline.one.otel.collector.queue.DataQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,27 +18,32 @@ import java.util.List;
  * @author Jay.H.Zou
  * @date 2021/7/20
  */
-public abstract class AbstractDataReceiver<T> implements DataReceiver<T> {
+public abstract class AbstractDataReceiver<I, O> implements DataReceiver<I, O> {
 
     protected static final Logger logger = LoggerFactory.getLogger(AbstractDataReceiver.class);
 
     private ReceiverConfig config;
 
-    private List<DataProcessor<T>> processors;
+    private DataFormatter<I, O> formatter;
 
-    private DataQueue<T> dataQueue;
+    private List<DataFilter<O>> filters;
+
+    private DataQueue<O> dataQueue;
 
     /**
      * 定义一个Server对象，监听端口来获取rpc请求，以进行下面的处理
      */
     private Server server;
 
-    public AbstractDataReceiver(ReceiverConfig config, List<DataProcessor<T>> processors, DataQueue<T> dataQueue) {
+    public AbstractDataReceiver(ReceiverConfig config,
+                                DataFormatter<I, O> formatter,
+                                List<DataFilter<O>> filters,
+                                DataQueue<O> dataQueue) {
         this.config = config;
-        this.processors = processors;
+        this.formatter = formatter;
+        this.filters = filters;
         this.dataQueue = dataQueue;
     }
-
 
     @Override
     public void initialize() throws Exception {
@@ -48,13 +54,14 @@ public abstract class AbstractDataReceiver<T> implements DataReceiver<T> {
     }
 
     @Override
-    public boolean consume(T data) {
-        for (DataProcessor<T> processor : processors) {
-            if (!processor.process(data)) {
+    public boolean consume(I data) {
+        O format = formatter.format(data);
+        for (DataFilter<O> filter : filters) {
+            if (!filter.filter(format)) {
                 return false;
             }
         }
-        return dataQueue.put(data);
+        return dataQueue.put(format);
     }
 
     /**

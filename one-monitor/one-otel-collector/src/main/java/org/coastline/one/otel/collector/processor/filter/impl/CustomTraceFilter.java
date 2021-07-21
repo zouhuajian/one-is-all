@@ -20,7 +20,7 @@ public class CustomTraceFilter implements DataFilter<ResourceSpans> {
     }
 
     @Override
-    public boolean process(ResourceSpans data) {
+    public boolean filter(ResourceSpans data) {
         return false;
     }
 }

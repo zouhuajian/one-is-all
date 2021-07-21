@@ -16,5 +16,4 @@ public interface ComponentFactory {
 
     void buildMetricsComponents(CollectorConfig config) throws Exception;
 
-    void buildExtensionComponents(CollectorConfig config) throws Exception;
 }
