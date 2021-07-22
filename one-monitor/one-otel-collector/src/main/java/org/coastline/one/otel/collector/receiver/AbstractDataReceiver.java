@@ -76,7 +76,8 @@ public abstract class AbstractDataReceiver<I, O> implements DataReceiver<I, O> {
     public void close() {
         if (server != null) {
             try {
-                server.awaitTermination();
+                //server.awaitTermination();
+                server.shutdownNow();
             } catch (Exception e) {
                 logger.error("close server error", e);
             }

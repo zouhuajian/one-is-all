@@ -9,6 +9,8 @@ import org.coastline.one.otel.collector.processor.filter.DataFilter;
  */
 public class CustomTraceFilter implements DataFilter<ResourceSpans> {
 
+
+
     @Override
     public void initialize() throws Exception {
         DataFilter.super.initialize();

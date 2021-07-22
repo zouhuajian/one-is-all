@@ -3,14 +3,14 @@ package org.coastline.one.spring.filter;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.UnsafeByteOperations;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.api.trace.SpanKind;
-import io.opentelemetry.api.trace.StatusCode;
-import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.api.internal.OtelEncodingUtils;
+import io.opentelemetry.api.trace.*;
 import io.opentelemetry.context.Scope;
 import io.opentelemetry.exporter.otlp.internal.SpanAdapter;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
@@ -27,9 +27,14 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author Jay.H.Zou
@@ -71,13 +76,17 @@ public class OtelFilter implements Filter {
             span.addEvent("test_event");
             span.addEvent("have_attr", Attributes.of(AttributeKey.stringKey("event_attr_key"), "event_attr_value"));
             span.setStatus(StatusCode.OK, "this is ok");
+
         } catch (Exception t) {
             span.setStatus(StatusCode.ERROR, t.getMessage());
         } finally {
             span.end(); // closing the scope does not end the span, this has to be done manually
         }
+        tracer.spanBuilder("childWithLink")
+                .addLink(span.getSpanContext())
+                .startSpan().end();
         // customSend((ReadWriteSpan)span);
-        filterChain.doFilter(servletRequest,servletResponse);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     private void customSend(ReadWriteSpan span) {
@@ -104,5 +113,23 @@ public class OtelFilter implements Filter {
                 },
                 MoreExecutors.directExecutor());
         managedChannel.shutdown();
+    }
+
+    public static void main(String[] args) {
+        long INVALID_ID = 0;
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        long idHi = random.nextLong();
+        long idLo;
+        do {
+            idLo = random.nextLong();
+        } while (idLo == INVALID_ID);
+        String traceId = TraceId.fromLongs(idHi, idLo);
+        System.out.println(traceId);
+
+        ByteString byteString = UnsafeByteOperations.unsafeWrap(OtelEncodingUtils.bytesFromBase16(traceId, TraceId.getLength()));
+        byte[] bytes = byteString.toByteArray();
+        char[] chars = new char[TraceId.getLength()];
+        OtelEncodingUtils.bytesToBase16(bytes, chars, bytes.length);
+        System.out.println(new String(chars));
     }
 }

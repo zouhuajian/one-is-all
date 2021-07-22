@@ -6,6 +6,12 @@ package org.coastline.one.otel.collector.component;
  */
 public interface DataComponent {
 
+
+    default void start() throws Exception {
+        initialize();
+        addShutdownHook();
+    }
+
     default void initialize() throws Exception {
     }
 
@@ -15,7 +21,7 @@ public interface DataComponent {
     default void close() {
     }
 
-    default void doClose() {
+    default void addShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     }
 }

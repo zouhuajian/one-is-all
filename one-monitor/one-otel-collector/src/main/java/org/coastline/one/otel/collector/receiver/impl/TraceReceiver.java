@@ -34,7 +34,7 @@ public class TraceReceiver extends AbstractDataReceiver<ResourceSpans, TraceMode
                                        List<DataFilter<TraceModel>> filters,
                                        DataQueue<TraceModel> dataQueue) throws Exception {
         TraceReceiver receiver = new TraceReceiver(config, formatter, filters, dataQueue);
-        receiver.initialize();
+        receiver.start();
         logger.info("trace receiver started at port {}", config.getPort());
         return receiver;
     }

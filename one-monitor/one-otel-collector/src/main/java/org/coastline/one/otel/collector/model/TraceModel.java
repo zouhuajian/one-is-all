@@ -1,6 +1,7 @@
 package org.coastline.one.otel.collector.model;
 
 
+
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -12,64 +13,97 @@ import java.util.Map;
  */
 public class TraceModel {
 
-    private TraceModel(){}
+    private TraceModel() {
+    }
 
     public static TraceModel create() {
         return new TraceModel();
     }
 
-    private Resource resource = new Resource();
+    private ResourceData resourceData =  ResourceData.create();
 
-    private InstrumentationLibrary instrumentationLibrary = new InstrumentationLibrary();
+    private List<InstrumentationLibrarySpansData> instrumentationLibrarySpansDataList = Lists.newArrayList();
 
-    private List<Span> spans = Lists.newArrayList();
-
-    public Resource getResource() {
-        return resource;
+    public ResourceData getResourceData() {
+        return resourceData;
     }
 
-    public TraceModel setResource(Resource resource) {
-        this.resource = resource;
+    public TraceModel setResourceData(ResourceData resourceData) {
+        this.resourceData = resourceData;
         return this;
     }
 
-    public InstrumentationLibrary getInstrumentationLibrary() {
-        return instrumentationLibrary;
+    public List<InstrumentationLibrarySpansData> getInstrumentationLibrarySpansDataList() {
+        return instrumentationLibrarySpansDataList;
     }
 
-    public TraceModel setInstrumentationLibrary(InstrumentationLibrary instrumentationLibrary) {
-        this.instrumentationLibrary = instrumentationLibrary;
+    public TraceModel setInstrumentationLibrarySpansDataList(List<InstrumentationLibrarySpansData> instrumentationLibrarySpansDataList) {
+        this.instrumentationLibrarySpansDataList = instrumentationLibrarySpansDataList;
         return this;
     }
 
-    public List<Span> getSpans() {
-        return spans;
-    }
+    /********************************* Resource AttributesList & InstrumentationLibrary *********************************/
+    public static class ResourceData {
+        private ResourceData(){}
 
-    public TraceModel setSpans(List<Span> spans) {
-        this.spans = spans;
-        return this;
-    }
+        public static ResourceData create() {
+            return new ResourceData();
+        }
 
-    /********************************* Resource AttributesList *********************************/
-    public static class Resource {
         /**
          * service.name = one-spring-demo
          * service.zone = LOCAL
          */
-        private Map<String, String> attributes;
+        private Map<String, String> attributesMap;
 
-        public Map<String, String> getAttributes() {
-            return attributes;
+        public Map<String, String> getAttributesMap() {
+            return attributesMap;
         }
 
-        public void setAttributes(Map<String, String> attributes) {
-            this.attributes = attributes;
+        public ResourceData setAttributesMap(Map<String, String> attributesMap) {
+            this.attributesMap = attributesMap;
+            return this;
         }
     }
 
-    /********************************* InstrumentationLibrary *********************************/
-    public static class InstrumentationLibrary {
+    public static class InstrumentationLibrarySpansData {
+        private InstrumentationLibrarySpansData() {}
+
+        public static InstrumentationLibrarySpansData create() {
+            return new InstrumentationLibrarySpansData();
+        }
+
+        private InstrumentationLibraryData instrumentationLibraryData;
+
+        private List<SpanData> spanDataList;
+
+        public InstrumentationLibraryData getInstrumentationLibraryData() {
+            return instrumentationLibraryData;
+        }
+
+        public InstrumentationLibrarySpansData setInstrumentationLibraryData(InstrumentationLibraryData instrumentationLibraryData) {
+            this.instrumentationLibraryData = instrumentationLibraryData;
+            return this;
+        }
+
+        public List<SpanData> getSpanDataList() {
+            return spanDataList;
+        }
+
+        public InstrumentationLibrarySpansData setSpanDataList(List<SpanData> spanDataList) {
+            this.spanDataList = spanDataList;
+            return this;
+        }
+    }
+
+    public static class InstrumentationLibraryData {
+
+        private InstrumentationLibraryData() {}
+
+        public static InstrumentationLibraryData create() {
+            return new InstrumentationLibraryData();
+        }
+
         private String name;
 
         private String version;
@@ -78,7 +112,7 @@ public class TraceModel {
             return name;
         }
 
-        public InstrumentationLibrary setName(String name) {
+        public InstrumentationLibraryData setName(String name) {
             this.name = name;
             return this;
         }
@@ -87,14 +121,20 @@ public class TraceModel {
             return version;
         }
 
-        public InstrumentationLibrary setVersion(String version) {
+        public InstrumentationLibraryData setVersion(String version) {
             this.version = version;
             return this;
         }
     }
 
     /********************************* Span *********************************/
-    public static class Span {
+    public static class SpanData {
+
+        private SpanData() {}
+
+        public static SpanData create() {
+            return new SpanData();
+        }
         private String traceId;
 
         private String spanId;
@@ -107,127 +147,184 @@ public class TraceModel {
 
         private long endTimeNano;
 
-        private Map<String, String> attributes;
+        private Map<String, String> attributesMap;
 
-        private List<Event> events;
+        private List<EventData> eventDataList;
 
-        private Status status;
+        private List<LinkData> linkDataList;
+
+        private String status;
 
         public String getTraceId() {
             return traceId;
         }
 
-        public void setTraceId(String traceId) {
+        public SpanData setTraceId(String traceId) {
             this.traceId = traceId;
+            return this;
         }
 
         public String getSpanId() {
             return spanId;
         }
 
-        public void setSpanId(String spanId) {
+        public SpanData setSpanId(String spanId) {
             this.spanId = spanId;
+            return this;
         }
 
         public String getName() {
             return name;
         }
 
-        public void setName(String name) {
+        public SpanData setName(String name) {
             this.name = name;
+            return this;
         }
 
         public String getKind() {
             return kind;
         }
 
-        public void setKind(String kind) {
+        public SpanData setKind(String kind) {
             this.kind = kind;
+            return this;
         }
 
         public long getStartTimeNano() {
             return startTimeNano;
         }
 
-        public void setStartTimeNano(long startTimeNano) {
+        public SpanData setStartTimeNano(long startTimeNano) {
             this.startTimeNano = startTimeNano;
+            return this;
         }
 
         public long getEndTimeNano() {
             return endTimeNano;
         }
 
-        public void setEndTimeNano(long endTimeNano) {
+        public SpanData setEndTimeNano(long endTimeNano) {
             this.endTimeNano = endTimeNano;
+            return this;
         }
 
-        public Map<String, String> getAttributes() {
-            return attributes;
+        public Map<String, String> getAttributesMap() {
+            return attributesMap;
         }
 
-        public void setAttributes(Map<String, String> attributes) {
-            this.attributes = attributes;
+        public SpanData setAttributesMap(Map<String, String> attributesMap) {
+            this.attributesMap = attributesMap;
+            return this;
         }
 
-        public List<Event> getEvents() {
-            return events;
+        public List<EventData> getEventDataList() {
+            return eventDataList;
         }
 
-        public void setEvents(List<Event> events) {
-            this.events = events;
+        public SpanData setEventDataList(List<EventData> eventDataList) {
+            this.eventDataList = eventDataList;
+            return this;
         }
 
-        public Status getStatus() {
+        public List<LinkData> getLinkDataList() {
+            return linkDataList;
+        }
+
+        public SpanData setLinkDataList(List<LinkData> linkDataList) {
+            this.linkDataList = linkDataList;
+            return this;
+        }
+
+        public String getStatus() {
             return status;
         }
 
-        public void setStatus(Status status) {
+        public SpanData setStatus(String status) {
             this.status = status;
+            return this;
         }
     }
 
-    public static class Event {
+    public static class EventData {
+
+        private EventData() {}
+
+        public static EventData create() {
+            return new EventData();
+        }
+
         private long timeNano;
 
-        private Map<String, String> attributes;
+        private Map<String, String> attributesMap;
 
         public long getTimeNano() {
             return timeNano;
         }
 
-        public void setTimeNano(long timeNano) {
+        public EventData setTimeNano(long timeNano) {
             this.timeNano = timeNano;
+            return this;
         }
 
-        public Map<String, String> getAttributes() {
-            return attributes;
+        public Map<String, String> getAttributesMap() {
+            return attributesMap;
         }
 
-        public void setAttributes(Map<String, String> attributes) {
-            this.attributes = attributes;
-        }
-    }
-
-    private static class Status {
-        private String code;
-
-        private String message;
-
-        public String getCode() {
-            return code;
-        }
-
-        public void setCode(String code) {
-            this.code = code;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
+        public EventData setAttributesMap(Map<String, String> attributesMap) {
+            this.attributesMap = attributesMap;
+            return this;
         }
     }
 
+    public static class LinkData {
+
+        private LinkData() {}
+
+        public static LinkData create() {
+            return new LinkData();
+        }
+
+        private String traceId;
+
+        private String spanId;
+
+        private Map<String, String> attributesMap;
+
+        private String status;
+
+        public String getTraceId() {
+            return traceId;
+        }
+
+        public LinkData setTraceId(String traceId) {
+            this.traceId = traceId;
+            return this;
+        }
+
+        public String getSpanId() {
+            return spanId;
+        }
+
+        public LinkData setSpanId(String spanId) {
+            this.spanId = spanId;
+            return this;
+        }
+
+        public Map<String, String> getAttributesMap() {
+            return attributesMap;
+        }
+
+        public void setAttributesMap(Map<String, String> attributesMap) {
+            this.attributesMap = attributesMap;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+    }
 }
