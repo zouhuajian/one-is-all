@@ -6,7 +6,7 @@ import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc;
 import io.opentelemetry.proto.trace.v1.ResourceSpans;
-import org.coastline.one.otel.collector.config.ReceiverConfig;
+import org.coastline.one.otel.collector.config.OldReceiverConfig;
 import org.coastline.one.otel.collector.model.TraceModel;
 import org.coastline.one.otel.collector.processor.filter.DataFilter;
 import org.coastline.one.otel.collector.processor.formatter.DataFormatter;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class TraceReceiver extends AbstractDataReceiver<ResourceSpans, TraceModel> {
 
-    private TraceReceiver(ReceiverConfig config,
+    private TraceReceiver(OldReceiverConfig config,
                           DataFormatter<ResourceSpans, TraceModel> formatter,
                           List<DataFilter<TraceModel>> filters,
                           DataQueue<TraceModel> dataQueue) {
@@ -29,7 +29,7 @@ public class TraceReceiver extends AbstractDataReceiver<ResourceSpans, TraceMode
         logger.info("trace receiver start to initialize...");
     }
 
-    public static TraceReceiver create(ReceiverConfig config,
+    public static TraceReceiver create(OldReceiverConfig config,
                                        DataFormatter<ResourceSpans, TraceModel> formatter,
                                        List<DataFilter<TraceModel>> filters,
                                        DataQueue<TraceModel> dataQueue) throws Exception {

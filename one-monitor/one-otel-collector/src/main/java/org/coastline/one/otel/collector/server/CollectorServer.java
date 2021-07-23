@@ -2,7 +2,7 @@ package org.coastline.one.otel.collector.server;
 
 import com.google.gson.Gson;
 import org.coastline.one.otel.collector.component.impl.DefaultComponentFactory;
-import org.coastline.one.otel.collector.config.CollectorConfig;
+import org.coastline.one.otel.collector.config.OldCollectorConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -23,7 +23,7 @@ public class CollectorServer implements InitializingBean {
     private static final String DEFAULT_CONFIG_NAME = "application.yaml";
 
     @Autowired
-    private CollectorConfig config;
+    private OldCollectorConfig config;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -36,7 +36,7 @@ public class CollectorServer implements InitializingBean {
         startServers(config);
     }
 
-    public void startServers(CollectorConfig config) throws Exception {
+    public void startServers(OldCollectorConfig config) throws Exception {
         DefaultComponentFactory.createTraceComponents(config);
         DefaultComponentFactory.createMetricsComponents(config);
     }

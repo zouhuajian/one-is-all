@@ -6,7 +6,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
-import org.coastline.one.otel.collector.config.ExporterConfig;
+import org.coastline.one.otel.collector.config.OldExporterConfig;
 import org.coastline.one.otel.collector.exporter.DataExporter;
 import org.coastline.one.otel.collector.model.TraceModel;
 import org.coastline.one.otel.collector.queue.DataQueue;
@@ -29,7 +29,7 @@ public class KafkaTraceExporter implements DataExporter<TraceModel> {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaTraceExporter.class);
 
-    private ExporterConfig config;
+    private OldExporterConfig config;
 
     private DataQueue<TraceModel> dataQueue;
 
@@ -43,12 +43,12 @@ public class KafkaTraceExporter implements DataExporter<TraceModel> {
             new ThreadFactoryBuilder().setDaemon(true).setNameFormat("consume-queue-%d").build(),
             new ThreadPoolExecutor.CallerRunsPolicy());
 
-    private KafkaTraceExporter(ExporterConfig config, DataQueue<TraceModel> dataQueue) {
+    private KafkaTraceExporter(OldExporterConfig config, DataQueue<TraceModel> dataQueue) {
         this.config = config;
         this.dataQueue = dataQueue;
     }
 
-    public static KafkaTraceExporter create(ExporterConfig config, DataQueue<TraceModel> dataQueue) throws Exception {
+    public static KafkaTraceExporter create(OldExporterConfig config, DataQueue<TraceModel> dataQueue) throws Exception {
         KafkaTraceExporter exporter = new KafkaTraceExporter(config, dataQueue);
         exporter.start();
         return exporter;

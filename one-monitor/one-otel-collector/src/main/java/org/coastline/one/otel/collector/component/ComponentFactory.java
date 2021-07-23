@@ -1,6 +1,6 @@
 package org.coastline.one.otel.collector.component;
 
-import org.coastline.one.otel.collector.config.CollectorConfig;
+import org.coastline.one.otel.collector.config.OldCollectorConfig;
 
 
 /**
@@ -12,8 +12,8 @@ import org.coastline.one.otel.collector.config.CollectorConfig;
 public interface ComponentFactory {
 
 
-    void buildTraceComponents(CollectorConfig config) throws Exception;
+    void buildTraceComponents(OldCollectorConfig config) throws Exception;
 
-    void buildMetricsComponents(CollectorConfig config) throws Exception;
+    void buildMetricsComponents(OldCollectorConfig config) throws Exception;
 
 }

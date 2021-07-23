@@ -2,7 +2,7 @@ package org.coastline.one.otel.collector.component.impl;
 
 import com.google.common.collect.Lists;
 import org.coastline.one.otel.collector.component.ComponentFactory;
-import org.coastline.one.otel.collector.config.CollectorConfig;
+import org.coastline.one.otel.collector.config.OldCollectorConfig;
 import org.coastline.one.otel.collector.exporter.impl.KafkaTraceExporter;
 import org.coastline.one.otel.collector.model.TraceModel;
 import org.coastline.one.otel.collector.processor.filter.DataFilter;
@@ -24,16 +24,16 @@ public class DefaultComponentFactory implements ComponentFactory {
 
     public static final DefaultComponentFactory DEFAULT_INSTANT = new DefaultComponentFactory();
 
-    public static void createTraceComponents(CollectorConfig config) throws Exception {
+    public static void createTraceComponents(OldCollectorConfig config) throws Exception {
         DEFAULT_INSTANT.buildTraceComponents(config);
     }
 
-    public static void createMetricsComponents(CollectorConfig config) throws Exception {
+    public static void createMetricsComponents(OldCollectorConfig config) throws Exception {
         DEFAULT_INSTANT.buildMetricsComponents(config);
     }
 
     @Override
-    public void buildTraceComponents(CollectorConfig config) throws Exception {
+    public void buildTraceComponents(OldCollectorConfig config) throws Exception {
         // processors
         DefaultTraceDataFormatter formatter = DefaultTraceDataFormatter.create();
         List<DataFilter<TraceModel>> filters = Lists.newArrayList(DefaultTraceFilter.create());
@@ -44,7 +44,7 @@ public class DefaultComponentFactory implements ComponentFactory {
     }
 
     @Override
-    public void buildMetricsComponents(CollectorConfig config) throws Exception {
+    public void buildMetricsComponents(OldCollectorConfig config) throws Exception {
 
     }
 }

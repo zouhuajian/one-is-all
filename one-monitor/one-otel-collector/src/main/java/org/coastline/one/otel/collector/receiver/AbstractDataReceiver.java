@@ -3,7 +3,7 @@ package org.coastline.one.otel.collector.receiver;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import org.coastline.one.otel.collector.config.ReceiverConfig;
+import org.coastline.one.otel.collector.config.OldReceiverConfig;
 import org.coastline.one.otel.collector.processor.filter.DataFilter;
 import org.coastline.one.otel.collector.processor.formatter.DataFormatter;
 import org.coastline.one.otel.collector.queue.DataQueue;
@@ -22,7 +22,7 @@ public abstract class AbstractDataReceiver<I, O> implements DataReceiver<I, O> {
 
     protected static final Logger logger = LoggerFactory.getLogger(AbstractDataReceiver.class);
 
-    private ReceiverConfig config;
+    private OldReceiverConfig config;
 
     private DataFormatter<I, O> formatter;
 
@@ -35,7 +35,7 @@ public abstract class AbstractDataReceiver<I, O> implements DataReceiver<I, O> {
      */
     private Server server;
 
-    public AbstractDataReceiver(ReceiverConfig config,
+    public AbstractDataReceiver(OldReceiverConfig config,
                                 DataFormatter<I, O> formatter,
                                 List<DataFilter<O>> filters,
                                 DataQueue<O> dataQueue) {

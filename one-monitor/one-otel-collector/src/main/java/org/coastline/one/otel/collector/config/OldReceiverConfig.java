@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Jay.H.Zou
  * @date 2021/7/20
  */
-public class ReceiverConfig {
+public class OldReceiverConfig {
 
     private Integer port;
 

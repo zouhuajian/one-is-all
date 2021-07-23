@@ -5,7 +5,7 @@ package org.coastline.one.otel.collector.config;
  * @date 2021/7/20
  */
 
-public class ExporterConfig {
+public class OldExporterConfig {
 
     private String brokers;
 
