@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>one-jaegertracing</module>
-        <module>one-otel-collector</module>
     </modules>
 
     <properties>
