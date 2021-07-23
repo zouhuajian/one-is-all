@@ -3,7 +3,7 @@ package org.coastline.one.otel.collector.component.impl;
 import com.google.common.collect.Lists;
 import org.coastline.one.otel.collector.component.ComponentFactory;
 import org.coastline.one.otel.collector.config.CollectorConfig;
-import org.coastline.one.otel.collector.exporter.impl.TraceKafkaExporter;
+import org.coastline.one.otel.collector.exporter.impl.KafkaTraceExporter;
 import org.coastline.one.otel.collector.model.TraceModel;
 import org.coastline.one.otel.collector.processor.filter.DataFilter;
 import org.coastline.one.otel.collector.processor.filter.impl.DefaultTraceFilter;
@@ -40,7 +40,7 @@ public class DefaultComponentFactory implements ComponentFactory {
         // queue
         DataQueue<TraceModel> dataQueue = DefaultTraceQueue.create();
         TraceReceiver.create(config.getTraceReceiverConfig(), formatter, filters, dataQueue);
-        TraceKafkaExporter.create(config.getTraceExportersConfig(), dataQueue);
+        KafkaTraceExporter.create(config.getTraceExportersConfig(), dataQueue);
     }
 
     @Override

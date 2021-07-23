@@ -56,7 +56,11 @@ public class TraceReceiver extends AbstractDataReceiver<ResourceSpans, TraceMode
             // process
             try {
                 resourceSpansList.parallelStream().forEach(resourceSpans -> {
-                    boolean result = consume(resourceSpans);
+                    try {
+                        boolean result = consume(resourceSpans);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 });
             } catch (Exception e) {
                 logger.error("consume trace data error", e);

@@ -89,11 +89,11 @@
             <artifactId>spring-boot-starter-log4j2</artifactId>
             <version>2.5.2</version>
         </dependency>
+
         <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-api</artifactId>
-            <version>1.4.1</version>
-            <scope>compile</scope>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>${kafka.version}</version>
         </dependency>
 
     </dependencies>

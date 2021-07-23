@@ -3,15 +3,15 @@ receivers:
     trace:
       port: 4317
     metrics:
-      port: 4318
+      port: 1234
 
 exporters:
   kafka:
     trace:
-      brokers: "xxx"
-      topic:
+      brokers: localhost:9092
+      topic: fairy_trace
     metrics:
-      brokers: "xxx"
+      brokers:
       topic:
 
 # TODO: 未设计好

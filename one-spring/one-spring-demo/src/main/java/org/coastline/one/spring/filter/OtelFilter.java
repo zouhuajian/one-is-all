@@ -128,7 +128,7 @@ public class OtelFilter implements Filter {
 
         ByteString byteString = UnsafeByteOperations.unsafeWrap(OtelEncodingUtils.bytesFromBase16(traceId, TraceId.getLength()));
         byte[] bytes = byteString.toByteArray();
-        char[] chars = new char[TraceId.getLength()];
+        char[] chars = new char[32];
         OtelEncodingUtils.bytesToBase16(bytes, chars, bytes.length);
         System.out.println(new String(chars));
     }

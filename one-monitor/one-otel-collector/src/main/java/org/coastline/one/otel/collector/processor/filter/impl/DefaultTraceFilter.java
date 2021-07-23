@@ -18,7 +18,6 @@ public class DefaultTraceFilter implements DataFilter<TraceModel> {
 
     @Override
     public boolean filter(TraceModel data) {
-
-        return false;
+        return true;
     }
 }

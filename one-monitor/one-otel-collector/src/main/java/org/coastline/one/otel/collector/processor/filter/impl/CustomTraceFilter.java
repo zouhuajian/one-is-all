@@ -18,11 +18,10 @@ public class CustomTraceFilter implements DataFilter<ResourceSpans> {
 
     @Override
     public void close() {
-        DataFilter.super.close();
     }
 
     @Override
     public boolean filter(ResourceSpans data) {
-        return false;
+        return true;
     }
 }

@@ -1,23 +1,17 @@
 package org.coastline.one.otel.collector.queue;
 
-import java.util.List;
+import org.coastline.one.otel.collector.component.DataComponent;
 
 /**
  * @author Jay.H.Zou
  * @date 2021/7/20
  */
-public interface DataQueue<T> {
+public interface DataQueue<T> extends DataComponent {
 
-    void initialize();
+    boolean add(T data) throws Exception;
 
-    void destroy();
+    T poll();
 
-    boolean put(T data);
-
-    boolean put(List<T> dataList);
-
-    T get();
-
-    List<T> getBatch(long batch);
+    T take() throws Exception;
 
 }

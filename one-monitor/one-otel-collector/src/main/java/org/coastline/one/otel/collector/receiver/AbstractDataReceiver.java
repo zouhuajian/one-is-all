@@ -54,14 +54,22 @@ public abstract class AbstractDataReceiver<I, O> implements DataReceiver<I, O> {
     }
 
     @Override
-    public boolean consume(I data) {
-        O format = formatter.format(data);
+    public boolean consume(I data) throws Exception {
+        O format;
+        try {
+            format = formatter.format(data);
+        } catch (Exception e) {
+            logger.error("format data error, origin data = {}", data, e);
+            // dirty data
+            return true;
+        }
         for (DataFilter<O> filter : filters) {
             if (!filter.filter(format)) {
-                return false;
+                // useless data
+                return true;
             }
         }
-        return dataQueue.put(format);
+        return dataQueue.add(format);
     }
 
     /**
@@ -82,6 +90,7 @@ public abstract class AbstractDataReceiver<I, O> implements DataReceiver<I, O> {
                 logger.error("close server error", e);
             }
         }
+        logger.info("receiver server shutdown, port = {}", config.getPort());
     }
 
 

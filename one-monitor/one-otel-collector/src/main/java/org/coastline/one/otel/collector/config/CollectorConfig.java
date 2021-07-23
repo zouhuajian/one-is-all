@@ -38,7 +38,7 @@ public class CollectorConfig {
     }
 
     @Bean(name = "traceExporterConfig")
-    @ConfigurationProperties(prefix = "receivers.kafka.trace")
+    @ConfigurationProperties(prefix = "exporters.kafka.trace")
     public ExporterConfig createTraceExporterConfig() {
         return new ExporterConfig();
     }

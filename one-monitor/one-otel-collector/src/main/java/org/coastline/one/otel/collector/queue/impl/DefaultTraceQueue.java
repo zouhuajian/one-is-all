@@ -1,10 +1,10 @@
 package org.coastline.one.otel.collector.queue.impl;
 
-import io.opentelemetry.proto.trace.v1.ResourceSpans;
 import org.coastline.one.otel.collector.model.TraceModel;
 import org.coastline.one.otel.collector.queue.DataQueue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -12,43 +12,49 @@ import java.util.concurrent.BlockingQueue;
  * @author Jay.H.Zou
  * @date 2021/7/21
  */
-public class DefaultTraceQueue implements DataQueue<TraceModel> {
+public final class DefaultTraceQueue implements DataQueue<TraceModel> {
 
-    private BlockingQueue<ResourceSpans> blockingDeque;
+    private static final Logger logger = LoggerFactory.getLogger(DefaultTraceQueue.class);
 
-    private DefaultTraceQueue() {}
+    private static final int DEFAULT_SIZE = 10000;
 
-    public static DefaultTraceQueue create(){
-        return new DefaultTraceQueue();
+    private BlockingQueue<TraceModel> blockingQueue;
+
+    private DefaultTraceQueue() {
+    }
+
+    public static DefaultTraceQueue create() throws Exception {
+        DefaultTraceQueue defaultTraceQueue = new DefaultTraceQueue();
+        defaultTraceQueue.start();
+        return defaultTraceQueue;
     }
 
     @Override
     public void initialize() {
-        blockingDeque = new ArrayBlockingQueue<>(10000);
+        blockingQueue = new ArrayBlockingQueue<>(DEFAULT_SIZE);
     }
 
     @Override
-    public void destroy() {
-
+    public void close() {
+        if (blockingQueue != null) {
+            blockingQueue.clear();
+        }
+        logger.info("default trace queue closed");
     }
 
     @Override
-    public boolean put(TraceModel data) {
-        return false;
+    public boolean add(TraceModel data) {
+        return blockingQueue.add(data);
     }
 
     @Override
-    public boolean put(List<TraceModel> dataList) {
-        return false;
+    public TraceModel poll() {
+        return blockingQueue.poll();
     }
 
     @Override
-    public TraceModel get() {
-        return null;
+    public TraceModel take() throws Exception {
+        return blockingQueue.take();
     }
 
-    @Override
-    public List<TraceModel> getBatch(long batch) {
-        return null;
-    }
 }

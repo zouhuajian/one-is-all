@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -20,14 +21,14 @@ public class OneKafkaConsumer {
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "local");
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Collections.singletonList("otlp_spans"));
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class.getName());
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class.getName());
+        KafkaConsumer<byte[], byte[]> consumer = new KafkaConsumer<>(props);
+        consumer.subscribe(Collections.singletonList("fairy_trace"));
         while (true) {
-            ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(2));
+            ConsumerRecords<byte[], byte[]> records = consumer.poll(Duration.ofSeconds(2));
             records.forEach(record -> {
-                JSONObject data = JSON.parseObject(record.value());
+                JSONObject data = JSON.parseObject(new String(record.value()));
                 System.out.println(data.toJSONString());
                 System.out.println("============================================================================");
             });

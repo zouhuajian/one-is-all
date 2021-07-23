@@ -8,5 +8,5 @@ import org.coastline.one.otel.collector.component.DataComponent;
  */
 public interface DataFormatter<I, O> extends DataComponent {
 
-    O format(I data);
+    O format(I data) throws Exception;
 }

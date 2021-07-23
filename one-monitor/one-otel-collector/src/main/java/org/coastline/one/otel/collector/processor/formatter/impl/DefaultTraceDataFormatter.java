@@ -63,8 +63,8 @@ public class DefaultTraceDataFormatter implements DataFormatter<ResourceSpans, T
         }
         Gson gson = new Gson();
         String traceModelJson = gson.toJson(traceModel);
-        System.out.println(traceModelJson);
-        logger.info("**************************************************************");
+        // logger.info(traceModelJson);
+        // logger.info("**************************************************************");
         return traceModel;
     }
 

@@ -10,6 +10,6 @@ import org.coastline.one.otel.collector.component.DataComponent;
  */
 public interface DataReceiver<I, O> extends DataComponent {
 
-    boolean consume(I data);
+    boolean consume(I data) throws Exception;
 
 }
