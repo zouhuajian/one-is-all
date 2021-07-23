@@ -1,21 +1,20 @@
 # 即将废弃
+#receivers:
+#  otlp:
+#    trace:
+#      port: 4317
+#    metrics:
+#      port: 1234
+#exporters:
+#  kafka:
+#    trace:
+#      brokers: localhost:9092
+#      topic: fairy_trace
+#    metrics:
+#      brokers:
+#      topic:
+
 receivers:
-  otlp:
-    trace:
-      port: 4317
-    metrics:
-      port: 1234
-exporters:
-  kafka:
-    trace:
-      brokers: localhost:9092
-      topic: fairy_trace
-    metrics:
-      brokers:
-      topic:
-
-
-receivers_:
   otlp/trace:
     protocols:
       grpc:
@@ -29,7 +28,8 @@ receivers_:
       grpc:
         endpoint: "0.0.0.0:4319"
 
-exporters_:
+
+exporters:
   kafka/trace:
     brokers: "localhost:9092"
     topic: "elf_trace"
@@ -51,7 +51,7 @@ extensions:
   jvm:
     endpoint: "0.0.0.0:1776"
   pprof:
-    endpoint: 0.0.0.0:1777
+    endpoint: "0.0.0.0:1777"
 
 service:
   pipelines:

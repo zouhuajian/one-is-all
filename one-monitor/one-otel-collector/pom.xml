@@ -96,6 +96,7 @@
             <version>${kafka.version}</version>
         </dependency>
 
+
     </dependencies>
 
 </project>
