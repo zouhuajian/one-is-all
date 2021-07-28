@@ -74,6 +74,7 @@ public class OtelFilter implements Filter {
                     AttributeKey.stringKey("http_code"), String.valueOf(status));
             span.setAllAttributes(attributes);
             span.addEvent("test_event");
+            span.addEvent("message", Attributes.of(AttributeKey.stringKey("message"), "11"));
             span.addEvent("have_attr", Attributes.of(AttributeKey.stringKey("event_attr_key"), "event_attr_value"));
             span.setStatus(StatusCode.OK, "this is ok");
 
