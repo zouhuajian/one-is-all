@@ -12,7 +12,11 @@
     <artifactId>one-spring-demo</artifactId>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
         <bytebuddy.version>1.10.16</bytebuddy.version>
+        <netty.version>4.1.66.Final</netty.version>
+        <protostuff.version>1.7.4</protostuff.version>
     </properties>
 
     <dependencies>
@@ -22,6 +26,25 @@
             <artifactId>one-core</artifactId>
             <version>1.0.0-RELEASE</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.protostuff</groupId>
+            <artifactId>protostuff-core</artifactId>
+            <version>${protostuff.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.protostuff</groupId>
+            <artifactId>protostuff-runtime</artifactId>
+            <version>${protostuff.version}</version>
+        </dependency>
+
         <!-- opentelemetry sdk -->
         <dependency>
             <groupId>io.opentelemetry</groupId>

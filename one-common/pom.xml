@@ -29,19 +29,5 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.leansoft</groupId>
-            <artifactId>bigqueue</artifactId>
-            <version>0.7.0</version>
-        </dependency>
-
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>github.release.repo</id>
-            <url>https://raw.github.com/bulldog2011/bulldog-repo/master/repo/releases/</url>
-        </repository>
-    </repositories>
 </project>

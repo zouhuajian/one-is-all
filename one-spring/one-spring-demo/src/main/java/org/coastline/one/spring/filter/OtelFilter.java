@@ -1,40 +1,24 @@
 package org.coastline.one.spring.filter;
 
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.MoreExecutors;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.UnsafeByteOperations;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.api.internal.OtelEncodingUtils;
-import io.opentelemetry.api.trace.*;
+import io.opentelemetry.api.metrics.DoubleValueRecorder;
+import io.opentelemetry.api.metrics.Meter;
+import io.opentelemetry.api.metrics.common.Labels;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.api.trace.StatusCode;
+import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
-import io.opentelemetry.exporter.otlp.internal.SpanAdapter;
-import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
-import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
-import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc;
-import io.opentelemetry.sdk.trace.ReadWriteSpan;
-import io.opentelemetry.sdk.trace.data.SpanData;
 import org.coastline.one.spring.config.OTelConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nullable;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 /**
  * @author Jay.H.Zou
@@ -57,7 +41,6 @@ public class OtelFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String method = request.getMethod();
         String requestURI = request.getRequestURI();
@@ -74,63 +57,56 @@ public class OtelFilter implements Filter {
                     AttributeKey.stringKey("http_code"), String.valueOf(status));
             span.setAllAttributes(attributes);
             span.addEvent("test_event");
-            span.addEvent("message", Attributes.of(AttributeKey.stringKey("message"), "11"));
             span.addEvent("have_attr", Attributes.of(AttributeKey.stringKey("event_attr_key"), "event_attr_value"));
             span.setStatus(StatusCode.OK, "this is ok");
-
+            recordMetrics(span, request);
         } catch (Exception t) {
             span.setStatus(StatusCode.ERROR, t.getMessage());
         } finally {
             span.end(); // closing the scope does not end the span, this has to be done manually
         }
-        tracer.spanBuilder("childWithLink")
-                .addLink(span.getSpanContext())
-                .startSpan().end();
-        // customSend((ReadWriteSpan)span);
+        /* tracer.spanBuilder("childWithLink")
+                        .addLink(span.getSpanContext())
+                        .startSpan().end(); */
+
+
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private void customSend(ReadWriteSpan span) {
-        List<SpanData> spans = Collections.singletonList(span.toSpanData());
-        // 构建客户端
-        ExportTraceServiceRequest exportTraceServiceRequest = ExportTraceServiceRequest.newBuilder()
-                .addAllResourceSpans(SpanAdapter.toProtoResourceSpans(spans))
+    private void recordMetrics(Span span, HttpServletRequest request) {
+        Random random = new Random();
+        Meter meter = OTelConfig.getMeter();
+        // 统计请求个数
+        /*LongCounter counter = meter.longCounterBuilder("http_count")
+                .setDescription("http request count")
+                .setUnit("1").build();
+        counter.add(1, Labels.of("http_url", request.getRequestURI()));
+        // 队列长度
+        LongUpDownCounter longUpDownCounter = meter.longUpDownCounterBuilder("test_up_down_counter")
                 .build();
-        ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("localhost", 4317).usePlaintext().build();
+        longUpDownCounter.add(random.nextInt(50));*/
+        // record duration
+        DoubleValueRecorder duration = meter.doubleValueRecorderBuilder("duration")
+                .setUnit("ms")
+                .setDescription("duration metrics")
+                .build();
+        int i = random.nextInt(200);
+        //i = i > 3 ? 1 : 5;
+        duration.record(i,  Labels.of("http_url", request.getRequestURI()));
+        System.out.println(i);
+        // Build observer e.g. LongSumObserver
+        /*meter.longSumObserverBuilder("cpu_usage")
+                .setDescription("CPU Usage")
+                .setUnit("%")
+                .setUpdater(result -> {
+                    // compute
+                    result.observe(random.nextLong(), Labels.of("system", "cpu"));
+                }).build();
+        meter.doubleValueObserverBuilder("cpppu")
+                .setUnit("%")
+                .setUpdater(doubleResult -> doubleResult.observe((Math.random()), Labels.of("trace", "pu")))
+                .build();*/
 
-        TraceServiceGrpc.TraceServiceFutureStub exporter = TraceServiceGrpc.newFutureStub(managedChannel);
-        Futures.addCallback(
-                exporter.export(exportTraceServiceRequest),
-                new FutureCallback<ExportTraceServiceResponse>() {
-                    @Override
-                    public void onSuccess(@Nullable ExportTraceServiceResponse response) {
-                        System.out.println("res: " + response);
-                    }
 
-                    @Override
-                    public void onFailure(Throwable t) {
-                        System.out.println(t);
-                    }
-                },
-                MoreExecutors.directExecutor());
-        managedChannel.shutdown();
-    }
-
-    public static void main(String[] args) {
-        long INVALID_ID = 0;
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-        long idHi = random.nextLong();
-        long idLo;
-        do {
-            idLo = random.nextLong();
-        } while (idLo == INVALID_ID);
-        String traceId = TraceId.fromLongs(idHi, idLo);
-        System.out.println(traceId);
-
-        ByteString byteString = UnsafeByteOperations.unsafeWrap(OtelEncodingUtils.bytesFromBase16(traceId, TraceId.getLength()));
-        byte[] bytes = byteString.toByteArray();
-        char[] chars = new char[32];
-        OtelEncodingUtils.bytesToBase16(bytes, chars, bytes.length);
-        System.out.println(new String(chars));
     }
 }

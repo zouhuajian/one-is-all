@@ -24,7 +24,7 @@ public class OneKafkaConsumer {
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class.getName());
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class.getName());
         KafkaConsumer<byte[], byte[]> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Collections.singletonList("elf_trace"));
+        consumer.subscribe(Collections.singletonList("elf_traces"));
         while (true) {
             ConsumerRecords<byte[], byte[]> records = consumer.poll(Duration.ofSeconds(2));
             records.forEach(record -> {

@@ -128,8 +128,7 @@ public class MMAPTest {
         }
     }
 
-    public static void testFileMMapRandomRW(MappedByteBuffer mappedByteBuffer1, MappedByteBuffer mappedByteBuffer2) throws
-            Exception {
+    public static void testFileMMapRandomRW(MappedByteBuffer mappedByteBuffer1, MappedByteBuffer mappedByteBuffer2) throws Exception {
         byte[] bytes = "测试字符串2测试字符串2测试字符串2测试字符串2测试字符串2测试字符串2测试字符串2测试字符串2测试字符串2测试字符串2测试字符串2".getBytes();
         byte[] to = new byte[bytes.length];
         ThreadLocalRandom random = ThreadLocalRandom.current();
