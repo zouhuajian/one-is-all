@@ -2,6 +2,8 @@ package org.coastline.one.spring.filter;
 
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.metrics.DoubleCounter;
+import io.opentelemetry.api.metrics.DoubleUpDownCounter;
 import io.opentelemetry.api.metrics.DoubleValueRecorder;
 import io.opentelemetry.api.metrics.Meter;
 import io.opentelemetry.api.metrics.common.Labels;
@@ -9,6 +11,7 @@ import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import org.coastline.one.spring.config.OTelConfig;
 import org.slf4j.Logger;
@@ -19,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jay.H.Zou
@@ -29,9 +33,29 @@ public class OtelFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(OtelFilter.class);
 
     private static final String SPAN_NAME_URL = "monitor_provider";
+    private DoubleCounter httpCounter;
+    private DoubleValueRecorder httpDuration;
+    private DoubleUpDownCounter gaugeCounter;
+
+    private Tracer tracer;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        tracer = OTelConfig.getTracer();
+        initMeter();
+    }
+
+    private void initMeter() {
+        Meter meter = OTelConfig.getMeter();
+        httpCounter = meter.doubleCounterBuilder("http_request_count")
+                .setUnit("1")
+                .build();
+        // record duration
+        httpDuration = meter.doubleValueRecorderBuilder("http_duration")
+                .setUnit("ms")
+                .setDescription("duration metrics")
+                .build();
+        gaugeCounter = meter.doubleUpDownCounterBuilder("gauge_test").build();
     }
 
     @Override
@@ -46,8 +70,8 @@ public class OtelFilter implements Filter {
         String requestURI = request.getRequestURI();
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         int status = response.getStatus();
-        logger.info("method = {}, url = {}, code = {}", method, requestURI, status);
-        Tracer tracer = OTelConfig.getTracer();
+        //logger.info("method = {}, url = {}, code = {}", method, requestURI, status);
+        tracer = OTelConfig.getTracer2();
         Span span = tracer.spanBuilder(SPAN_NAME_URL).setSpanKind(SpanKind.PRODUCER).startSpan();
 
         try (Scope scope = span.makeCurrent()) {
@@ -60,6 +84,7 @@ public class OtelFilter implements Filter {
             span.addEvent("have_attr", Attributes.of(AttributeKey.stringKey("event_attr_key"), "event_attr_value"));
             span.setStatus(StatusCode.OK, "this is ok");
             recordMetrics(span, request);
+            childOne(span);
         } catch (Exception t) {
             span.setStatus(StatusCode.ERROR, t.getMessage());
         } finally {
@@ -73,40 +98,22 @@ public class OtelFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
+    void childOne(Span parentSpan) throws InterruptedException {
+        Span childSpan = tracer.spanBuilder("child")
+                .setParent(Context.current().with(parentSpan))
+                .startSpan();
+        // do stuff
+        TimeUnit.MILLISECONDS.sleep(2);
+        childSpan.end();
+    }
+
     private void recordMetrics(Span span, HttpServletRequest request) {
         Random random = new Random();
-        Meter meter = OTelConfig.getMeter();
-        // 统计请求个数
-        /*LongCounter counter = meter.longCounterBuilder("http_count")
-                .setDescription("http request count")
-                .setUnit("1").build();
-        counter.add(1, Labels.of("http_url", request.getRequestURI()));
-        // 队列长度
-        LongUpDownCounter longUpDownCounter = meter.longUpDownCounterBuilder("test_up_down_counter")
-                .build();
-        longUpDownCounter.add(random.nextInt(50));*/
-        // record duration
-        DoubleValueRecorder duration = meter.doubleValueRecorderBuilder("duration")
-                .setUnit("ms")
-                .setDescription("duration metrics")
-                .build();
-        int i = random.nextInt(200);
-        //i = i > 3 ? 1 : 5;
-        duration.record(i,  Labels.of("http_url", request.getRequestURI()));
-        System.out.println(i);
-        // Build observer e.g. LongSumObserver
-        /*meter.longSumObserverBuilder("cpu_usage")
-                .setDescription("CPU Usage")
-                .setUnit("%")
-                .setUpdater(result -> {
-                    // compute
-                    result.observe(random.nextLong(), Labels.of("system", "cpu"));
-                }).build();
-        meter.doubleValueObserverBuilder("cpppu")
-                .setUnit("%")
-                .setUpdater(doubleResult -> doubleResult.observe((Math.random()), Labels.of("trace", "pu")))
-                .build();*/
-
+        // sum
+        httpCounter.add(1);
+        gaugeCounter.add(10);
+        // histogram
+        httpDuration.record(random.nextInt(200), Labels.of("http_url", request.getRequestURI()));
 
     }
 }

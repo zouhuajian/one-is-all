@@ -27,7 +27,7 @@ public class ItemService {
     public String getItem(String key) {
         String localHostName = NetUtil.getLocalHostName();
         longCounter.add(10, Labels.of("host", localHostName, "key", key));
-        logger.info("get item, key = {}", key);
+        //logger.info("get item, key = {}", key);
         // do stuff
         return this.getClass().getName();
     }

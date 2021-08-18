@@ -24,6 +24,7 @@ import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 
 import java.util.Collections;
+import java.util.Random;
 
 /**
  * @author Jay.H.Zou
@@ -46,13 +47,16 @@ public class OTelConfig {
     );
 
     private static void initTracer() {
-        OtlpGrpcSpanExporter exporter = OtlpGrpcSpanExporter.builder().setEndpoint(TRACES_ENDPOINT_URL).build();
+        OtlpGrpcSpanExporter exporter = OtlpGrpcSpanExporter.builder()
+                .setEndpoint(TRACES_ENDPOINT_URL).build();
         // span 处理器
-        BatchSpanProcessor spanProcessor = BatchSpanProcessor.builder(exporter).build();
+        BatchSpanProcessor batchSpanProcessor = BatchSpanProcessor.builder(exporter)
+                .setMaxQueueSize(1000)
+                .setMaxExportBatchSize(100)
+                .build();
         SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
                 .setResource(resource)
-                .addSpanProcessor(spanProcessor)
-                .addSpanProcessor(BatchSpanProcessor.builder(OtlpGrpcSpanExporter.builder().build()).build())
+                .addSpanProcessor(batchSpanProcessor)
                 .build();
         openTelemetry = OpenTelemetrySdk.builder()
                 .setTracerProvider(sdkTracerProvider)
@@ -67,29 +71,26 @@ public class OTelConfig {
                         AttributeKey.stringKey("service.name"), "one-spring-demo",
                         AttributeKey.stringKey("service.zone"), "LOCAL")
         );
-        OtlpGrpcMetricExporter exporter = OtlpGrpcMetricExporter.builder()
-                .setEndpoint(METRICS_ENDPOINT_URL).build();
-
-        InstrumentSelector instrumentSelector = InstrumentSelector.builder()
-                .setInstrumentType(InstrumentType.VALUE_RECORDER).build();
+        OtlpGrpcMetricExporter exporter = OtlpGrpcMetricExporter.builder().setEndpoint(METRICS_ENDPOINT_URL).build();
+        InstrumentSelector instrumentSelector = InstrumentSelector.builder().setInstrumentType(InstrumentType.VALUE_RECORDER).build();
         View view = View.builder()
-                .setAggregatorFactory(AggregatorFactory.histogram(Lists.newArrayList(1D, 10D, 50D, 100D), AggregationTemporality.DELTA))
+                .setAggregatorFactory(AggregatorFactory.histogram(Lists.newArrayList(1D, 10D, 50D, 100D), AggregationTemporality.CUMULATIVE))
                 .build();
         meterProvider = SdkMeterProvider.builder()
                 .setResource(resource)
-                .registerView(instrumentSelector, view)
+                //.registerView(instrumentSelector, view)
                 .buildAndRegisterGlobal();
+
         IntervalMetricReader.builder()
-                .setMetricProducers(Collections.singleton((SdkMeterProvider) GlobalMeterProvider.get()))
+                .setMetricProducers(Collections.singletonList(meterProvider))
                 .setMetricExporter(exporter)
-                .setExportIntervalMillis(10000)// configurable interval
-                .build().start();
+                .setExportIntervalMillis(10)// configurable interval
+                .buildAndStart();
     }
 
     static {
         initTracer();
         initMeter();
-        //OpenTelemetrySdkAutoConfiguration.initialize();
     }
 
     public static Meter getMeter() {
@@ -98,5 +99,8 @@ public class OTelConfig {
 
     public static Tracer getTracer() {
         return openTelemetry.getTracer("otel-sdk", "1.4.1");
+    }
+    public static Tracer getTracer2() {
+        return openTelemetry.getTracer("otel-sdk", "1.4.1" + new Random().nextInt(10));
     }
 }
