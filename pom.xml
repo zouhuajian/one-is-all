@@ -31,6 +31,7 @@
         <module>one-spring</module>
         <module>one-monitor</module>
         <module>one-common</module>
+        <module>one-hbase</module>
     </modules>
 
     <dependencyManagement>
