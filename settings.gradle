@@ -1,4 +1,6 @@
 rootProject.name = 'one-is-all'
 include 'one-core'
 include 'one-common'
+include 'one-flink'
+include 'one-zookeeper'
 
