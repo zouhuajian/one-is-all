@@ -1,0 +1,4 @@
+rootProject.name = 'one-is-all'
+include 'one-core'
+include 'one-common'
+
