@@ -1,0 +1,17 @@
+# kafka consumer config
+kafka.brokers: xx
+kafka.topics: csoss_monitor_traces;
+kafka.group-id: flink_local
+
+# cos config
+cos.bucket-name: xx
+cos.secret-id: xx
+cos.secret-key: x
+cos.region: ap-shanghai
+cos.queue-size: 200
+# unit: MB
+cos.batch-size: 5
+
+# hbase config
+hbase.zookeeper.quorum: xx
+hbase.table: traces_meta

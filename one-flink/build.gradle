@@ -16,5 +16,10 @@ dependencies {
 
     implementation "org.apache.flink:flink-connector-kafka_${scalaVersion}:${flinkVersion}"
 
+    // mysql
+    compileOnly "mysql:mysql-connector-java:${mysqlVersion}"
+    compileOnly "com.zaxxer:HikariCP:${hikariCPVersion}"
+    // hbase
+    compileOnly "org.apache.hbase:hbase-client:${hbaseVersion}"
 
 }
