@@ -2,6 +2,9 @@ ext {
     curatorVersion = '2.13.0'
 }
 dependencies {
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
     implementation("org.apache.curator:curator-x-discovery:${curatorVersion}") {
         exclude group: 'log4j', module: 'log4j'
     }
