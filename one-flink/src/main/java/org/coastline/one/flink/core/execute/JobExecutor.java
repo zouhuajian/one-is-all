@@ -9,6 +9,8 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.coastline.one.flink.core.config.LocalConfigLoader;
 
+import java.io.IOException;
+
 /**
  * @author Jay.H.Zou
  * @date 2021/8/4
@@ -21,7 +23,7 @@ public abstract class JobExecutor {
 
     private final StreamExecutionEnvironment env;
 
-    public JobExecutor(String[] args) {
+    public JobExecutor(String[] args) throws IOException {
         Configuration devConfig = new Configuration();
         devConfig.setInteger("rest.port", 8002);
         env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(devConfig);
@@ -34,7 +36,7 @@ public abstract class JobExecutor {
     /**
      * custom flink env config for job
      */
-    protected void customEnv(final StreamExecutionEnvironment env) {
+    protected void customEnv(final StreamExecutionEnvironment env) throws IOException {
     }
 
 

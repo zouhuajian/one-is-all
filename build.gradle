@@ -53,7 +53,7 @@ subprojects {
         junitVersion = '4.13.1'
         protostuffVersion = '1.7.4'
         mysqlVersion = '8.0.25'
-        hikariCPVersion = '5.0.0'
+        hikariCPVersion = '4.0.3'
         hbaseVersion = '2.4.5'
     }
 }

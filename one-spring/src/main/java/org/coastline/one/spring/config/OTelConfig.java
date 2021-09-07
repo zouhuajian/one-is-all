@@ -1,5 +1,6 @@
 package org.coastline.one.spring.config;
 
+import com.google.common.collect.Lists;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
@@ -11,7 +12,12 @@ import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.metrics.SdkMeterProvider;
+import io.opentelemetry.sdk.metrics.aggregator.AggregatorFactory;
+import io.opentelemetry.sdk.metrics.common.InstrumentType;
+import io.opentelemetry.sdk.metrics.data.AggregationTemporality;
 import io.opentelemetry.sdk.metrics.export.IntervalMetricReader;
+import io.opentelemetry.sdk.metrics.view.InstrumentSelector;
+import io.opentelemetry.sdk.metrics.view.View;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
@@ -25,9 +31,9 @@ import java.util.Random;
  */
 public class OTelConfig {
 
-    private static final String TRACES_ENDPOINT_URL = "http://localhost:4317";
+    private static final String TRACES_ENDPOINT_URL = "http://localhost:5317";
 
-    private static final String METRICS_ENDPOINT_URL = "http://localhost:4318";
+    private static final String METRICS_ENDPOINT_URL = "http://localhost:5318";
 
     private static OpenTelemetry openTelemetry;
 
@@ -65,10 +71,10 @@ public class OTelConfig {
                         AttributeKey.stringKey("service.zone"), "LOCAL")
         );
         OtlpGrpcMetricExporter exporter = OtlpGrpcMetricExporter.builder().setEndpoint(METRICS_ENDPOINT_URL).build();
-        /*InstrumentSelector instrumentSelector = InstrumentSelector.builder().setInstrumentType(InstrumentType.VALUE_RECORDER).build();
+        InstrumentSelector instrumentSelector = InstrumentSelector.builder().setInstrumentType(InstrumentType.HISTOGRAM).build();
         View view = View.builder()
                 .setAggregatorFactory(AggregatorFactory.histogram(Lists.newArrayList(1D, 10D, 50D, 100D), AggregationTemporality.CUMULATIVE))
-                .build();*/
+                .build();
         meterProvider = SdkMeterProvider.builder()
                 .setResource(resource)
                 //.registerView(instrumentSelector, view)
@@ -77,7 +83,7 @@ public class OTelConfig {
         IntervalMetricReader.builder()
                 .setMetricProducers(Collections.singletonList(meterProvider))
                 .setMetricExporter(exporter)
-                .setExportIntervalMillis(10)// configurable interval
+                .setExportIntervalMillis(2000)// configurable interval
                 .buildAndStart();
     }
 

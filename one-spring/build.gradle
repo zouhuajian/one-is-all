@@ -6,18 +6,28 @@ ext {
     lombokVersion = '1.18.20'
     monitorCoreVersion = '0.0.2-SNAPSHOT'
     opentelemetryVersion = '1.5.0'
+    grpcVersion = '1.38.0'
+    nettyVersion = '4.1.66.Final'
 }
 
 dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    implementation "io.opentelemetry:opentelemetry-api:${opentelemetryVersion}"
+    // implementation "io.opentelemetry:opentelemetry-api:${opentelemetryVersion}"
     implementation "io.opentelemetry:opentelemetry-proto:${opentelemetryVersion}-alpha"
     implementation "io.opentelemetry:opentelemetry-exporter-otlp-common:${opentelemetryVersion}"
     implementation "io.opentelemetry:opentelemetry-exporter-otlp-trace:${opentelemetryVersion}"
     implementation "io.opentelemetry:opentelemetry-exporter-otlp-metrics:${opentelemetryVersion}-alpha"
     implementation "io.opentelemetry:opentelemetry-sdk-extension-autoconfigure:${opentelemetryVersion}-alpha"
+    implementation "io.grpc:grpc-okhttp:${grpcVersion}"
+    implementation "io.grpc:grpc-netty:${grpcVersion}"
+    implementation "io.grpc:grpc-netty-shaded:${grpcVersion}"
+
+
+    // implementation "io.netty:netty-all:${nettyVersion}"
+    /*implementation "io.grpc:grpc-netty:${grpcVersion}"
+    implementation "io.grpc:grpc-netty-shaded:${grpcVersion}"*/
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-aop'

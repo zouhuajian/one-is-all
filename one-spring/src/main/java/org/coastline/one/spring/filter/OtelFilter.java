@@ -2,10 +2,7 @@ package org.coastline.one.spring.filter;
 
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.api.metrics.DoubleHistogram;
-import io.opentelemetry.api.metrics.DoubleUpDownCounter;
-import io.opentelemetry.api.metrics.LongCounter;
-import io.opentelemetry.api.metrics.Meter;
+import io.opentelemetry.api.metrics.*;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.api.trace.StatusCode;
@@ -22,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * @author Jay.H.Zou
@@ -34,8 +32,6 @@ public class OtelFilter implements Filter {
     private static final String SPAN_NAME_URL = "monitor_provider";
     private LongCounter httpCounter;
     private DoubleHistogram httpDuration;
-    private DoubleUpDownCounter gaugeCounter;
-
     private Tracer tracer;
 
     @Override
@@ -54,7 +50,6 @@ public class OtelFilter implements Filter {
                 .setUnit("ms")
                 .setDescription("duration metrics")
                 .build();
-        gaugeCounter = meter.upDownCounterBuilder("gauge_test").ofDoubles().build();
     }
 
     @Override
@@ -93,7 +88,6 @@ public class OtelFilter implements Filter {
                         .addLink(span.getSpanContext())
                         .startSpan().end(); */
 
-
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
@@ -110,11 +104,9 @@ public class OtelFilter implements Filter {
         Random random = new Random();
         // sum
         httpCounter.add(1);
-        gaugeCounter.add(10);
         // histogram
         httpDuration.record(random.nextInt(200),
-                Attributes.of(AttributeKey.stringKey("http_url"), request.getRequestURI(),
-                        AttributeKey.stringKey("http_method"), request.getMethod()));
-
+                Attributes.of(AttributeKey.stringKey("AttributeKey_http_url"), request.getRequestURI(),
+                        AttributeKey.stringKey("AttributeKey_http_method"), request.getMethod()));
     }
 }

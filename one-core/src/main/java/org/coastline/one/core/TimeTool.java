@@ -1,9 +1,6 @@
 package org.coastline.one.core;
 
-import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -19,20 +16,9 @@ public class TimeTool {
     private TimeTool() {
     }
 
-    public static long getCurrentTime() {
+    public static long currentTimeMillis() {
        return Instant.now().toEpochMilli();
     }
 
-    public static Timestamp getCurrentTimestamp() {
-        return new Timestamp(getCurrentTime());
-    }
-
-    public static String timestampToDateTime(long time) {
-        return dateTimeFormatter.format(LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneOffset.ofHours(8)));
-    }
-
-    public static String getCurrentTimeFormat() {
-        return timestampToDateTime(getCurrentTime());
-    }
 
 }

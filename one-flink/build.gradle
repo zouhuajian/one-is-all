@@ -1,6 +1,6 @@
 ext {
-    flinkVersion = '1.13.1'
-    scalaVersion = '2.12'
+    flinkVersion = '1.13.2'
+    scalaVersion = '2.11'
 }
 dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
@@ -13,6 +13,13 @@ dependencies {
     implementation "org.apache.flink:flink-streaming-java_${scalaVersion}:${flinkVersion}"
     implementation "org.apache.flink:flink-streaming-scala_${scalaVersion}:${flinkVersion}"
     implementation "org.apache.flink:flink-runtime-web_${scalaVersion}:${flinkVersion}"
+    // flink sql
+    implementation "org.apache.flink:flink-table-api-java-bridge_${scalaVersion}:${flinkVersion}"
+    implementation "org.apache.flink:flink-table-planner-blink_${scalaVersion}:${flinkVersion}"
+
+    // If you want to implement a custom format or connector for (de)serializing rows or a set of user-defined functions,
+    // the following dependency is sufficient and can be used for JAR files for the SQL Client:
+    implementation "org.apache.flink:flink-table-common:${flinkVersion}"
 
     implementation "org.apache.flink:flink-connector-kafka_${scalaVersion}:${flinkVersion}"
 
