@@ -22,6 +22,7 @@ dependencies {
     implementation "org.apache.flink:flink-table-common:${flinkVersion}"
 
     implementation "org.apache.flink:flink-connector-kafka_${scalaVersion}:${flinkVersion}"
+    implementation "org.apache.flink:flink-json:${flinkVersion}"
 
     // mysql
     compileOnly "mysql:mysql-connector-java:${mysqlVersion}"

@@ -37,25 +37,23 @@ public class KafkaToPrint {
                 "   'format'='json',\n" +
                 "   'json.fail-on-missing-field' = 'false',\n" +
                 "   'json.ignore-parse-errors' = 'true'\n" +
-                ");");
+                ")");
         // register an output Table
         tableEnv.executeSql("CREATE TEMPORARY TABLE print_table (\n" +
                 "    `time` BIGINT COMMENT '事件时间',\n" +
                 "    `service` STRING COMMENT '服务名',\n" +
-                "    `zone` STRING COMMENT '分区',\n" +
                 "    `host` STRING COMMENT 'host',\n" +
                 "    `type` STRING COMMENT 'type',\n" +
-                "    `name` STRING COMMENT 'name',\n" +
                 "    `duration` DOUBLE COMMENT '响应时间'\n" +
                 ") WITH (\n" +
                 "    'connector' = 'print'\n" +
-                ");");
+                ")");
 
 
         // create a Table object from a Table API query
         Table table1 = tableEnv.from("c_kafka_source").select($("time"), $("service"), $("host"), $("type"), $("duration"));
         // create a Table object from a SQL query
-        Table table2 = tableEnv.sqlQuery("SELECT * FROM table1 c_kafka_source");
+        Table table2 = tableEnv.sqlQuery("SELECT * FROM c_kafka_source");
         // emit a Table API result Table to a TableSink, same for SQL result
         TableResult tableResult = table1.executeInsert("print_table");
         tableResult.print();
