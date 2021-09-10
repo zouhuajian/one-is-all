@@ -16,6 +16,9 @@ public class ConfigurationTool implements Serializable {
     private ConfigurationTool() {
     }
 
+    /********************************* flink *********************************/
+    public static final ConfigOption<String> JOB_NAME = ConfigOptions.key("flink.job-name").stringType().defaultValue("default_job_name");
+
     /********************************* kafka *********************************/
     public static final ConfigOption<String> KAFKA_BROKERS = ConfigOptions.key("kafka.brokers").stringType().noDefaultValue();
     public static final ConfigOption<String> KAFKA_TOPIC = ConfigOptions.key("kafka.topic").stringType().noDefaultValue();

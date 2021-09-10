@@ -5,6 +5,7 @@ import org.coastline.one.core.TimeTool;
 import org.coastline.one.flink.common.model.MonitorData;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jay.H.Zou
@@ -12,7 +13,7 @@ import java.util.Random;
  */
 public class MemorySourceFunction extends RichSourceFunction<MonitorData> {
 
-    private static final int DATA_COUNT = 100;
+    private static final int DATA_COUNT = Integer.MAX_VALUE;
 
     private static final Random RANDOM = new Random();
 
@@ -29,9 +30,11 @@ public class MemorySourceFunction extends RichSourceFunction<MonitorData> {
                     .time(TimeTool.currentTimeMillis())
                     .service("one-flink")
                     .zone("LOCAL")
-                    .name("name-" + RANDOM.nextInt(10))
+                    //.name("name-" + RANDOM.nextInt(10))
+                    .name("one-name")
                     .duration(RANDOM.nextInt(1000))
                     .build();
+            TimeUnit.MILLISECONDS.sleep(1000);
             ctx.collect(data);
         }
     }

@@ -1,4 +1,4 @@
-package org.coastline.one.flink.stream.job.traces.process;
+package org.coastline.one.flink.stream.traces.process;
 
 import org.apache.flink.api.common.state.ListState;
 import org.apache.flink.api.common.state.ListStateDescriptor;

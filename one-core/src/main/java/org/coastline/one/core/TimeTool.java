@@ -17,8 +17,7 @@ public class TimeTool {
     }
 
     public static long currentTimeMillis() {
-       return Instant.now().toEpochMilli();
+        return Instant.now().toEpochMilli();
     }
-
 
 }

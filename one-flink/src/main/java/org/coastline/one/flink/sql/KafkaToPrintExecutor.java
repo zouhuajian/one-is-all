@@ -1,27 +1,33 @@
 package org.coastline.one.flink.sql;
 
-import org.apache.flink.configuration.Configuration;
-import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableEnvironment;
 import org.apache.flink.table.api.TableResult;
+import org.coastline.one.flink.sql.core.SqlJobExecutor;
+import org.coastline.one.flink.stream.traces.TracesStorageStreamJob;
 
 import static org.apache.flink.table.api.Expressions.$;
 
 /**
  * @author Jay.H.Zou
- * @date 2021/9/6
+ * @date 2021/9/9
  */
-public class KafkaToPrint {
+public class KafkaToPrintExecutor extends SqlJobExecutor {
 
-    public static void main(String[] args) {
-        EnvironmentSettings settings = EnvironmentSettings
-                .newInstance()
-                .inStreamingMode()
-                .useBlinkPlanner()
-                .build();
-        TableEnvironment tableEnv = TableEnvironment.create(settings);
-        Configuration configuration = tableEnv.getConfig().getConfiguration();
+    private static final String KAFKA_ADDRESS = "xxx:9092";
+
+    public KafkaToPrintExecutor(String[] args) {
+        super(args);
+    }
+
+    public static KafkaToPrintExecutor start(String[] args) throws Exception {
+        KafkaToPrintExecutor job = new KafkaToPrintExecutor(args);
+        job.execute("kakfa_to_print");
+        return job;
+    }
+
+    @Override
+    public void buildJob(TableEnvironment tableEnv) throws Exception {
         // kafka source
         tableEnv.executeSql("CREATE TEMPORARY TABLE c_kafka_source (\n" +
                 "    `time` BIGINT COMMENT '事件时间',\n" +
@@ -30,7 +36,7 @@ public class KafkaToPrint {
                 "    `type` STRING COMMENT 'type',\n" +
                 "    `duration` DOUBLE COMMENT '响应时间'\n" +
                 ")  WITH (\n" +
-                "   'properties.bootstrap.servers'='xxx:9092',\n" +
+                "   'properties.bootstrap.servers'='" + KAFKA_ADDRESS + "',\n" +
                 "   'properties.group.id'='flink_sql',\n" +
                 "   'scan.startup.mode'='latest-offset',\n" +
                 "   'scan.topic-partition-discovery.interval' = '30s',\n" +
@@ -59,5 +65,9 @@ public class KafkaToPrint {
         // emit a Table API result Table to a TableSink, same for SQL result
         TableResult tableResult = table1.executeInsert("print_table");
         tableResult.print();
+    }
+
+    public static void main(String[] args) throws Exception {
+        KafkaToPrintExecutor.start(args);
     }
 }

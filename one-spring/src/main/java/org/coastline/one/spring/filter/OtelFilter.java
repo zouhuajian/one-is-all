@@ -34,6 +34,8 @@ public class OtelFilter implements Filter {
     private DoubleHistogram httpDuration;
     private Tracer tracer;
 
+    private Random random = new Random();
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         tracer = OTelConfig.getTracer();
@@ -50,6 +52,14 @@ public class OtelFilter implements Filter {
                 .setUnit("ms")
                 .setDescription("duration metrics")
                 .build();
+        meter.gaugeBuilder("one_cpu").setUnit("1").setDescription("test gauge").buildWithCallback(new Consumer<ObservableDoubleMeasurement>() {
+            @Override
+            public void accept(ObservableDoubleMeasurement observableDoubleMeasurement) {
+                int i = random.nextInt(100);
+                System.out.println(i);
+                observableDoubleMeasurement.observe(i, Attributes.of(AttributeKey.stringKey("c"), "c"));
+            }
+        });
     }
 
     @Override

@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.coastline.one.flink.stream.job.traces.trigger;
+package org.coastline.one.flink.stream.core.trigger;
 
 import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.functions.ReduceFunction;
@@ -33,7 +33,7 @@ import org.apache.flink.streaming.api.windowing.windows.Window;
  * @param <W> The type of {@link Window Windows} on which this trigger can operate.
  */
 @PublicEvolving
-public class OneCountTrigger<W extends Window> extends Trigger<Object, W> {
+public class CountPurgeTrigger<W extends Window> extends Trigger<Object, W> {
     private static final long serialVersionUID = 1L;
 
     private final long maxCount;
@@ -41,7 +41,7 @@ public class OneCountTrigger<W extends Window> extends Trigger<Object, W> {
     private final ReducingStateDescriptor<Long> stateDesc =
             new ReducingStateDescriptor<>("count", new Sum(), LongSerializer.INSTANCE);
 
-    private OneCountTrigger(long maxCount) {
+    private CountPurgeTrigger(long maxCount) {
         this.maxCount = maxCount;
     }
 
@@ -52,20 +52,20 @@ public class OneCountTrigger<W extends Window> extends Trigger<Object, W> {
         count.add(1L);
         if (count.get() >= maxCount) {
             count.clear();
-            return TriggerResult.FIRE;
+            return TriggerResult.FIRE_AND_PURGE;
         }
         return TriggerResult.CONTINUE;
     }
 
     @Override
     public TriggerResult onEventTime(long time, W window, TriggerContext ctx) {
-        return TriggerResult.CONTINUE;
+        return TriggerResult.FIRE_AND_PURGE;
     }
 
     @Override
-    public TriggerResult onProcessingTime(long time, W window, TriggerContext ctx)
-            throws Exception {
-        return TriggerResult.CONTINUE;
+    public TriggerResult onProcessingTime(long time, W window, TriggerContext ctx) throws Exception {
+        System.out.println("==================================");
+        return TriggerResult.FIRE_AND_PURGE;
     }
 
     @Override
@@ -94,8 +94,8 @@ public class OneCountTrigger<W extends Window> extends Trigger<Object, W> {
      * @param maxCount The count of elements at which to fire.
      * @param <W> The type of {@link Window Windows} on which this trigger can operate.
      */
-    public static <W extends Window> OneCountTrigger<W> of(long maxCount) {
-        return new OneCountTrigger<>(maxCount);
+    public static <W extends Window> CountPurgeTrigger<W> of(long maxCount) {
+        return new CountPurgeTrigger<>(maxCount);
     }
 
     private static class Sum implements ReduceFunction<Long> {

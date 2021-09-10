@@ -15,3 +15,4 @@ cos.batch-size: 5
 # hbase config
 hbase.zookeeper.quorum: xx
 hbase.table: traces_meta
+

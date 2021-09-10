@@ -1,4 +1,4 @@
-package org.coastline.one.flink.stream.core.execute;
+package org.coastline.one.flink.stream.core;
 
 
 import com.google.gson.FieldNamingPolicy;
@@ -13,15 +13,13 @@ import org.coastline.one.flink.common.config.LocalConfigLoader;
  * @author Jay.H.Zou
  * @date 2021/8/4
  */
-public abstract class JobExecutor {
-    // 下划线转驼峰
-    public static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
+public abstract class StreamJobExecutor {
 
     private static final long serialVersionUID = 1L;
 
     private final StreamExecutionEnvironment env;
 
-    public JobExecutor(String[] args)  {
+    public StreamJobExecutor(String[] args)  {
         Configuration devConfig = new Configuration();
         devConfig.setInteger("rest.port", 8002);
         env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(devConfig);
