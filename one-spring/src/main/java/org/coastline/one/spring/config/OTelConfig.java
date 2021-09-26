@@ -12,7 +12,6 @@ import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.metrics.SdkMeterProvider;
-import io.opentelemetry.sdk.metrics.aggregator.AggregatorFactory;
 import io.opentelemetry.sdk.metrics.common.InstrumentType;
 import io.opentelemetry.sdk.metrics.data.AggregationTemporality;
 import io.opentelemetry.sdk.metrics.export.IntervalMetricReader;
@@ -41,8 +40,9 @@ public class OTelConfig {
 
     private static final Resource resource = Resource.create(
             Attributes.of(
-                    AttributeKey.stringKey("service.name"), "one-spring-demo",
-                    AttributeKey.stringKey("service.zone"), "LOCAL")
+                    AttributeKey.stringKey("service_name"), "one-spring-demo",
+                    AttributeKey.stringKey("service_zone"), "LOCAL",
+                    AttributeKey.stringKey("service_host"), "192.168.3.4")
     );
 
     private static void initTracer() {
@@ -65,16 +65,11 @@ public class OTelConfig {
 
 
     private static void initMeter() {
-        Resource resource = Resource.create(
-                Attributes.of(
-                        AttributeKey.stringKey("service.name"), "one-spring-demo",
-                        AttributeKey.stringKey("service.zone"), "LOCAL")
-        );
         OtlpGrpcMetricExporter exporter = OtlpGrpcMetricExporter.builder().setEndpoint(METRICS_ENDPOINT_URL).build();
         InstrumentSelector instrumentSelector = InstrumentSelector.builder().setInstrumentType(InstrumentType.HISTOGRAM).build();
-        View view = View.builder()
+        /*View view = View.builder()
                 .setAggregatorFactory(AggregatorFactory.histogram(Lists.newArrayList(1D, 10D, 50D, 100D), AggregationTemporality.CUMULATIVE))
-                .build();
+                .build();*/
         meterProvider = SdkMeterProvider.builder()
                 .setResource(resource)
                 //.registerView(instrumentSelector, view)
@@ -99,6 +94,7 @@ public class OTelConfig {
     public static Tracer getTracer() {
         return openTelemetry.getTracer("otel-sdk", "1.4.1");
     }
+
     public static Tracer getTracer2() {
         return openTelemetry.getTracer("otel-sdk", "1.4.1" + new Random().nextInt(10));
     }

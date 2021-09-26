@@ -5,7 +5,7 @@ apply plugin: 'io.spring.dependency-management'
 ext {
     lombokVersion = '1.18.20'
     monitorCoreVersion = '0.0.2-SNAPSHOT'
-    opentelemetryVersion = '1.5.0'
+    opentelemetryVersion = '1.6.0'
     grpcVersion = '1.38.0'
     nettyVersion = '4.1.66.Final'
 }
@@ -23,7 +23,6 @@ dependencies {
     implementation "io.grpc:grpc-okhttp:${grpcVersion}"
     implementation "io.grpc:grpc-netty:${grpcVersion}"
     implementation "io.grpc:grpc-netty-shaded:${grpcVersion}"
-
 
     // implementation "io.netty:netty-all:${nettyVersion}"
     /*implementation "io.grpc:grpc-netty:${grpcVersion}"

@@ -1,3 +1,4 @@
 dependencies {
     api project(':one-core')
+    implementation "io.netty:netty-all:${nettyVersion}"
 }

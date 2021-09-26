@@ -53,14 +53,9 @@ public class WindowStreamJob extends StreamJobExecutor {
                 });
     }
 
-    public static WindowStreamJob start(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         WindowStreamJob job = new WindowStreamJob(args);
         job.execute("window_testing");
-        return job;
-    }
-
-    public static void main(String[] args) throws Exception {
-        WindowStreamJob.start(args);
     }
 
     static class DataKeySelector implements KeySelector<MonitorData, String> {
