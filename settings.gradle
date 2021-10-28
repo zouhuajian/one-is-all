@@ -3,6 +3,6 @@ include 'one-core'
 include 'one-common'
 include 'one-flink'
 include 'one-zookeeper'
-include 'one-hbase'
 include 'one-spring'
+include 'one-hadoop'
 

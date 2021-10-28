@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author Jay.H.Zou
@@ -18,8 +19,19 @@ import java.io.Serializable;
 public class MonitorData implements Serializable {
     private static final long serialVersionUID = 1L;
     private long time;
+    private long timeNano;
+    private String traceId;
+    private String msgId;
+    private String parentMsgId;
     private String service;
     private String zone;
+    private String host;
+    private String category;
+    private String type;
     private String name;
-    private long duration;
+    private double duration;
+    private long durationMicros;
+    private String status;
+    private String data;
+    private List<MonitorData> children;
 }

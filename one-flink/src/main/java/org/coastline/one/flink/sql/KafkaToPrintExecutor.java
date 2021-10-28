@@ -1,3 +1,4 @@
+/*
 package org.coastline.one.flink.sql;
 
 import org.apache.flink.table.api.Table;
@@ -8,10 +9,12 @@ import org.coastline.one.flink.stream.traces.TracesStorageStreamJob;
 
 import static org.apache.flink.table.api.Expressions.$;
 
+*/
 /**
  * @author Jay.H.Zou
  * @date 2021/9/9
- */
+ *//*
+
 public class KafkaToPrintExecutor extends SqlJobExecutor {
 
     private static final String KAFKA_ADDRESS = "xxx:9092";
@@ -71,3 +74,4 @@ public class KafkaToPrintExecutor extends SqlJobExecutor {
         KafkaToPrintExecutor.start(args);
     }
 }
+*/

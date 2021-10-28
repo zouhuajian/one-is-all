@@ -1,0 +1,6 @@
+
+dependencies {
+    implementation "org.apache.hbase:hbase-client:${hbaseVersion}"
+    implementation "org.apache.hadoop:hadoop-client:${hdfsVersion}"
+}
+

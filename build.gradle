@@ -55,6 +55,7 @@ subprojects {
         mysqlVersion = '8.0.25'
         hikariCPVersion = '4.0.3'
         hbaseVersion = '2.4.5'
+        hdfsVersion = '2.8.5'
         nettyVersion = '4.1.67.Final'
     }
 }
