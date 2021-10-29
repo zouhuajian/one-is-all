@@ -1,6 +1,6 @@
 ext {
-    flinkVersion = '1.13.2'
-    scalaVersion = '2.11'
+    flinkVersion = '1.14.0'
+    scalaVersion = '2.12'
 }
 dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
@@ -13,6 +13,7 @@ dependencies {
     implementation "org.apache.flink:flink-streaming-java_${scalaVersion}:${flinkVersion}"
     implementation "org.apache.flink:flink-streaming-scala_${scalaVersion}:${flinkVersion}"
     implementation "org.apache.flink:flink-runtime-web_${scalaVersion}:${flinkVersion}"
+
     // flink sql
     implementation "org.apache.flink:flink-table-api-java-bridge_${scalaVersion}:${flinkVersion}"
     implementation "org.apache.flink:flink-table-planner-blink_${scalaVersion}:${flinkVersion}"

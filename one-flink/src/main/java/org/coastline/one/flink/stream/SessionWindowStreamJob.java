@@ -21,11 +21,11 @@ import java.util.List;
  * @author Jay.H.Zou
  * @date 2021/8/5
  */
-public class WindowStreamJob extends StreamJobExecutor {
+public class SessionWindowStreamJob extends StreamJobExecutor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WindowStreamJob.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionWindowStreamJob.class);
 
-    private WindowStreamJob(String[] args) throws IOException {
+    private SessionWindowStreamJob(String[] args) throws IOException {
         super(args);
     }
 
@@ -54,7 +54,7 @@ public class WindowStreamJob extends StreamJobExecutor {
     }
 
     public static void main(String[] args) throws Exception {
-        WindowStreamJob job = new WindowStreamJob(args);
+        SessionWindowStreamJob job = new SessionWindowStreamJob(args);
         job.execute("window_testing");
     }
 

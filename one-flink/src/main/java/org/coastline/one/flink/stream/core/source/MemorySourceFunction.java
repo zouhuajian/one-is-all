@@ -13,19 +13,29 @@ import java.util.concurrent.TimeUnit;
  */
 public class MemorySourceFunction extends RichSourceFunction<MonitorData> {
 
-    private static final int DATA_COUNT = Integer.MAX_VALUE;
+    private int dataCount;
 
     private static final Random RANDOM = new Random();
 
-    private MemorySourceFunction() {}
+    private MemorySourceFunction() {
+        this.dataCount = Integer.MAX_VALUE;
+    }
+
+    private MemorySourceFunction(int dataCount) {
+        this.dataCount = dataCount;
+    }
 
     public static MemorySourceFunction create() {
         return new MemorySourceFunction();
     }
 
+    public static MemorySourceFunction create(int dataCount) {
+        return new MemorySourceFunction(dataCount);
+    }
+
     @Override
     public void run(SourceContext<MonitorData> ctx) throws Exception {
-        for (int i = 0; i < DATA_COUNT; i++) {
+        for (int i = 0; i < dataCount; i++) {
             MonitorData data = MonitorData.builder()
                     .time(TimeTool.currentTimeMillis())
                     .service("one-flink")
@@ -34,9 +44,10 @@ public class MemorySourceFunction extends RichSourceFunction<MonitorData> {
                     .name("one-name")
                     .duration(RANDOM.nextInt(1000))
                     .build();
-            TimeUnit.MILLISECONDS.sleep(1000);
+            TimeUnit.MILLISECONDS.sleep(600);
             ctx.collect(data);
         }
+        TimeUnit.MINUTES.sleep(2);
     }
 
     @Override
