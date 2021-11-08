@@ -1,32 +1,23 @@
-/*
 package org.coastline.one.flink.sql;
 
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableEnvironment;
 import org.apache.flink.table.api.TableResult;
 import org.coastline.one.flink.sql.core.SqlJobExecutor;
-import org.coastline.one.flink.stream.traces.TracesStorageStreamJob;
 
 import static org.apache.flink.table.api.Expressions.$;
 
-*/
+
 /**
  * @author Jay.H.Zou
  * @date 2021/9/9
- *//*
-
+ */
 public class KafkaToPrintExecutor extends SqlJobExecutor {
 
     private static final String KAFKA_ADDRESS = "xxx:9092";
 
     public KafkaToPrintExecutor(String[] args) {
         super(args);
-    }
-
-    public static KafkaToPrintExecutor start(String[] args) throws Exception {
-        KafkaToPrintExecutor job = new KafkaToPrintExecutor(args);
-        job.execute("kakfa_to_print");
-        return job;
     }
 
     @Override
@@ -71,7 +62,8 @@ public class KafkaToPrintExecutor extends SqlJobExecutor {
     }
 
     public static void main(String[] args) throws Exception {
-        KafkaToPrintExecutor.start(args);
+        KafkaToPrintExecutor job = new KafkaToPrintExecutor(args);
+        job.execute();
     }
 }
-*/
+
