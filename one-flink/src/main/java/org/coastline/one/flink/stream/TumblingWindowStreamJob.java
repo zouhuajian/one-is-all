@@ -5,6 +5,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.coastline.one.core.HashTool;
 import org.coastline.one.flink.common.model.MonitorData;
 import org.coastline.one.flink.common.model.WindowData;
 import org.coastline.one.flink.stream.core.StreamJobExecutor;
@@ -45,6 +46,7 @@ public class TumblingWindowStreamJob extends StreamJobExecutor {
                     @Override
                     public void invoke(WindowData<MonitorData> value, Context context) throws Exception {
                         List<MonitorData> dataList = value.getDataList();
+
                         COUNT.addAndGet(dataList.size());
                         LOGGER.info(">>>>> index = {}, key = {}, window = {}, delta count = {}, count = {}",
                                 getRuntimeContext().getIndexOfThisSubtask(),
@@ -69,7 +71,7 @@ public class TumblingWindowStreamJob extends StreamJobExecutor {
 
         @Override
         public String getKey(MonitorData value) throws Exception {
-            return value.getName() + value.getTime() / 10000;
+            return HashTool.hashMurmur3_128(value.getName() + value.getTime() / 10000);
         }
     }
 
