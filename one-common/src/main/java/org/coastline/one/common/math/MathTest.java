@@ -7,8 +7,6 @@ package org.coastline.one.common.math;
 public class MathTest {
     public static final double POSITIVE_INFINITY = 1.0 / 0.0;
     public static void main(String[] args) {
-        System.out.println(POSITIVE_INFINITY);
-
-        System.out.println(System.currentTimeMillis());
+        System.out.println("ONE IS ALL");
     }
 }
