@@ -6,7 +6,8 @@ package org.coastline.one.common.java.proxy;
  */
 public class MoneyService implements IMoneyService{
     @Override
-    public void haveMoney() {
+    public boolean haveMoney() {
         System.out.println("I'm rich.");
+        return true;
     }
 }

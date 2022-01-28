@@ -6,5 +6,5 @@ package org.coastline.one.common.java.proxy;
  */
 public interface IMoneyService {
 
-    void haveMoney();
+    boolean haveMoney();
 }
