@@ -1,12 +1,15 @@
+ext {
+    cglibVersion = '3.3.0'
+}
+
 dependencies {
     api project(':one-core')
     implementation "io.netty:netty-all:${nettyVersion}"
-    implementation 'org.neo4j.driver:neo4j-java-driver:4.3.5'
 
     /*implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
     implementation 'org.apache.logging.log4j:log4j-api:2.14.1'*/
     implementation "mysql:mysql-connector-java:${mysqlVersion}"
 
-    implementation 'cglib:cglib:3.3.0'
+    implementation "cglib:cglib:${cglibVersion}"
 
 }

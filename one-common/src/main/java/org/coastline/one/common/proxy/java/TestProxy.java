@@ -1,5 +1,8 @@
-package org.coastline.one.common.java.proxy;
+package org.coastline.one.common.proxy.java;
 
+
+import org.coastline.one.common.proxy.IMoneyService;
+import org.coastline.one.common.proxy.MoneyService;
 
 import java.lang.reflect.Proxy;
 
@@ -8,7 +11,7 @@ import java.lang.reflect.Proxy;
  * @date 2022/1/27
  */
 public class TestProxy {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IllegalAccessException {
         //生成$Proxy0的class文件
         //System.getProperties().setProperty("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
 
@@ -20,7 +23,6 @@ public class TestProxy {
                 moneyService.getClass().getInterfaces(), handler);
 
         System.out.println("proxy: " + proxyMoneyService.getClass());
-        System.out.println(proxyMoneyService.haveMoney());
         System.out.println(proxyMoneyService.haveMoney());
     }
 }

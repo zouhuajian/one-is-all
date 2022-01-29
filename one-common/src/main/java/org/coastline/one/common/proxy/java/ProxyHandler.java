@@ -1,4 +1,4 @@
-package org.coastline.one.common.java.proxy;
+package org.coastline.one.common.proxy.java;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -19,9 +19,7 @@ public class ProxyHandler implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         System.err.println("Before invoke " + method.getName());
         Object invoke = method.invoke(target, args);
-        System.out.println(invoke);
         System.err.println("After invoke " + method.getName());
-        System.out.println(proxy.getClass());
         return invoke;
     }
 
