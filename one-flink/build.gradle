@@ -1,5 +1,5 @@
 ext {
-    flinkVersion = '1.14.2'
+    flinkVersion = '1.14.3'
     scalaVersion = '2.12'
 }
 dependencies {
