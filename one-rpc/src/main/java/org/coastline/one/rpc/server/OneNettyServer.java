@@ -9,6 +9,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.MessageToByteEncoder;
+import io.netty.util.concurrent.DefaultThreadFactory;
 
 import java.util.List;
 
@@ -20,16 +21,16 @@ import java.util.List;
  */
 public abstract class OneNettyServer {
 
-    private ChannelFuture channelFuture;
-    private EventLoopGroup bossGroup;
-    private EventLoopGroup workerGroup;
+    private static ChannelFuture channelFuture;
+    private static EventLoopGroup bossGroup;
+    private static EventLoopGroup workerGroup;
 
-    public void initialize() throws Exception {
+    public static void initialize() throws Exception {
         /*requestCodec = ProtostuffCodec.create(RpcRequest.class);
         responseCodec = ProtostuffCodec.create(RpcResponse.class);*/
         int threads = Runtime.getRuntime().availableProcessors();
-        bossGroup = new NioEventLoopGroup(threads);
-        workerGroup = new NioEventLoopGroup();
+        bossGroup = new NioEventLoopGroup(4, new DefaultThreadFactory("netty-boss"));
+        workerGroup = new NioEventLoopGroup(4, new DefaultThreadFactory("netty-worker"));
         ServerBootstrap bootstrap = new ServerBootstrap(); // (2)
         bootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class) // (3)
@@ -53,12 +54,17 @@ public abstract class OneNettyServer {
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childOption(ChannelOption.SO_REUSEADDR, true)
                 .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT); // (6)
+        Runtime.getRuntime().addShutdownHook(new Thread(OneNettyServer::close));
+
         // Bind and start to accept incoming connections.
         channelFuture = bootstrap.bind(8080).sync(); // (7)
-
     }
 
-    public void close() {
+    public static void main(String[] args) throws Exception {
+        initialize();
+    }
+
+    public static void close() {
         try {
             // Wait until the server socket is closed.
             // In this example, this does not happen, but you can do that to gracefully
@@ -116,7 +122,7 @@ public abstract class OneNettyServer {
     /**
      * process request after encoding
      */
-    private class ServerHandler extends SimpleChannelInboundHandler<String> {
+    private static class ServerHandler extends SimpleChannelInboundHandler<String> {
 
         //接受client发送的消息
         @Override
