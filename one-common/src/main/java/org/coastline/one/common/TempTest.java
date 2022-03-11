@@ -1,6 +1,8 @@
 package org.coastline.one.common;
 
+import java.nio.ByteBuffer;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jay.H.Zou
@@ -8,8 +10,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class TempTest {
 
-    public static void main(String[] args) {
-        ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<>();
-        queue.poll();
+    public static void main(String[] args) throws InterruptedException {
+        //分配128MB直接内存
+        while (true) {
+            ByteBuffer bb = ByteBuffer.allocateDirect(1024);
+        }
+
     }
 }

@@ -29,10 +29,10 @@ public abstract class OneNettyServer {
         /*requestCodec = ProtostuffCodec.create(RpcRequest.class);
         responseCodec = ProtostuffCodec.create(RpcResponse.class);*/
         int threads = Runtime.getRuntime().availableProcessors();
-        bossGroup = new NioEventLoopGroup(4, new DefaultThreadFactory("netty-boss"));
-        workerGroup = new NioEventLoopGroup(4, new DefaultThreadFactory("netty-worker"));
+        bossGroup = new NioEventLoopGroup(8, new DefaultThreadFactory("netty-boss"));
+        workerGroup = new NioEventLoopGroup(8, new DefaultThreadFactory("netty-worker"));
         ServerBootstrap bootstrap = new ServerBootstrap(); // (2)
-        bootstrap.group(bossGroup, workerGroup)
+        bootstrap.group(workerGroup)
                 .channel(NioServerSocketChannel.class) // (3)
                 .childHandler(new ChannelInitializer<SocketChannel>() { // (4)
                     @Override

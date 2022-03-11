@@ -50,5 +50,6 @@ public class JavaUtilsTest {
         Thread.sleep(1000);
         // random
         ThreadLocalRandom threadLocalRandom = ThreadLocalRandom.current();
+        threadLocalRandom.nextInt();
     }
 }
