@@ -119,7 +119,6 @@ public abstract class OneNettyServer {
         }
     }
 
-
     /**
      * process request after encoding
      */

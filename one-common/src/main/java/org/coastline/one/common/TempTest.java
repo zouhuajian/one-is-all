@@ -1,8 +1,6 @@
 package org.coastline.one.common;
 
 import java.nio.ByteBuffer;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jay.H.Zou
