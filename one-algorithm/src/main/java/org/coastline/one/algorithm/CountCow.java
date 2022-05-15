@@ -2,7 +2,6 @@ package org.coastline.one.algorithm;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * 一只母牛，第二年底生一只母牛和一只公牛，第三年底生一只母牛 ，第五年开始母牛会死。
@@ -66,17 +65,14 @@ public class CountCow {
                 if (++age < 5) {
                     increase(newCowMap, age, cowMap.get(age - 1));
                 }
-
             }
             for (int age : bullMap.keySet()) {
                 if (++age < 4) {
                     increase(newBullMap, age, bullMap.get(age - 1));
                 }
             }
-
             cowMap = newCowMap;
             bullMap = newBullMap;
-
             System.out.println("================== 第 " + (i + 1) + " 年, 共: " + count() + " ==================");
         }
         return count();
