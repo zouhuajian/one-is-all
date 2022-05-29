@@ -1,4 +1,4 @@
-package org.coastline.one.flink.common.util;
+package org.coastline.one.core;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import okhttp3.*;

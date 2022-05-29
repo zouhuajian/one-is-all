@@ -4,7 +4,7 @@ import okhttp3.*;
 import org.apache.flink.configuration.ConfigOptions;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
-import org.coastline.one.flink.common.util.HttpClientTool;
+import org.coastline.one.core.HttpClientTool;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
