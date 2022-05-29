@@ -57,6 +57,7 @@ subprojects {
         hbaseVersion = '2.4.5'
         hdfsVersion = '2.8.5'
         nettyVersion = '4.1.67.Final'
+        okhttpVersion = '4.9.3'
     }
     dependencies {
         compileOnly "org.projectlombok:lombok:${lombokVersion}"

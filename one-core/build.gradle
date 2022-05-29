@@ -5,4 +5,5 @@ dependencies {
     api "com.google.guava:guava:${guavaVersion}"
     api "io.protostuff:protostuff-core:${protostuffVersion}"
     api "io.protostuff:protostuff-runtime:${protostuffVersion}"
+    compileOnly "com.squareup.okhttp3:okhttp:${okhttpVersion}"
 }

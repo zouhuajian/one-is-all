@@ -31,4 +31,6 @@ dependencies {
     // hbase
     compileOnly "org.apache.hbase:hbase-client:${hbaseVersion}"
 
+    // http
+    implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
 }
