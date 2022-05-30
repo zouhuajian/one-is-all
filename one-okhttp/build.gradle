@@ -10,7 +10,5 @@ dependencies {
 
     // okhttp
     implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
-    // kafka client
-    implementation "org.apache.kafka:kafka-clients:${kafkaVersion}"
 
 }
