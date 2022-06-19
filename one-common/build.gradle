@@ -13,5 +13,6 @@ dependencies {
 
     implementation 'com.lmax:disruptor:3.4.4'
     implementation 'org.roaringbitmap:RoaringBitmap:0.9.25'
-
+    
+    implementation 'io.kubernetes:client-java:15.0.1'
 }

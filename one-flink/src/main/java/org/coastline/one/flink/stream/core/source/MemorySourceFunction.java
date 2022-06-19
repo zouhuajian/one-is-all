@@ -1,5 +1,6 @@
 package org.coastline.one.flink.stream.core.source;
 
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 import org.coastline.one.core.TimeTool;
 import org.coastline.one.flink.common.model.MonitorData;
@@ -13,45 +14,36 @@ import java.util.concurrent.TimeUnit;
  */
 public class MemorySourceFunction extends RichSourceFunction<MonitorData> {
 
-    private int dataCount;
-
-    private static final Random RANDOM = new Random();
-
-    private MemorySourceFunction() {
-        this.dataCount = Integer.MAX_VALUE;
-    }
-
-    private MemorySourceFunction(int dataCount) {
-        this.dataCount = dataCount;
-    }
+    private boolean running;
 
     public static MemorySourceFunction create() {
         return new MemorySourceFunction();
     }
 
-    public static MemorySourceFunction create(int dataCount) {
-        return new MemorySourceFunction(dataCount);
+    
+
+    @Override
+    public void open(Configuration parameters) throws Exception {
+        running = true;
     }
 
     @Override
     public void run(SourceContext<MonitorData> ctx) throws Exception {
-        for (int i = 0; i < dataCount; i++) {
+        while (running) {
             MonitorData data = MonitorData.builder()
                     .time(TimeTool.currentTimeMillis())
                     .service("one-flink")
                     .zone("LOCAL")
-                    //.name("name-" + RANDOM.nextInt(10))
                     .name("one-name")
-                    .duration(RANDOM.nextInt(1000))
+                    .duration(0)
                     .build();
-            TimeUnit.MILLISECONDS.sleep(600);
+            TimeUnit.MILLISECONDS.sleep(100);
             ctx.collect(data);
         }
-        TimeUnit.MINUTES.sleep(2);
     }
 
     @Override
     public void cancel() {
-
+        running = false;
     }
 }

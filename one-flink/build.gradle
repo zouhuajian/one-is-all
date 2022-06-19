@@ -1,5 +1,9 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
 ext {
-    flinkVersion = '1.14.3'
+    flinkVersion = '1.15.0'
     scalaVersion = '2.12'
 }
 dependencies {
@@ -7,22 +11,22 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
     api project(':one-core')
-    implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
+    compileOnly "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
 
-    implementation "org.apache.flink:flink-java:${flinkVersion}"
-    implementation "org.apache.flink:flink-streaming-java_${scalaVersion}:${flinkVersion}"
-    implementation "org.apache.flink:flink-streaming-scala_${scalaVersion}:${flinkVersion}"
-    implementation "org.apache.flink:flink-runtime-web_${scalaVersion}:${flinkVersion}"
+    compileOnly "org.apache.flink:flink-java:${flinkVersion}"
+    compileOnly "org.apache.flink:flink-streaming-java:${flinkVersion}"
+    //compileOnly "org.apache.flink:flink-streaming-scala_${scalaVersion}:${flinkVersion}"
+    compileOnly "org.apache.flink:flink-runtime-web:${flinkVersion}"
 
     // flink sql
-    compileOnly "org.apache.flink:flink-table-api-java-bridge_${scalaVersion}:${flinkVersion}"
+    compileOnly "org.apache.flink:flink-table-api-java-bridge:${flinkVersion}"
     //implementation "org.apache.flink:flink-table-planner-blink_${scalaVersion}:${flinkVersion}"
 
     // If you want to implement a custom format or connector for (de)serializing rows or a set of user-defined functions,
     // the following dependency is sufficient and can be used for JAR files for the SQL Client:
-    implementation "org.apache.flink:flink-table-common:${flinkVersion}"
+    compileOnly "org.apache.flink:flink-table-common:${flinkVersion}"
 
-    implementation "org.apache.flink:flink-connector-kafka_${scalaVersion}:${flinkVersion}"
+    compileOnly "org.apache.flink:flink-connector-kafka:${flinkVersion}"
     //implementation "org.apache.flink:flink-json:${flinkVersion}"
 
     // mysql
@@ -32,5 +36,5 @@ dependencies {
     compileOnly "org.apache.hbase:hbase-client:${hbaseVersion}"
 
     // http
-    implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+    compileOnly "com.squareup.okhttp3:okhttp:${okhttpVersion}"
 }

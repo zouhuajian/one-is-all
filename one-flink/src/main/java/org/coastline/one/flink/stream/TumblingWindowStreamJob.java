@@ -38,7 +38,7 @@ public class TumblingWindowStreamJob extends StreamJobExecutor {
 
     @Override
     public void buildJob(final StreamExecutionEnvironment env) throws Exception {
-        env.addSource(MemorySourceFunction.create(100)).name("memory_source")
+        /*env.addSource(MemorySourceFunction.create(100)).name("memory_source")
                 .keyBy(DataKeySelector.create())
                 .window(TumblingProcessingTimeWindows.of(Time.seconds(10)))
                 .process(ListWindowProcessFunction.create())
@@ -52,7 +52,7 @@ public class TumblingWindowStreamJob extends StreamJobExecutor {
                                 getRuntimeContext().getIndexOfThisSubtask(),
                                 value.getKey(), value.getWindow(), dataList.size(), COUNT.get());
                     }
-                });
+                });*/
     }
 
     public static void main(String[] args) throws Exception {
