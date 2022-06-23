@@ -1,0 +1,16 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+ext {
+    flinkVersion = '1.15.0'
+    scalaVersion = '2.12'
+}
+
+dependencies {
+    // flink
+    compileOnly "org.apache.flink:flink-table-runtime:${flinkVersion}"
+    compileOnly "org.apache.flink:flink-json:${flinkVersion}"
+    api "io.protostuff:protostuff-core:${protostuffVersion}"
+    api "io.protostuff:protostuff-runtime:${protostuffVersion}"
+}

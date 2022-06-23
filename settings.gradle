@@ -7,4 +7,5 @@ include 'one-spring'
 include 'one-hadoop'
 include 'one-rpc'
 include 'one-okhttp'
+include 'one-flink-sql'
 
