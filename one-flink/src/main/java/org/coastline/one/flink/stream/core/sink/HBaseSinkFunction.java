@@ -26,12 +26,12 @@ public class HBaseSinkFunction<T> extends RichSinkFunction<T> {
         String hbaseTable = configuration.get(ConfigurationTool.HBASE_TABLE);
         String zookeeperQuorum = configuration.get(ConfigurationTool.HBASE_ZOOKEEPER_QUORUM);
 
-        org.apache.hadoop.conf.Configuration hbaseConfig = HBaseConfiguration.create();
+        /*org.apache.hadoop.conf.Configuration hbaseConfig = HBaseConfiguration.create();
         hbaseConfig.set(HConstants.ZOOKEEPER_QUORUM, zookeeperQuorum);
 
         connection = ConnectionFactory.createConnection(hbaseConfig);
         table = connection.getTable(TableName.valueOf(hbaseTable));
-        customInit(configuration);
+        customInit(configuration);*/
     }
 
     /**

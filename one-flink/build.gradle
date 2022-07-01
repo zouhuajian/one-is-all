@@ -15,26 +15,16 @@ dependencies {
 
     compileOnly "org.apache.flink:flink-java:${flinkVersion}"
     compileOnly "org.apache.flink:flink-streaming-java:${flinkVersion}"
-    //compileOnly "org.apache.flink:flink-streaming-scala_${scalaVersion}:${flinkVersion}"
     compileOnly "org.apache.flink:flink-runtime-web:${flinkVersion}"
 
-    // flink sql
-    compileOnly "org.apache.flink:flink-table-api-java-bridge:${flinkVersion}"
-    //implementation "org.apache.flink:flink-table-planner-blink_${scalaVersion}:${flinkVersion}"
-
-    // If you want to implement a custom format or connector for (de)serializing rows or a set of user-defined functions,
-    // the following dependency is sufficient and can be used for JAR files for the SQL Client:
-    compileOnly "org.apache.flink:flink-table-common:${flinkVersion}"
-
     compileOnly "org.apache.flink:flink-connector-kafka:${flinkVersion}"
-    //implementation "org.apache.flink:flink-json:${flinkVersion}"
 
+    implementation "org.apache.flink:flink-connector-jdbc:${flinkVersion}"
+    implementation "com.zaxxer:HikariCP:${hikariCPVersion}"
     // mysql
-    compileOnly "mysql:mysql-connector-java:${mysqlVersion}"
-    compileOnly "com.zaxxer:HikariCP:${hikariCPVersion}"
-    // hbase
-    compileOnly "org.apache.hbase:hbase-client:${hbaseVersion}"
+    implementation "mysql:mysql-connector-java:${mysqlVersion}"
+    implementation "org.apache.flink:flink-connector-hbase-2.2:${flinkVersion}"
 
     // http
-    compileOnly "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+    implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
 }
