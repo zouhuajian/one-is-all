@@ -30,6 +30,8 @@ import org.apache.flink.streaming.api.windowing.windows.Window;
 /**
  * A {@link Trigger} that fires once the count of elements in a pane reaches the given count.
  *
+ * FIRE_AND_PURGE
+ *
  * @param <W> The type of {@link Window Windows} on which this trigger can operate.
  */
 @PublicEvolving
@@ -38,8 +40,7 @@ public class CountPurgeTrigger<W extends Window> extends Trigger<Object, W> {
 
     private final long maxCount;
 
-    private final ReducingStateDescriptor<Long> stateDesc =
-            new ReducingStateDescriptor<>("count", new Sum(), LongSerializer.INSTANCE);
+    private final ReducingStateDescriptor<Long> stateDesc = new ReducingStateDescriptor<>("count", new Sum(), LongSerializer.INSTANCE);
 
     private CountPurgeTrigger(long maxCount) {
         this.maxCount = maxCount;
@@ -59,12 +60,11 @@ public class CountPurgeTrigger<W extends Window> extends Trigger<Object, W> {
 
     @Override
     public TriggerResult onEventTime(long time, W window, TriggerContext ctx) {
-        return TriggerResult.FIRE_AND_PURGE;
+        return TriggerResult.CONTINUE;
     }
 
     @Override
     public TriggerResult onProcessingTime(long time, W window, TriggerContext ctx) throws Exception {
-        System.out.println("==================================");
         return TriggerResult.FIRE_AND_PURGE;
     }
 

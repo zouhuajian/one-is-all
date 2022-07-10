@@ -20,8 +20,6 @@ public class MemorySourceFunction extends RichSourceFunction<MonitorData> {
         return new MemorySourceFunction();
     }
 
-    
-
     @Override
     public void open(Configuration parameters) throws Exception {
         running = true;
@@ -37,7 +35,7 @@ public class MemorySourceFunction extends RichSourceFunction<MonitorData> {
                     .name("one-name")
                     .duration(0)
                     .build();
-            TimeUnit.MILLISECONDS.sleep(100);
+            TimeUnit.MILLISECONDS.sleep(2000);
             ctx.collect(data);
         }
     }

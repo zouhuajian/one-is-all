@@ -11,20 +11,19 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
     api project(':one-core')
-    compileOnly "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
+    //implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
+    implementation "org.apache.flink:flink-java:${flinkVersion}"
+    implementation "org.apache.flink:flink-streaming-java:${flinkVersion}"
+    implementation "org.apache.flink:flink-runtime-web:${flinkVersion}"
 
-    compileOnly "org.apache.flink:flink-java:${flinkVersion}"
-    compileOnly "org.apache.flink:flink-streaming-java:${flinkVersion}"
-    compileOnly "org.apache.flink:flink-runtime-web:${flinkVersion}"
-
-    compileOnly "org.apache.flink:flink-connector-kafka:${flinkVersion}"
+    implementation "org.apache.flink:flink-connector-kafka:${flinkVersion}"
 
     implementation "org.apache.flink:flink-connector-jdbc:${flinkVersion}"
+
     implementation "com.zaxxer:HikariCP:${hikariCPVersion}"
     // mysql
     implementation "mysql:mysql-connector-java:${mysqlVersion}"
     implementation "org.apache.flink:flink-connector-hbase-2.2:${flinkVersion}"
-
     // http
     implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
 }
