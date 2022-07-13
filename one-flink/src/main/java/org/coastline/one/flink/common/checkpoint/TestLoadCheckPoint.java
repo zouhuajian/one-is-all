@@ -1,5 +1,7 @@
 package org.coastline.one.flink.common.checkpoint;
 
+import org.apache.flink.api.common.state.StateTtlConfig;
+import org.apache.flink.api.common.time.Time;
 import org.apache.flink.runtime.checkpoint.Checkpoints;
 import org.coastline.one.flink.common.config.ConfigLoader;
 
@@ -18,5 +20,9 @@ public class TestLoadCheckPoint {
         assert resourceAsStream != null;
         DataInputStream dataInputStream = new DataInputStream(resourceAsStream);
         Checkpoints.loadCheckpointMetadata(dataInputStream, null, null);
+
+        StateTtlConfig.newBuilder(Time.seconds(10))
+                .cleanupIncrementally(10, false)
+                .build();
     }
 }

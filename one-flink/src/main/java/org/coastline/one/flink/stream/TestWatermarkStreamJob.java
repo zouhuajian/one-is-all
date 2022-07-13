@@ -42,6 +42,7 @@ public class TestWatermarkStreamJob extends StreamJobExecutor {
     @Override
     public void buildJob(final StreamExecutionEnvironment env) throws Exception {
         env.setParallelism(1);
+        env.getConfig().setAutoWatermarkInterval(5000);
         env.addSource(MemorySourceFunction.create()).name("memory_source")
                 .assignTimestampsAndWatermarks(WatermarkStrategy
                         // 参数 maxOutOfOrderness: 迟到数据的的上限

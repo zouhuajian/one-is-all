@@ -5,12 +5,23 @@ plugins {
 ext {
     flinkVersion = '1.15.0'
     scalaVersion = '2.12'
+    log4jVersion = '2.17.2'
 }
 
 dependencies {
+    implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
     // flink
-    compileOnly "org.apache.flink:flink-table-runtime:${flinkVersion}"
-    compileOnly "org.apache.flink:flink-json:${flinkVersion}"
+    implementation "org.apache.flink:flink-runtime-web:${flinkVersion}"
+    implementation "org.apache.flink:flink-java:${flinkVersion}"
+    implementation "org.apache.flink:flink-streaming-java:${flinkVersion}"
+    //implementation "org.apache.flink:flink-streaming-scala_${scalaVersion}:${flinkVersion}"
+    implementation "org.apache.flink:flink-table-runtime:${flinkVersion}"
+    implementation "org.apache.flink:flink-table-planner_${scalaVersion}:${flinkVersion}"
+
+    implementation "org.apache.flink:flink-json:${flinkVersion}"
+
+    implementation "org.apache.flink:flink-connector-kafka:${flinkVersion}"
     api "io.protostuff:protostuff-core:${protostuffVersion}"
     api "io.protostuff:protostuff-runtime:${protostuffVersion}"
+    api "com.csoss.monitor:monitor-core:1.0.16-RELEASE"
 }

@@ -2,8 +2,12 @@ package org.coastline.one.flink.stream;
 
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.api.common.state.StateTtlConfig;
 import org.apache.flink.api.java.functions.KeySelector;
+import org.apache.flink.streaming.api.CheckpointingMode;
+import org.apache.flink.streaming.api.TimerService;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
@@ -43,7 +47,10 @@ public class TestWindowStreamJob extends StreamJobExecutor {
 
     @Override
     public void buildJob(final StreamExecutionEnvironment env) throws Exception {
-        env.setParallelism(1);
+        // test
+        // disable: -1
+        env.getCheckpointConfig().setCheckpointInterval(120000);
+        env.getCheckpointConfig().enableUnalignedCheckpoints();
         env.addSource(MemorySourceFunction.create()).name("memory_source")
                 .assignTimestampsAndWatermarks(WatermarkStrategy
                         // 参数 maxOutOfOrderness: 迟到数据的的上限
@@ -75,11 +82,26 @@ public class TestWindowStreamJob extends StreamJobExecutor {
                                 TimeTool.toLocalDateTimeFormat(currentWatermark));
                         out.collect(elements.iterator().next());
                     }
+
+                })
+                .process(new ProcessFunction<MonitorData, MonitorData>() {
+                    @Override
+                    public void processElement(MonitorData value, ProcessFunction<MonitorData, MonitorData>.Context ctx, Collector<MonitorData> out) throws Exception {
+
+                    }
+
+                    @Override
+                    public void onTimer(long timestamp, ProcessFunction<MonitorData, MonitorData>.OnTimerContext ctx, Collector<MonitorData> out) throws Exception {
+                        TimerService timerService = ctx.timerService();
+                    }
+
+
                 })
                 .print();
     }
 
     public static void main(String[] args) throws Exception {
+
         TestWindowStreamJob job = new TestWindowStreamJob(args);
         job.execute("water_marker_test");
     }

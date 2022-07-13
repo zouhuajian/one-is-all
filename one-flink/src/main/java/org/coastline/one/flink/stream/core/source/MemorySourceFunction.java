@@ -1,6 +1,7 @@
 package org.coastline.one.flink.stream.core.source;
 
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 import org.coastline.one.core.TimeTool;
 import org.coastline.one.flink.common.model.MonitorData;
@@ -12,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * @author Jay.H.Zou
  * @date 2021/8/29
  */
-public class MemorySourceFunction extends RichSourceFunction<MonitorData> {
+public class MemorySourceFunction extends RichParallelSourceFunction<MonitorData> {
 
     private boolean running;
 

@@ -1,1 +1,1 @@
-com.csoss.processor.flink.sql.formats.protostuff.ProtostuffMetricsFormatFactory
+org.coastline.one.flink.sql.format.protostuff.ProtostuffMetricsFormatFactory
