@@ -1,4 +1,4 @@
-package org.coastline.one.okhttp;
+package org.coastline.one.common.http;
 
 import okhttp3.*;
 import org.coastline.one.core.HttpClientTool;

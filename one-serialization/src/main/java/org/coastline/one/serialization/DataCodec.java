@@ -1,4 +1,4 @@
-package org.coastline.one.core.codec;
+package org.coastline.one.serialization;
 
 /**
  * @author Jay.H.Zou

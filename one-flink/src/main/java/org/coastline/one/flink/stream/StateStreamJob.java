@@ -1,5 +1,6 @@
 package org.coastline.one.flink.stream;
 
+import org.apache.flink.api.common.operators.SlotSharingGroup;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
@@ -54,7 +55,7 @@ public class StateStreamJob extends StreamJobExecutor {
         // 同一时间只允许一个 checkpoint 进行
         checkpointConfig.setMaxConcurrentCheckpoints(1);
         // 使用 externalized checkpoints，这样 checkpoint 在作业取消后仍就会被保留
-        checkpointConfig.enableExternalizedCheckpoints(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
+        checkpointConfig.setExternalizedCheckpointCleanup(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
         // 开启实验性的 unaligned checkpoints
         checkpointConfig.enableUnalignedCheckpoints();
     }
@@ -73,6 +74,7 @@ public class StateStreamJob extends StreamJobExecutor {
                         System.out.println(value);
                     }
                 });
+        env.registerSlotSharingGroup(SlotSharingGroup.newBuilder("q").build());
     }
 
     public static void main(String[] args) throws Exception {

@@ -2,20 +2,15 @@ package org.coastline.one.flink.stream;
 
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.common.state.StateTtlConfig;
 import org.apache.flink.api.java.functions.KeySelector;
-import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimerService;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
-import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
-import org.coastline.one.core.HashTool;
 import org.coastline.one.core.TimeTool;
 import org.coastline.one.flink.common.model.MonitorData;
 import org.coastline.one.flink.stream.core.StreamJobExecutor;
@@ -48,10 +43,11 @@ public class TestWindowStreamJob extends StreamJobExecutor {
     @Override
     public void buildJob(final StreamExecutionEnvironment env) throws Exception {
         // test
-        // disable: -1
-        env.getCheckpointConfig().setCheckpointInterval(120000);
+        // checkpoint barrie disable: -1
+        env.getCheckpointConfig().setCheckpointInterval(10000);
         env.getCheckpointConfig().enableUnalignedCheckpoints();
-        env.addSource(MemorySourceFunction.create()).name("memory_source")
+        //env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.AT_LEAST_ONCE);
+        env.addSource(MemorySourceFunction.create()).name("memory_source").uid("kafka")
                 .assignTimestampsAndWatermarks(WatermarkStrategy
                         // 参数 maxOutOfOrderness: 迟到数据的的上限
                         .<MonitorData>forBoundedOutOfOrderness(Duration.ofSeconds(10))
@@ -68,22 +64,31 @@ public class TestWindowStreamJob extends StreamJobExecutor {
                         }))
 
                 .keyBy(DataKeySelector.create())
-                .window(TumblingEventTimeWindows.of(Time.seconds(10)))
+                /*.countWindow(10)
+                .process(new ProcessWindowFunction<MonitorData, MonitorData, String, GlobalWindow>() {
+                    @Override
+                    public void process(String s, ProcessWindowFunction<MonitorData, MonitorData, String, GlobalWindow>.Context context, Iterable<MonitorData> elements, Collector<MonitorData> out) throws Exception {
+                        System.out.println(s+ " = " + Lists.newArrayList(elements).size());
+                        out.collect(elements.iterator().next());
+                    }
+                })*/
+                 .window(TumblingEventTimeWindows.of(Time.seconds(10)))
+                //.window(SlidingEventTimeWindows.of(Time.seconds(10), Time.seconds(2)))
                 .process(new ProcessWindowFunction<MonitorData, MonitorData, String, TimeWindow>() {
                     @Override
                     public void process(String key, ProcessWindowFunction<MonitorData, MonitorData, String, TimeWindow>.Context context,
                                         Iterable<MonitorData> elements, Collector<MonitorData> out) throws Exception {
                         long currentWatermark = context.currentWatermark();
                         TimeWindow window = context.window();
-                        LOGGER.warn("window start = {}, end = {}, max = {}, current water marker = {}",
+                        LOGGER.warn("window start = {}, end = {},current water marker = {}",
                                 TimeTool.toLocalDateTimeFormat(window.getStart()),
                                 TimeTool.toLocalDateTimeFormat(window.getEnd()),
-                                TimeTool.toLocalDateTimeFormat(window.maxTimestamp()),
                                 TimeTool.toLocalDateTimeFormat(currentWatermark));
                         out.collect(elements.iterator().next());
                     }
 
                 })
+
                 .process(new ProcessFunction<MonitorData, MonitorData>() {
                     @Override
                     public void processElement(MonitorData value, ProcessFunction<MonitorData, MonitorData>.Context ctx, Collector<MonitorData> out) throws Exception {
@@ -117,7 +122,7 @@ public class TestWindowStreamJob extends StreamJobExecutor {
 
         @Override
         public String getKey(MonitorData value) throws Exception {
-            return HashTool.hashMurmur3_128(value.getName());
+            return value.getName();
         }
     }
 

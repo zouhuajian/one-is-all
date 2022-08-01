@@ -1,9 +1,10 @@
-package org.coastline.one.core.codec;
+package org.coastline.one.serialization.protostuff;
 
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
+import org.coastline.one.serialization.DataCodec;
 
 /**
  * @author Jay.H.Zou
@@ -11,7 +12,7 @@ import io.protostuff.runtime.RuntimeSchema;
  */
 public class ProtostuffCodec<T> implements DataCodec<T> {
 
-    private Schema<T> schema;
+    private final Schema<T> schema;
 
     private ProtostuffCodec(Class<T> clazz) {
         this.schema = RuntimeSchema.getSchema(clazz);

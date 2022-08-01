@@ -3,6 +3,9 @@ ext {
 }
 
 dependencies {
+    implementation 'org.openjdk.jmh:jmh-core:1.35'
+    annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.35'
+
     api project(':one-core')
 
     /*implementation 'org.apache.logging.log4j:log4j-core:2.14.1'

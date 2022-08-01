@@ -1,11 +1,13 @@
 package org.coastline.one.flink.stream.core.source;
 
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.coastline.one.flink.common.util.ConfigurationTool;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
 
@@ -37,7 +39,10 @@ public class KafkaSource implements Serializable {
 
     public static FlinkKafkaConsumer<byte[]> create(Properties properties, List<String> topics) {
         MonitorKafkaDeserializationSchema kafkaSource = new MonitorKafkaDeserializationSchema();
-        return new FlinkKafkaConsumer<>(topics, kafkaSource, properties);
+        FlinkKafkaConsumer<byte[]> flinkKafkaConsumer = new FlinkKafkaConsumer<>(topics, kafkaSource, properties);
+        flinkKafkaConsumer
+                .assignTimestampsAndWatermarks(WatermarkStrategy.forBoundedOutOfOrderness(Duration.ofSeconds(10)));
+        return flinkKafkaConsumer;
     }
 
 
