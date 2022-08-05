@@ -1,0 +1,13 @@
+ext {
+    sparkVersion = '3.3.0'
+    scalaVersion = '2.13'
+}
+
+dependencies {
+    api project(':one-core')
+
+    implementation "org.apache.spark:spark-streaming_$scalaVersion:$sparkVersion"
+    implementation "org.apache.spark:spark-hive_$scalaVersion:$sparkVersion"
+
+    implementation 'org.apache.spark:spark-streaming-kafka_2.11:1.6.3'
+}

@@ -8,4 +8,5 @@ include 'one-hadoop'
 include 'one-rpc'
 include 'one-flink-sql'
 include 'one-serialization'
+include 'one-spark'
 
