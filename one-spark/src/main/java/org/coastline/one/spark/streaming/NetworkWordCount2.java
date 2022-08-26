@@ -4,7 +4,6 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.streaming.Durations;
-import org.apache.spark.streaming.StreamingContext;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaPairDStream;
 import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
@@ -18,7 +17,7 @@ import java.util.Iterator;
  * @author Jay.H.Zou
  * @date 2022/8/1
  */
-public class NetworkWordCount {
+public class NetworkWordCount2 {
 
     /**
      * nc -lk 9999
@@ -28,6 +27,14 @@ public class NetworkWordCount {
      */
     public static void main(String[] args) throws InterruptedException {
         // Create a local StreamingContext with two working thread and batch interval of 1 second
+        SparkSession sparkSession = SparkSession.builder()
+                .master("spark://spark-master:7077")
+                .appName("test-application")
+                .config("spark.jars.packages", "io.acryl:datahub-spark-lineage:0.8.23")
+                .config("spark.extraListeners", "datahub.spark.DatahubSparkListener")
+                .config("spark.datahub.rest.server", "http://localhost:8080")
+                .enableHiveSupport()
+                .getOrCreate();
         SparkConf conf = new SparkConf()
                 .setMaster("local[2]")
                 //.setMaster("spark://xxx:7077")

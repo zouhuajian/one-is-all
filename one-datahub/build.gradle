@@ -1,0 +1,8 @@
+ext {
+    datahubVersion = '0.8.43'
+}
+
+dependencies {
+    implementation "io.acryl:datahub-client:${datahubVersion}"
+
+}
