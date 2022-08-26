@@ -1,17 +1,19 @@
 package org.coastline.one.flink.stream;
 
-import org.apache.flink.api.common.operators.SlotSharingGroup;
+import org.apache.flink.api.common.state.StateTtlConfig;
+import org.apache.flink.api.common.state.ValueState;
+import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.runtime.state.FunctionInitializationContext;
-import org.apache.flink.runtime.state.FunctionSnapshotContext;
+import org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackend;
+import org.apache.flink.runtime.state.hashmap.HashMapStateBackend;
+import org.apache.flink.runtime.state.storage.FileSystemCheckpointStorage;
+import org.apache.flink.runtime.state.storage.JobManagerCheckpointStorage;
 import org.apache.flink.streaming.api.CheckpointingMode;
-import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
-import org.apache.flink.streaming.api.functions.ProcessFunction;
-import org.apache.flink.streaming.api.functions.sink.SinkFunction;
+import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -19,7 +21,6 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.coastline.one.flink.common.model.MonitorData;
 import org.coastline.one.flink.stream.core.StreamJobExecutor;
-import org.coastline.one.flink.stream.core.process.CommonProcessFunction;
 import org.coastline.one.flink.stream.core.source.MemorySourceFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,41 +41,38 @@ public class StateStreamJob extends StreamJobExecutor {
 
     @Override
     protected void customEnv(StreamExecutionEnvironment env) {
-        // 每 1000ms 开始一次 checkpoint
-        env.enableCheckpointing(1000);
+        env.enableCheckpointing(10000, CheckpointingMode.EXACTLY_ONCE);
         CheckpointConfig checkpointConfig = env.getCheckpointConfig();
-        // 高级选项：
-        // 设置模式为精确一次 (这是默认值)
-        checkpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
-        // 确认 checkpoints 之间的时间会进行 500 ms
-        checkpointConfig.setMinPauseBetweenCheckpoints(500);
-        // Checkpoint 必须在一分钟内完成，否则就会被抛弃
-        checkpointConfig.setCheckpointTimeout(60000);
-        // 允许两个连续的 checkpoint 错误
-        checkpointConfig.setTolerableCheckpointFailureNumber(2);
-        // 同一时间只允许一个 checkpoint 进行
-        checkpointConfig.setMaxConcurrentCheckpoints(1);
-        // 使用 externalized checkpoints，这样 checkpoint 在作业取消后仍就会被保留
+        // state backend: memory
+        env.setStateBackend(new HashMapStateBackend());
+        // 使用 rocksdb, 并开启增量 checkpoint
+        EmbeddedRocksDBStateBackend embeddedRocksDBStateBackend = new EmbeddedRocksDBStateBackend(true);
+        //env.setStateBackend(new EmbeddedRocksDBStateBackend(true));
+        // checkpoint storage: job manager
+        checkpointConfig.setCheckpointStorage(new JobManagerCheckpointStorage(10 * 1024 * 1024));
+        // checkpoint storage: hdfs
+        // checkpointConfig.setCheckpointStorage(new FileSystemCheckpointStorage("hdfs:///checkpoints-data/"));
+        // checkpoint storage: file
+        checkpointConfig.setCheckpointStorage(new FileSystemCheckpointStorage(
+                "file:///Users/zouhuajian/Jay/project/zouhuajian/one-is-all/one-flink/checkpoint/"));
         checkpointConfig.setExternalizedCheckpointCleanup(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
-        // 开启实验性的 unaligned checkpoints
-        checkpointConfig.enableUnalignedCheckpoints();
+        // savepoint
+        // env.setDefaultSavepointDirectory(URI.create("hdfs:///checkpoints-data/"));
+        // env.setDefaultSavepointDirectory(URI.create("file:///Users/zouhuajian/Jay/project/zouhuajian/one-is-all/one-flink/savepoint"));
     }
 
     @Override
     public void buildJob(final StreamExecutionEnvironment env) throws Exception {
         env.addSource(MemorySourceFunction.create()).name("memory_source")
-                .process(CommonProcessFunction.create()).name("common_process")
-                .uid("common_process")
-                .keyBy((KeySelector<MonitorData, String>) value -> value.getName())
+                .uid("source_id")
+                .keyBy((KeySelector<MonitorData, String>) MonitorData::getName)
                 .window(TumblingProcessingTimeWindows.of(Time.seconds(10)))
-                .process(new AggregateFunction()).name("aggregate")
-                .addSink(new SinkFunction<MonitorData>() {
+                .process(new AggregateFunction()).name("aggregate").uid("aggregate_id")
+                .addSink(new RichSinkFunction<MonitorData>() {
                     @Override
                     public void invoke(MonitorData value, Context context) throws Exception {
-                        System.out.println(value);
                     }
-                });
-        env.registerSlotSharingGroup(SlotSharingGroup.newBuilder("q").build());
+                }).uid("sink_id");
     }
 
     public static void main(String[] args) throws Exception {
@@ -82,44 +80,32 @@ public class StateStreamJob extends StreamJobExecutor {
         job.execute("state_stream");
     }
 
-    static class DataKeySelector implements KeySelector<MonitorData, String> {
+    static class AggregateFunction extends ProcessWindowFunction<MonitorData, MonitorData, String, TimeWindow> {
 
-        private DataKeySelector() {
-        }
-
-        public static DataKeySelector create() {
-            return new DataKeySelector();
-        }
-
-        @Override
-        public String getKey(MonitorData value) throws Exception {
-            return value.getName();
-        }
-    }
-
-    static class AggregateFunction extends ProcessWindowFunction<MonitorData, MonitorData, String, TimeWindow> implements CheckpointedFunction {
+        private transient ValueState<String> state;
 
         @Override
         public void open(Configuration parameters) throws Exception {
+            ValueStateDescriptor<String> valueStateDescriptor = new ValueStateDescriptor<>("name", TypeInformation.of(String.class));
+            StateTtlConfig ttlConfig = StateTtlConfig.newBuilder(org.apache.flink.api.common.time.Time.days(1))
+                    .cleanupFullSnapshot()
+                    .updateTtlOnCreateAndWrite()
+                    .cleanupIncrementally(10, true)
+                    // default enable
+                    //.disableCleanupInBackground()
+                    // 在 RocksDB 压缩时清理
+                    //.cleanupInRocksdbCompactFilter(1000)
+                    .build();
+            //valueStateDescriptor.enableTimeToLive(ttlConfig);
+            state = getRuntimeContext().getState(valueStateDescriptor);
         }
 
         @Override
-        public void close() throws Exception {
+        public void process(String s, ProcessWindowFunction<MonitorData, MonitorData, String, TimeWindow>.Context context,
+                            Iterable<MonitorData> elements, Collector<MonitorData> out) throws Exception {
+            state.update(s);
+            out.collect(elements.iterator().next());
         }
 
-        @Override
-        public void process(String s, ProcessWindowFunction<MonitorData, MonitorData, String, TimeWindow>.Context context, Iterable<MonitorData> elements, Collector<MonitorData> out) throws Exception {
-
-        }
-
-        @Override
-        public void snapshotState(FunctionSnapshotContext context) throws Exception {
-
-        }
-
-        @Override
-        public void initializeState(FunctionInitializationContext context) throws Exception {
-
-        }
     }
 }

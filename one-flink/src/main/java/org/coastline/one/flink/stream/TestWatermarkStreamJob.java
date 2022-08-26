@@ -46,6 +46,7 @@ public class TestWatermarkStreamJob extends StreamJobExecutor {
         env.addSource(MemorySourceFunction.create()).name("memory_source")
                 .assignTimestampsAndWatermarks(WatermarkStrategy
                         // 参数 maxOutOfOrderness: 迟到数据的的上限
+                        //.forMonotonousTimestamps()
                         .<MonitorData>forBoundedOutOfOrderness(Duration.ofSeconds(10))
                         // 处理空闲数据源, 空闲Duration.ofSeconds(n)后触发
                         .withIdleness(Duration.ofSeconds(30))

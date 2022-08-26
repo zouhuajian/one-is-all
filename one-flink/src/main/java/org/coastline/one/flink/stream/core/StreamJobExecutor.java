@@ -23,7 +23,7 @@ public abstract class StreamJobExecutor {
         Configuration devConfig = new Configuration();
         devConfig.setInteger("rest.port", 8002);
         env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(devConfig);
-        //env = StreamExecutionEnvironment.getExecutionEnvironment();
+        // env = StreamExecutionEnvironment.getExecutionEnvironment();
         // Configuration configuration = loadConfig(args);
         // env.getConfig().setGlobalJobParameters(configuration);
         customEnv(this.env);

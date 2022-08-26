@@ -1,13 +1,16 @@
 dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-    implementation 'org.openjdk.jmh:jmh-core:1.35'
-    annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.35'
+    implementation "org.openjdk.jmh:jmh-core:${jmhVersion}"
+    annotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}"
 
-    api "com.google.code.gson:gson:${gsonVersion}"
-    api "com.google.guava:guava:${guavaVersion}"
-    api "io.protostuff:protostuff-core:${protostuffVersion}"
-    api "io.protostuff:protostuff-runtime:${protostuffVersion}"
-    api "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
+    compileOnly "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
+    compileOnly "com.google.code.gson:gson:${gsonVersion}"
+    compileOnly "com.google.guava:guava:${guavaVersion}"
+    compileOnly "io.protostuff:protostuff-core:${protostuffVersion}"
+    compileOnly "io.protostuff:protostuff-runtime:${protostuffVersion}"
+
     compileOnly "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+    compileOnly "com.github.luben:zstd-jni:${zstdVersion}"
+    compileOnly "org.xerial.snappy:snappy-java:${snappyVersion}"
 }

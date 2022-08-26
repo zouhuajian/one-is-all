@@ -27,10 +27,10 @@ public class NetworkWordCount {
     public static void main(String[] args) throws InterruptedException {
         // Create a local StreamingContext with two working thread and batch interval of 1 second
         SparkConf conf = new SparkConf()
-                //.setMaster("local[2]")
-                .setMaster("spark://xxx:7077")
+                .setMaster("local[2]")
+                //.setMaster("spark://xxx:7077")
                 .setAppName("NetworkWordCount");
-        JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(10));
+        JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(2));
         // Create a DStream that will connect to hostname:port, like localhost:9999
         JavaReceiverInputDStream<String> lines = jssc.socketTextStream("localhost", 9999);
         // Split each line into words
@@ -43,7 +43,7 @@ public class NetworkWordCount {
 
         // Count each word in each batch
         JavaPairDStream<String, Integer> pairs = words.mapToPair(s -> new Tuple2<>(s, 1));
-        JavaPairDStream<String, Integer> wordCounts = pairs.reduceByKey(Integer::sum);
+        JavaPairDStream<String, Integer> wordCounts = pairs.reduceByKey(Integer::sum).cache();
 
         // Print the first ten elements of each RDD generated in this DStream to the console
         wordCounts.print();

@@ -1,17 +1,11 @@
 package org.coastline.one.flink.stream.core.process;
 
-import org.apache.flink.api.common.functions.FlatMapFunction;
-import org.apache.flink.util.Collector;
-import org.coastline.one.core.codec.ProtostuffCodec;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * 解码
  * @author Jay.H.Zou
  * @date 2021/8/19
  */
-public class DeserializeFlatMapFunction<T> implements FlatMapFunction<byte[], T> {
+/*public class DeserializeFlatMapFunction<T> implements FlatMapFunction<byte[], T> {
     private static final long serialVersionUID = 1L;
 
     private static final Logger logger = LoggerFactory.getLogger(DeserializeFlatMapFunction.class);
@@ -38,4 +32,4 @@ public class DeserializeFlatMapFunction<T> implements FlatMapFunction<byte[], T>
             logger.error("decode bytes error", e);
         }
     }
-}
+}*/
