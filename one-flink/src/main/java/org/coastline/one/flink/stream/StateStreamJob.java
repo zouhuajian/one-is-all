@@ -6,10 +6,8 @@ import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackend;
 import org.apache.flink.runtime.state.hashmap.HashMapStateBackend;
 import org.apache.flink.runtime.state.storage.FileSystemCheckpointStorage;
-import org.apache.flink.runtime.state.storage.JobManagerCheckpointStorage;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -46,10 +44,10 @@ public class StateStreamJob extends StreamJobExecutor {
         // state backend: memory
         env.setStateBackend(new HashMapStateBackend());
         // 使用 rocksdb, 并开启增量 checkpoint
-        EmbeddedRocksDBStateBackend embeddedRocksDBStateBackend = new EmbeddedRocksDBStateBackend(true);
+        //EmbeddedRocksDBStateBackend embeddedRocksDBStateBackend = new EmbeddedRocksDBStateBackend(true);
         //env.setStateBackend(new EmbeddedRocksDBStateBackend(true));
         // checkpoint storage: job manager
-        checkpointConfig.setCheckpointStorage(new JobManagerCheckpointStorage(10 * 1024 * 1024));
+        //checkpointConfig.setCheckpointStorage(new JobManagerCheckpointStorage(10 * 1024 * 1024));
         // checkpoint storage: hdfs
         // checkpointConfig.setCheckpointStorage(new FileSystemCheckpointStorage("hdfs:///checkpoints-data/"));
         // checkpoint storage: file
@@ -71,6 +69,7 @@ public class StateStreamJob extends StreamJobExecutor {
                 .addSink(new RichSinkFunction<MonitorData>() {
                     @Override
                     public void invoke(MonitorData value, Context context) throws Exception {
+                        System.out.println(value.getName());
                     }
                 }).uid("sink_id");
     }
@@ -103,6 +102,7 @@ public class StateStreamJob extends StreamJobExecutor {
         @Override
         public void process(String s, ProcessWindowFunction<MonitorData, MonitorData, String, TimeWindow>.Context context,
                             Iterable<MonitorData> elements, Collector<MonitorData> out) throws Exception {
+            //state.update(Lists.newArrayList(elements).toString());
             state.update(s);
             out.collect(elements.iterator().next());
         }

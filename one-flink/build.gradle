@@ -3,7 +3,7 @@ plugins {
 }
 
 ext {
-    flinkVersion = '1.15.1'
+    flinkVersion = '1.15.2'
     scalaVersion = '2.12'
 }
 dependencies {
@@ -27,4 +27,7 @@ dependencies {
     implementation "org.apache.flink:flink-connector-hbase-2.2:${flinkVersion}"
     // http
     implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+
+    implementation "org.apache.flink:flink-state-processor-api:${flinkVersion}"
+
 }

@@ -1,5 +1,7 @@
 package org.coastline.one.flink.stream;
 
+import org.apache.flink.api.common.RuntimeExecutionMode;
+import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.coastline.one.flink.stream.core.StreamJobExecutor;
 import org.coastline.one.flink.stream.core.source.MemorySourceFunction;
@@ -19,12 +21,26 @@ public class CommonStreamJob extends StreamJobExecutor {
     @Override
     protected void customEnv(StreamExecutionEnvironment env) {
         env.disableOperatorChaining();
+        env.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);
+        env.getCheckpointConfig().enableUnalignedCheckpoints();
     }
 
     @Override
     public void buildJob(final StreamExecutionEnvironment env) throws Exception {
         env.addSource(MemorySourceFunction.create()).name("memory_source")
+                .rebalance()
+                //.map(new MyMap<MonitorData, MonitorData>(), TypeInformation.of(MonitorData.class))
+                //.map(new MyMap<MonitorData, MonitorData>())
+                .map(value -> value)
+                //.returns(MonitorData.class)
                 .print().name("default_sink");
+    }
+    static class MyMap<T, O> implements MapFunction<T, O> {
+
+        @Override
+        public O map(T value) throws Exception {
+            return (O) value;
+        }
     }
 
     public static void main(String[] args) throws Exception {

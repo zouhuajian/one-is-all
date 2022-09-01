@@ -37,10 +37,10 @@ public class MemorySourceFunction extends RichParallelSourceFunction<MonitorData
                     .time(TimeTool.currentTimeMillis())
                     .service("one-flink")
                     .zone("LOCAL")
-                    .name("one-name-" + random.nextInt(5))
+                    .name("one-name-" + random.nextInt(100))
                     .duration(0)
                     .build();
-            TimeUnit.MILLISECONDS.sleep(200);
+            TimeUnit.MILLISECONDS.sleep(10);
             ctx.collect(data);
         }
     }
