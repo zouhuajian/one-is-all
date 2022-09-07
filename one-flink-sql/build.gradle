@@ -3,9 +3,10 @@ plugins {
 }
 
 ext {
-    flinkVersion = '1.15.0'
-    scalaVersion = '2.12'
+    flinkVersion = '1.15.2'
+    scalaVersion = '2.11'
     log4jVersion = '2.17.2'
+    hudiVersion = '0.12.0'
 }
 
 dependencies {
@@ -23,5 +24,12 @@ dependencies {
     implementation "org.apache.flink:flink-connector-kafka:${flinkVersion}"
     api "io.protostuff:protostuff-core:${protostuffVersion}"
     api "io.protostuff:protostuff-runtime:${protostuffVersion}"
+
+    // hudi
+    implementation "org.apache.hudi:hudi-flink:${hudiVersion}"
+
+    // clickhouse
+    implementation 'org.apache.flink:flink-connector-clickhouse:1.14.3-SNAPSHOT'
+
 
 }
