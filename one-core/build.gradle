@@ -1,6 +1,13 @@
+ext {
+    aspectjVersion = '1.9.4'
+}
+
 dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testImplementation 'junit:junit:4.13.2'
+
     implementation "org.openjdk.jmh:jmh-core:${jmhVersion}"
     annotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}"
 
@@ -13,4 +20,6 @@ dependencies {
     compileOnly "com.squareup.okhttp3:okhttp:${okhttpVersion}"
     compileOnly "com.github.luben:zstd-jni:${zstdVersion}"
     compileOnly "org.xerial.snappy:snappy-java:${snappyVersion}"
+
+    implementation "org.aspectj:aspectjweaver:${aspectjVersion}"
 }

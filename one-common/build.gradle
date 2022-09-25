@@ -5,8 +5,8 @@ ext {
 dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-    implementation 'org.openjdk.jmh:jmh-core:1.35'
-    annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.35'
+    // implementation 'org.openjdk.jmh:jmh-core:1.35'
+    // annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.35'
 
     api project(':one-core')
 

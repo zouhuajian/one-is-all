@@ -1,0 +1,8 @@
+ext {
+    kafkaVersion = '3.2.3'
+}
+
+dependencies {
+    implementation "org.apache.kafka:kafka-clients:${kafkaVersion}"
+
+}

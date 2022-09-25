@@ -1,4 +1,4 @@
-package org.coastline.one.core;
+package org.coastline.one.core.tool;
 
 import java.sql.Timestamp;
 import java.time.Instant;

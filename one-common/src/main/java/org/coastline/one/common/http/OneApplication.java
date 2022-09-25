@@ -1,7 +1,7 @@
 package org.coastline.one.common.http;
 
 import okhttp3.*;
-import org.coastline.one.core.HttpClientTool;
+import org.coastline.one.core.tool.HttpClientTool;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

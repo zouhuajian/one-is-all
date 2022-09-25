@@ -1,4 +1,4 @@
-package org.coastline.one.core;
+package org.coastline.one.core.tool;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import okhttp3.*;

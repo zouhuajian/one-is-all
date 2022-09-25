@@ -1,4 +1,4 @@
-package org.coastline.one.core;
+package org.coastline.one.core.tool;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;

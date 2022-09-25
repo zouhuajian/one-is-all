@@ -24,7 +24,6 @@ public class KafkaSource implements Serializable {
         // 构建kafka连接配置
         Properties properties = new Properties();
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, configuration.getString(ConfigurationTool.KAFKA_BROKERS));
-
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, configuration.getString(ConfigurationTool.KAFKA_GROUP_ID));
         /*properties.setProperty("session.timeout.ms", "600000");
         properties.setProperty("heartbeat.interval.ms", "300000");

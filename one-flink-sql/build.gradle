@@ -26,10 +26,11 @@ dependencies {
     api "io.protostuff:protostuff-runtime:${protostuffVersion}"
 
     // hudi
-    implementation "org.apache.hudi:hudi-flink:${hudiVersion}"
+    // implementation "org.apache.hudi:hudi-flink:${hudiVersion}"
 
     // clickhouse
-    implementation 'org.apache.flink:flink-connector-clickhouse:1.14.3-SNAPSHOT'
+    //implementation 'org.apache.flink:flink-connector-clickhouse:1.14.3-SNAPSHOT'
+    //implementation 'org.apache.hudi:hudi-flink:0.12.0'
 
 
 }
