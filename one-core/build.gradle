@@ -1,25 +1,22 @@
 ext {
-    aspectjVersion = '1.9.4'
+    aspectjVersion = '1.9.9'
 }
 
 dependencies {
-    compileOnly "org.projectlombok:lombok:${lombokVersion}"
-    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-
     testImplementation 'junit:junit:4.13.2'
 
-    implementation "org.openjdk.jmh:jmh-core:${jmhVersion}"
-    annotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}"
+    implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
+    implementation "com.google.code.gson:gson:${gsonVersion}"
+    implementation "com.google.guava:guava:${guavaVersion}"
+    implementation "io.protostuff:protostuff-core:${protostuffVersion}"
+    implementation "io.protostuff:protostuff-runtime:${protostuffVersion}"
 
-    compileOnly "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
-    compileOnly "com.google.code.gson:gson:${gsonVersion}"
-    api "com.google.guava:guava:${guavaVersion}"
-    compileOnly "io.protostuff:protostuff-core:${protostuffVersion}"
-    compileOnly "io.protostuff:protostuff-runtime:${protostuffVersion}"
-
-    compileOnly "com.squareup.okhttp3:okhttp:${okhttpVersion}"
-    compileOnly "com.github.luben:zstd-jni:${zstdVersion}"
-    compileOnly "org.xerial.snappy:snappy-java:${snappyVersion}"
+    implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+    implementation "com.github.luben:zstd-jni:${zstdVersion}"
+    implementation "org.xerial.snappy:snappy-java:${snappyVersion}"
 
     implementation "org.aspectj:aspectjweaver:${aspectjVersion}"
+
+    annotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}"
+    implementation "org.openjdk.jmh:jmh-core:${jmhVersion}"
 }

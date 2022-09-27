@@ -1,4 +1,4 @@
-package org.coastline.one.spring.aspect;
+package org.coastline.one.spring.aop;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -24,6 +24,7 @@ public class LogAspect {
     public void deBefore(JoinPoint joinPoint) throws Throwable {
         // 接收到请求，记录请求内容
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        assert attributes != null;
         HttpServletRequest request = attributes.getRequest();
         // 记录下请求内容
         System.out.println("URL : " + request.getRequestURL().toString());
@@ -42,7 +43,7 @@ public class LogAspect {
 
     //后置异常通知
     @AfterThrowing("webLog()")
-    public void throwss(JoinPoint jp){
+    public void throwsOne(JoinPoint jp){
         System.out.println("方法异常时执行.....");
     }
 
@@ -54,7 +55,7 @@ public class LogAspect {
 
     //环绕通知,环绕增强，相当于MethodInterceptor
     @Around("webLog()")
-    public Object arround(ProceedingJoinPoint pjp) {
+    public Object around(ProceedingJoinPoint pjp) {
         System.out.println("方法环绕start.....");
         try {
             Object o =  pjp.proceed();

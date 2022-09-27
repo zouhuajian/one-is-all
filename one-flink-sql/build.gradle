@@ -25,6 +25,12 @@ dependencies {
     api "io.protostuff:protostuff-core:${protostuffVersion}"
     api "io.protostuff:protostuff-runtime:${protostuffVersion}"
 
+    // implementation 'org.apache.hudi:hudi-flink-client:0.12.0'
+    // implementation 'org.apache.hudi:hudi-flink1.14.x:0.12.0'
+    implementation 'org.apache.hudi:hudi-flink:0.12.0'
+
+
+
     // hudi
     // implementation "org.apache.hudi:hudi-flink:${hudiVersion}"
 

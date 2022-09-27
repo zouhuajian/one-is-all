@@ -22,7 +22,7 @@ public class TimerHandler {
         long startTime = TimeTool.currentTimeMillis();
         result = joinPoint.proceed();
         String message = name + " cost time = " + (TimeTool.currentTimeMillis() - startTime) + "ms.";
-        System.out.println(message);
+        System.err.println(message);
         return result;
     }
 }

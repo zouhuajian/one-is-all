@@ -1,8 +1,9 @@
 package org.coastline.one.spring.controller;
 
-import org.coastline.one.spring.model.Result;
+import org.coastline.one.spring.annotation.RequestMonitor;
 import org.coastline.one.spring.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/item")
@@ -13,14 +14,15 @@ public class ItemController {
     private ItemService itemService;
 
     @PostMapping(value = "/set")
-    public Result<String> setKey(@RequestParam("key") String key, @RequestParam("value") String value) {
-        return Result.ofSuccess(value);
+    public ResponseEntity<String> setKey(@RequestParam("key") String key, @RequestParam("value") String value) {
+        return ResponseEntity.ok(value);
     }
 
+    @RequestMonitor
     @GetMapping(value = "/get")
-    public Result<String> getList(@RequestParam("key") String key) {
+    public ResponseEntity<String> getList(@RequestParam("key") String key) {
         String item = itemService.getItem(key);
-        return Result.ofSuccess(item);
+        return ResponseEntity.ok(item);
     }
 
 }

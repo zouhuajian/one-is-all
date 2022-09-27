@@ -1,37 +1,17 @@
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-
 ext {
     lombokVersion = '1.18.20'
-    opentelemetryVersion = '1.6.0'
-    grpcVersion = '1.38.0'
-    nettyVersion = '4.1.66.Final'
     mybatisSpring = '2.2.1'
 }
 
 dependencies {
-    compileOnly "org.projectlombok:lombok:${lombokVersion}"
-    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-
-    // implementation "io.opentelemetry:opentelemetry-api:${opentelemetryVersion}"
-    implementation "io.opentelemetry:opentelemetry-proto:${opentelemetryVersion}-alpha"
-    implementation "io.opentelemetry:opentelemetry-exporter-otlp-common:${opentelemetryVersion}"
-    implementation "io.opentelemetry:opentelemetry-exporter-otlp-trace:${opentelemetryVersion}"
-    implementation "io.opentelemetry:opentelemetry-exporter-otlp-metrics:${opentelemetryVersion}-alpha"
-    implementation "io.opentelemetry:opentelemetry-sdk-extension-autoconfigure:${opentelemetryVersion}-alpha"
-    implementation "io.grpc:grpc-okhttp:${grpcVersion}"
-    implementation "io.grpc:grpc-netty:${grpcVersion}"
-    implementation "io.grpc:grpc-netty-shaded:${grpcVersion}"
-
-    // implementation "io.netty:netty-all:${nettyVersion}"
-    /*implementation "io.grpc:grpc-netty:${grpcVersion}"
-    implementation "io.grpc:grpc-netty-shaded:${grpcVersion}"*/
-
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
-    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
-    implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpring}"
+    api project(':one-core')
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-aop"
+    implementation "org.springframework.boot:spring-boot-starter-log4j2"
+    //implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpring}"
 }
 
 configurations.all {

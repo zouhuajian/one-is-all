@@ -1,5 +1,6 @@
 package org.coastline.one.spring.service;
 
+import org.coastline.one.core.annotation.Timer;
 import org.springframework.stereotype.Service;
 
 /**
@@ -9,10 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ItemService {
 
+    @Timer(name = "getItem")
     public String getItem(String key) {
         return this.getClass().getName();
     }
-
-
-
 }
