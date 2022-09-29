@@ -18,10 +18,9 @@ public class TimerHandler {
         Object result;
         MethodSignature methodSignature = ((MethodSignature) joinPoint.getSignature());
         Timer timer = methodSignature.getMethod().getAnnotation(Timer.class);
-        String name = timer.name();
         long startTime = TimeTool.currentTimeMillis();
         result = joinPoint.proceed();
-        String message = name + " cost time = " + (TimeTool.currentTimeMillis() - startTime) + "ms.";
+        String message = timer.name() + " cost time = " + (TimeTool.currentTimeMillis() - startTime) + "ms.";
         System.err.println(message);
         return result;
     }

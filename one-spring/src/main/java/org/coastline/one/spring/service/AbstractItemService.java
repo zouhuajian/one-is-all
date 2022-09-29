@@ -1,16 +1,15 @@
 package org.coastline.one.spring.service;
 
 import org.coastline.one.core.annotation.Timer;
-import org.springframework.stereotype.Service;
 
 /**
  * @author Jay.H.Zou
- * @date 2021/1/24
+ * @date 2022/9/28
  */
-@Service
-public class ItemService extends AbstractItemService {
+public abstract class AbstractItemService implements IItemService {
 
-    //@Timer(name = "bean_item")
+    @Timer(name = "abstract_item")
+    @Override
     public String getItem(String key) {
         return this.getClass().getName();
     }

@@ -2,40 +2,26 @@ package org.coastline.one.spring.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.cglib.proxy.InvocationHandler;
-import org.springframework.cglib.proxy.Proxy;
-import org.springframework.context.ApplicationContext;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author Jay.H.Zou
  * @date 2022/9/23
  */
-/*public class BeanProcessor implements BeanPostProcessor {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BeanProcessor.class);
+public class OtherBeanProcessor implements BeanPostProcessor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(OtherBeanProcessor.class);
 
-    private final List<ProxyEntity> proxyEntities;
+    /*private final List<ProxyEntity> proxyEntities;
     private final ApplicationContext context;
 
     public BeanProcessor(List<ProxyEntity> proxyEntities, ApplicationContext context) {
         this.proxyEntities = proxyEntities;
         this.context = context;
-    }
+    }*/
 
-    *//**
-     * process bean
-     *
-     * @param bean
-     * @param beanName
-     * @return
-     * @throws BeansException
-     *//*
-    @Override
+    /*@Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         try {
             Class<?> clz = bean.getClass();
@@ -96,7 +82,7 @@ import java.lang.reflect.InvocationTargetException;
             ++i;
         }
         return classes;
-    }
+    }*/
 
     private Class<?> implementClass(Class<?>[] interfaces, Class<? extends Annotation> annotation) {
         if (interfaces == null || interfaces.length < 1) {
@@ -123,4 +109,4 @@ import java.lang.reflect.InvocationTargetException;
         }
         return superClass(clz.getSuperclass(), annotation);
     }
-}*/
+}

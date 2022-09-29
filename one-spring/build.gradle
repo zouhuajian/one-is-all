@@ -2,7 +2,6 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 ext {
-    lombokVersion = '1.18.20'
     mybatisSpring = '2.2.1'
 }
 

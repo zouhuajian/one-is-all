@@ -13,13 +13,15 @@ buildscript {
         mavenCentral()
     }
     dependencies {
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springbootVersion}"
+        classpath "io.freefair.gradle:aspectj-plugin:6.5.1"
     }
 }
 
 allprojects {
     group 'org.coastline.one'
-    version '0.0.3'
+    version '0.0.4'
 
     repositories {
         mavenLocal()

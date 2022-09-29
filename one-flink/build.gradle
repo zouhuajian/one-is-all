@@ -1,6 +1,4 @@
-plugins {
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
-}
+
 
 ext {
     flinkVersion = '1.15.2'

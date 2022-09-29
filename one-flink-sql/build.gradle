@@ -1,10 +1,8 @@
-plugins {
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
-}
+
 
 ext {
     flinkVersion = '1.15.2'
-    scalaVersion = '2.11'
+    scalaVersion = '2.12'
     log4jVersion = '2.17.2'
     hudiVersion = '0.12.0'
 }
@@ -22,13 +20,12 @@ dependencies {
     implementation "org.apache.flink:flink-json:${flinkVersion}"
 
     implementation "org.apache.flink:flink-connector-kafka:${flinkVersion}"
-    api "io.protostuff:protostuff-core:${protostuffVersion}"
-    api "io.protostuff:protostuff-runtime:${protostuffVersion}"
+    implementation "io.protostuff:protostuff-core:${protostuffVersion}"
+    implementation "io.protostuff:protostuff-runtime:${protostuffVersion}"
 
-    // implementation 'org.apache.hudi:hudi-flink-client:0.12.0'
-    // implementation 'org.apache.hudi:hudi-flink1.14.x:0.12.0'
+    implementation 'org.apache.hudi:hudi-flink-client:0.12.0'
+    implementation 'org.apache.hudi:hudi-flink1.14.x:0.12.0'
     implementation 'org.apache.hudi:hudi-flink:0.12.0'
-
 
 
     // hudi
