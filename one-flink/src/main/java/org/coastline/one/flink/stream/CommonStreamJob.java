@@ -2,9 +2,11 @@ package org.coastline.one.flink.stream;
 
 import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.coastline.one.flink.stream.core.StreamJobExecutor;
-import org.coastline.one.flink.stream.core.source.MemorySourceFunction;
+import org.coastline.one.flink.common.model.MonitorData;
+import org.coastline.one.flink.stream.functions.StreamJobExecutor;
+import org.coastline.one.flink.stream.functions.source.MemorySourceFunction;
 
 import java.io.IOException;
 
@@ -29,12 +31,14 @@ public class CommonStreamJob extends StreamJobExecutor {
     public void buildJob(final StreamExecutionEnvironment env) throws Exception {
         env.addSource(MemorySourceFunction.create()).name("memory_source")
                 .rebalance()
-                //.map(new MyMap<MonitorData, MonitorData>(), TypeInformation.of(MonitorData.class))
-                //.map(new MyMap<MonitorData, MonitorData>())
+                // test type
+                .map(new MyMap<>(), TypeInformation.of(MonitorData.class))
+                .map(new MyMap<MonitorData, MonitorData>())
                 .map(value -> value)
                 //.returns(MonitorData.class)
                 .print().name("default_sink");
     }
+
     static class MyMap<T, O> implements MapFunction<T, O> {
 
         @Override

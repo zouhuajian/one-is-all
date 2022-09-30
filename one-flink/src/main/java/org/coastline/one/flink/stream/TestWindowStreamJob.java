@@ -13,8 +13,8 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.coastline.one.core.tool.TimeTool;
 import org.coastline.one.flink.common.model.MonitorData;
-import org.coastline.one.flink.stream.core.StreamJobExecutor;
-import org.coastline.one.flink.stream.core.source.MemorySourceFunction;
+import org.coastline.one.flink.stream.functions.StreamJobExecutor;
+import org.coastline.one.flink.stream.functions.source.MemorySourceFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +72,7 @@ public class TestWindowStreamJob extends StreamJobExecutor {
                         out.collect(elements.iterator().next());
                     }
                 })*/
-                 .window(TumblingEventTimeWindows.of(Time.seconds(10)))
+                .window(TumblingEventTimeWindows.of(Time.seconds(10)))
                 //.window(SlidingEventTimeWindows.of(Time.seconds(10), Time.seconds(2)))
                 .process(new ProcessWindowFunction<MonitorData, MonitorData, String, TimeWindow>() {
                     @Override
@@ -86,20 +86,6 @@ public class TestWindowStreamJob extends StreamJobExecutor {
                                 TimeTool.toLocalDateTimeFormat(currentWatermark));
                         out.collect(elements.iterator().next());
                     }
-
-                })
-
-                .process(new ProcessFunction<MonitorData, MonitorData>() {
-                    @Override
-                    public void processElement(MonitorData value, ProcessFunction<MonitorData, MonitorData>.Context ctx, Collector<MonitorData> out) throws Exception {
-
-                    }
-
-                    @Override
-                    public void onTimer(long timestamp, ProcessFunction<MonitorData, MonitorData>.OnTimerContext ctx, Collector<MonitorData> out) throws Exception {
-                        TimerService timerService = ctx.timerService();
-                    }
-
 
                 })
                 .print();

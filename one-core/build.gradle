@@ -3,6 +3,7 @@ apply plugin: 'io.freefair.aspectj.post-compile-weaving'
 
 ext {
     aspectjVersion = '1.9.9'
+    jacksonVersion = '2.13.3'
 }
 
 dependencies {
@@ -13,6 +14,7 @@ dependencies {
     implementation "com.google.guava:guava:${guavaVersion}"
     implementation "io.protostuff:protostuff-core:${protostuffVersion}"
     implementation "io.protostuff:protostuff-runtime:${protostuffVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
     implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
     implementation "com.github.luben:zstd-jni:${zstdVersion}"
