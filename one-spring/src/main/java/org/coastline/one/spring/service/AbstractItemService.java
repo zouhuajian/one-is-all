@@ -8,7 +8,7 @@ import org.coastline.one.core.annotation.Timer;
  */
 public abstract class AbstractItemService implements IItemService {
 
-    @Timer(name = "abstract_item")
+    //@Timer(name = "abstract_item")
     @Override
     public String getItem(String key) {
         return this.getClass().getName();

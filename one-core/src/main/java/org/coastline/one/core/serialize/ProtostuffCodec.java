@@ -4,7 +4,6 @@ import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
-import org.coastline.one.serialization.DataCodec;
 
 /**
  * @author Jay.H.Zou

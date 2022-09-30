@@ -1,5 +1,6 @@
 package org.coastline.one.spring;
 
+import org.coastline.one.core.annotation.TimerHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -15,4 +16,10 @@ public class OneSpringApplication {
         SpringApplication.run(OneSpringApplication.class, args);
     }
 
+
+    // Spring AOP
+    //@Bean
+    public TimerHandler initTimerHandler() {
+        return new TimerHandler();
+    }
 }

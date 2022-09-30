@@ -1,17 +1,22 @@
 package org.coastline.one.spring.service;
 
-import org.coastline.one.core.annotation.Timer;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jay.H.Zou
  * @date 2021/1/24
  */
 @Service
-public class ItemService extends AbstractItemService {
+public class ItemService implements IItemService {
 
     //@Timer(name = "bean_item")
     public String getItem(String key) {
-        return this.getClass().getName();
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+        }
+        return key + " from " + this.getClass().getName();
     }
 }

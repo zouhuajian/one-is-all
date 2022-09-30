@@ -15,7 +15,7 @@ public class TestProxy {
         //生成$Proxy0的class文件
         //System.getProperties().setProperty("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
 
-        IMoneyService moneyService = new MoneyService();
+        MoneyService moneyService = new MoneyService();
         System.out.println("origin: " + moneyService.getClass());
 
         ProxyHandler handler = new ProxyHandler(moneyService);
@@ -23,6 +23,6 @@ public class TestProxy {
                 moneyService.getClass().getInterfaces(), handler);
 
         System.out.println("proxy: " + proxyMoneyService.getClass());
-        System.out.println(proxyMoneyService.haveMoney());
+        proxyMoneyService.haveMoney();
     }
 }
