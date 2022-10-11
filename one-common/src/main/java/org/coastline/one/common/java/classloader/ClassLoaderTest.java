@@ -1,4 +1,4 @@
-package org.coastline.one.common.jvm.classloader;
+package org.coastline.one.common.java.classloader;
 
 import java.lang.reflect.Method;
 
@@ -18,7 +18,7 @@ public class ClassLoaderTest {
         //1、删除CLASSPATH下的 ClassLoaderObject.class，CLASSPATH下没有 ClassLoaderObject.class，Application ClassLoader就把这个.class文件交给下一级用户自定义ClassLoader去加载了
         //2、如下， 即把自定义ClassLoader的父加载器设置为Extension ClassLoader，这样父加载器加载不到Person.class，就交由子加载器MyClassLoader来加载了
         CoastlineClassLoader coastlineClassLoader = new CoastlineClassLoader(ClassLoader.getSystemClassLoader().getParent());
-        Class<?> clazz = coastlineClassLoader.loadClass("org.coastline.one.common.jvm.classloader.ClassLoaderObject");
+        Class<?> clazz = coastlineClassLoader.loadClass("org.coastline.one.common.java.classloader.ClassLoaderObject");
 
         //利用反射获取main方法
         Method method = clazz.getDeclaredMethod("main", String[].class);

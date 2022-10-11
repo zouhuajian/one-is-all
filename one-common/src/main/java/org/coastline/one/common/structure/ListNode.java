@@ -1,4 +1,4 @@
-package org.coastline.one.common;
+package org.coastline.one.common.structure;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package org.coastline.one.common.jvm.classloader;
+package org.coastline.one.common.java.classloader;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -1,4 +1,4 @@
-package org.coastline.one.common.jvm.classloader;
+package org.coastline.one.common.java.classloader;
 
 /**
  * @author Jay.H.Zou

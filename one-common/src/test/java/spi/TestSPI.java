@@ -1,6 +1,6 @@
 package spi;
 
-import org.coastline.one.common.spi.SPIService;
+import org.coastline.one.common.java.spi.SPIService;
 import sun.misc.Service;
 
 import java.util.Iterator;

@@ -1,4 +1,4 @@
-package org.coastline.one.common.spi;
+package org.coastline.one.common.java.spi;
 
 /**
  * @author Jay.H.Zou
