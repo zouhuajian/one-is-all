@@ -1,8 +1,8 @@
-package org.coastline.one.common.proxy.java;
+package org.coastline.one.common.java.proxy.java;
 
 
-import org.coastline.one.common.proxy.IMoneyService;
-import org.coastline.one.common.proxy.MoneyService;
+import org.coastline.one.common.java.proxy.IMoneyService;
+import org.coastline.one.common.java.proxy.MoneyService;
 
 import java.lang.reflect.Proxy;
 

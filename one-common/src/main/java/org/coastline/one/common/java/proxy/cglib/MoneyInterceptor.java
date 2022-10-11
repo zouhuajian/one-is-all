@@ -1,4 +1,4 @@
-package org.coastline.one.common.proxy.cglib;
+package org.coastline.one.common.java.proxy.cglib;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;

@@ -46,6 +46,8 @@ public class TestWindowStreamJob extends StreamJobExecutor {
         // checkpoint barrie disable: -1
         env.getCheckpointConfig().setCheckpointInterval(10000);
         env.getCheckpointConfig().enableUnalignedCheckpoints();
+        // default value: 200ms
+        env.getConfig().setAutoWatermarkInterval(200);
         //env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.AT_LEAST_ONCE);
         env.addSource(MemorySourceFunction.create()).name("memory_source").uid("kafka")
                 .assignTimestampsAndWatermarks(WatermarkStrategy
@@ -62,7 +64,6 @@ public class TestWindowStreamJob extends StreamJobExecutor {
                                 return element.getTime();
                             }
                         }))
-
                 .keyBy(DataKeySelector.create())
                 /*.countWindow(10)
                 .process(new ProcessWindowFunction<MonitorData, MonitorData, String, GlobalWindow>() {

@@ -1,4 +1,4 @@
-package org.coastline.one.common.proxy.java;
+package org.coastline.one.common.java.proxy.java;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

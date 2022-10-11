@@ -1,8 +1,8 @@
-package org.coastline.one.common.proxy.cglib;
+package org.coastline.one.common.java.proxy.cglib;
 
 import net.sf.cglib.core.DebuggingClassWriter;
 import net.sf.cglib.proxy.Enhancer;
-import org.coastline.one.common.proxy.MoneyService;
+import org.coastline.one.common.java.proxy.MoneyService;
 
 /**
  * @author Jay.H.Zou

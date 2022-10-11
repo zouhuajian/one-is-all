@@ -1,4 +1,4 @@
-package org.coastline.one.common.concurrency;
+package org.coastline.one.common.java.concurrency;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executor;

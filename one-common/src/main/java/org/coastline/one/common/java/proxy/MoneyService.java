@@ -1,4 +1,4 @@
-package org.coastline.one.common.proxy;
+package org.coastline.one.common.java.proxy;
 
 /**
  * @author Jay.H.Zou
