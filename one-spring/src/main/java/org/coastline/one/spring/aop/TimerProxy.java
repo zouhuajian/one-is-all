@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
  */
 public class TimerProxy implements InvocationHandler {
 
-    private Object obj;
+    private final Object obj;
 
     public TimerProxy(Object obj) {
         this.obj = obj;

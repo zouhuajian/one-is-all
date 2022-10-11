@@ -8,7 +8,7 @@ import org.coastline.one.core.annotation.Timer;
  */
 public class ComputeService implements IComputeService {
 
-    @Timer(name = "math")
+    //@Timer(name = "class_compute")
     @Override
     public void compute() {
         System.out.println("1+1=2");
