@@ -1,6 +1,8 @@
 
 dependencies {
+    api project(':one-core')
     implementation "org.apache.hbase:hbase-client:${hbaseVersion}"
     implementation "org.apache.hadoop:hadoop-client:${hdfsVersion}"
+    //implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
 }
 

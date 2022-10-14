@@ -1,4 +1,4 @@
-package org.coastline.one.hadoop;
+package org.coastline.one.hadoop.hdfs;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
