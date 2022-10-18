@@ -4,10 +4,12 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
 import org.coastline.one.core.tool.HashTool;
+import org.coastline.one.core.tool.TimeTool;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * create 'test_table', {NAME => 'X', COMPRESSION => 'SNAPPY', TTL=>'604800', DATA_BLOCK_ENCODING => 'FAST_DIFF', BLOCKCACHE => FALSE}, {NUMREGIONS => 4, SPLITALGO => 'HexStringSplit'}
@@ -19,8 +21,14 @@ public class OneHBaseClient {
 
     private static final String TABLE = "test_table";
 
+    private static final String KEY = "key";
+
+    private static final byte[] ROW_KEY = (HashTool.hashMurmur3_32(KEY) + "-" + KEY).getBytes(StandardCharsets.UTF_8);
+
     private final Connection connection;
     private BufferedMutator bufferedMutator;
+    private static final AtomicInteger COLUMN_COUNT = new AtomicInteger();
+    private static final AtomicInteger RPC_COUNT = new AtomicInteger();
 
     public OneHBaseClient() throws IOException {
         Configuration hbaseConfig = HBaseConfiguration.create();
@@ -47,11 +55,10 @@ public class OneHBaseClient {
     }
 
     private void close() throws IOException {
-        connection.close();;
+        connection.close();
     }
 
-
-    public void testAppend() {
+    public void append() {
         String key = "one";
         byte[] rowKey = (HashTool.hashMurmur3_32(key) + "-" + key).getBytes(StandardCharsets.UTF_8);
         Put put = new Put(rowKey);
@@ -67,64 +74,68 @@ public class OneHBaseClient {
         Get get = new Get(rowKey);
         try (Table table = connection.getTable(TableName.valueOf(TABLE))) {
 
-
             table.put(put);
-            decodeResult(table.get(get));
+            decode(table.get(get));
             table.append(append);
-            decodeResult(table.get(get));
+            decode(table.get(get));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
-    public void testGetRowQualifierNumber() {
-
-        String key = "one";
-        byte[] rowKey = (HashTool.hashMurmur3_32(key) + "-" + key).getBytes(StandardCharsets.UTF_8);
-
-        Get get = new Get(rowKey);
+    public void getRow() {
+        long start = TimeTool.currentTimeMillis();
+        Get get = new Get(ROW_KEY);
         try (Table table = connection.getTable(TableName.valueOf(TABLE))) {
-            decodeResultForLong(table.get(get));
+            decode(table.get(get));
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("cost time = " + (TimeTool.currentTimeMillis() - start) + "ms");
     }
 
-    private void decodeResult(Result result) {
+    public void getRowByScan() {
+        long start = TimeTool.currentTimeMillis();
+        Scan scan = new Scan();
+        //.setMaxResultSize(128L) // 对单行没有意义
+        scan.withStartRow(ROW_KEY)
+                .withStopRow(ROW_KEY, true)
+                .setMaxResultSize(1024 * 1024)
+                .setBatch(5000);
+        try (Table table = connection.getTable(TableName.valueOf(TABLE))) {
+            ResultScanner scanner = table.getScanner(scan);
+            for (Result r = scanner.next(); r != null; r = scanner.next()) {
+                RPC_COUNT.incrementAndGet();
+                decode(r);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("cost time = " + (TimeTool.currentTimeMillis() - start) + "ms");
+    }
+
+    private void decode(Result result) {
         List<Cell> cells = result.listCells();
         if (cells == null || cells.isEmpty()) {
             return;
         }
-        byte[] row = result.getRow();
-        System.out.print(new String(row));
+        System.err.println("cell number: " + cells.size());
+        // System.out.print(new String(result.getRow()) + ",\t");
+        long serializeSize = 0;
         for (Cell cell : cells) {
-            System.out.print(", family: " + new String(CellUtil.cloneFamily(cell)));
-            System.out.print(", qualifier: " + new String(CellUtil.cloneQualifier(cell)));
-            System.out.print(", value: " + new String(CellUtil.cloneValue(cell)));
+            COLUMN_COUNT.incrementAndGet();
+            //System.out.println("family: " + new String(CellUtil.cloneFamily(cell)));
+            //System.out.println("qualifier: " + new String(CellUtil.cloneQualifier(cell)));
+            //System.out.print(", value: " + new String(CellUtil.cloneValue(cell)));
+            serializeSize += cell.getSerializedSize();
         }
-        System.out.println();
+        System.out.println("cells serialize size: " + (serializeSize / 1024.0 / 1024.0));
     }
-
-    private void decodeResultForLong(Result result) throws IOException {
-        byte[] row = result.getRow();
-        System.out.print(new String(row));
-        CellScanner cellScanner = result.cellScanner();
-        while (cellScanner.advance()) {
-            Cell cell = cellScanner.current();
-            System.out.print(", family: " + new String(CellUtil.cloneFamily(cell)));
-            System.out.print(", qualifier: " + new String(CellUtil.cloneQualifier(cell)));
-            System.out.print(", value: " + new String(CellUtil.cloneValue(cell)));
-        }
-        System.out.println();
-    }
-
-
-
 
     public static void main(String[] args) throws IOException {
         OneHBaseClient oneHBaseClient = new OneHBaseClient();
-        oneHBaseClient.testGetRowQualifierNumber();
+        oneHBaseClient.getRowByScan();
+        System.out.println("rpc_count=" + RPC_COUNT.get() + ", column_count=" + COLUMN_COUNT.get());
         oneHBaseClient.close();
     }
 
