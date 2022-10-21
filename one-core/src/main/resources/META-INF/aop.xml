@@ -1,5 +1,0 @@
-<aspectj>
-    <aspects>
-        <aspect name="org.coastline.one.core.annotation.Timer"/>
-    </aspects>
-</aspectj>

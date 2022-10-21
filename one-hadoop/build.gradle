@@ -1,3 +1,4 @@
+apply plugin: "com.github.johnrengelman.shadow"
 
 dependencies {
     api project(':one-core')

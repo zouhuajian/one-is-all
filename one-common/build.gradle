@@ -1,3 +1,5 @@
+//apply plugin: 'io.freefair.aspectj.post-compile-weaving'
+
 ext {
     cglibVersion = '3.3.0'
 }
@@ -23,3 +25,15 @@ dependencies {
     // low level rest client of elasticsearch
     implementation 'org.elasticsearch.client:elasticsearch-rest-client:8.4.3'
 }
+
+/*
+compileJava {
+    ajc {
+        enabled = true
+        classpath
+        options {
+            aspectpath.setFrom configurations.aspect
+            compilerArgs = []
+        }
+    }
+}*/

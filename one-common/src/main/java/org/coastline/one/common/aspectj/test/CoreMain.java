@@ -1,7 +1,7 @@
-package org.coastline.one.core.test;
+package org.coastline.one.common.aspectj.test;
 
-import org.coastline.one.core.test.service.ComputeService;
-import org.coastline.one.core.test.service.IComputeService;
+import org.coastline.one.common.aspectj.test.service.ComputeService;
+import org.coastline.one.common.aspectj.test.service.IComputeService;
 
 /**
  * @author Jay.H.Zou

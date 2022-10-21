@@ -26,19 +26,17 @@ public class OneHBaseClient {
     private static final byte[] ROW_KEY = (HashTool.hashMurmur3_32(KEY) + "-" + KEY).getBytes(StandardCharsets.UTF_8);
 
     private final Connection connection;
-    private BufferedMutator bufferedMutator;
+    // private BufferedMutator bufferedMutator;
     private static final AtomicInteger COLUMN_COUNT = new AtomicInteger();
     private static final AtomicInteger RPC_COUNT = new AtomicInteger();
 
     public OneHBaseClient() throws IOException {
-        Configuration hbaseConfig = HBaseConfiguration.create();
+        connection = ConnectionFactory.createConnection();
+        /*Configuration hbaseConfig = HBaseConfiguration.create();
         hbaseConfig.set(HConstants.ZOOKEEPER_QUORUM, "xxx");
         hbaseConfig.set(HConstants.HBASE_CLIENT_META_OPERATION_TIMEOUT, "60000");
         hbaseConfig.setLong("hbase.ipc.client.connection.minIdleTimeBeforeClose", 43200000);
-        // ------ 在配置文件存在时，以上可不需要 ------
-        connection = ConnectionFactory.createConnection();
-
-        /*BufferedMutator.ExceptionListener listener = (e, mutator) -> {
+        BufferedMutator.ExceptionListener listener = (e, mutator) -> {
             for (int i = 0; i < e.getNumExceptions(); i++) {
                 // LOGGER.error("async sent puts error: {}", e.getRow(i));
             }
@@ -54,7 +52,11 @@ public class OneHBaseClient {
         bufferedMutator = connection.getBufferedMutator(params);*/
     }
 
-    private void close() throws IOException {
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public void close() throws IOException {
         connection.close();
     }
 

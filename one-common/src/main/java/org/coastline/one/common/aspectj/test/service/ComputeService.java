@@ -1,6 +1,4 @@
-package org.coastline.one.core.test.service;
-
-import org.coastline.one.core.annotation.Timer;
+package org.coastline.one.common.aspectj.test.service;
 
 /**
  * @author Jay.H.Zou

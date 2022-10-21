@@ -1,5 +1,4 @@
 apply plugin: "com.github.johnrengelman.shadow"
-apply plugin: 'io.freefair.aspectj.post-compile-weaving'
 
 ext {
     aspectjVersion = '1.9.9'
@@ -27,13 +26,3 @@ dependencies {
     implementation "org.openjdk.jmh:jmh-core:${jmhVersion}"
 }
 
-compileJava {
-    ajc {
-        enabled = true
-        classpath
-        options {
-            aspectpath.setFrom configurations.aspect
-            compilerArgs = []
-        }
-    }
-}
