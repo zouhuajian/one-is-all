@@ -47,26 +47,48 @@ subprojects {
     }
 
     ext {
+
+        log4jVersion = '2.17.2'
+        junitVersion = '4.13.1'
+
+        // tool
+        guavaVersion = '30.1.1-jre'
+        cglibVersion = '3.3.0'
+        aspectjVersion = '1.9.9'
         lombokVersion = '1.18.22'
         jmhVersion = '1.35'
-        log4jVersion = '2.17.2'
-        guavaVersion = '30.1.1-jre'
+
+        // json
         gsonVersion = '2.8.7'
-        junitVersion = '4.13.1'
+        jacksonVersion = '2.13.3'
+
         protostuffVersion = '1.7.4'
         mysqlVersion = '8.0.25'
         hikariCPVersion = '4.0.3'
 
         nettyVersion = '4.1.67.Final'
         okhttpVersion = '4.9.3'
+
         // bigdata
         hbaseVersion = '2.4.5'
         hdfsVersion = '2.8.5'
         hiveVersion = '3.1.3'
+        kafkaVersion = '3.2.3'
+
+        // flink
+        flinkVersion = '1.15.2'
+        scalaVersion = '2.12'
+        log4jVersion = '2.17.2'
+        hudiVersion = '0.12.0'
+
+        // spark
+        sparkVersion = '3.3.0'
+
         // compress
         zstdVersion = '1.5.2-3'
         snappyVersion = '1.1.8.4'
 
+        mybatisSpring = '2.2.1'
     }
     dependencies {
         compileOnly "org.projectlombok:lombok:${lombokVersion}"

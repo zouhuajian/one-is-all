@@ -1,10 +1,5 @@
 apply plugin: "com.github.johnrengelman.shadow"
 
-ext {
-    aspectjVersion = '1.9.9'
-    jacksonVersion = '2.13.3'
-}
-
 dependencies {
     testImplementation 'junit:junit:4.13.2'
 
