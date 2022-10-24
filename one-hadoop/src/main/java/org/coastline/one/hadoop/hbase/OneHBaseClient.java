@@ -1,13 +1,14 @@
 package org.coastline.one.hadoop.hbase;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.*;
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.coastline.one.core.tool.HashTool;
 import org.coastline.one.core.tool.TimeTool;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -60,6 +61,28 @@ public class OneHBaseClient {
         connection.close();
     }
 
+    public void put() {
+        List<Put> putList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            String key = "one-" + i;
+            byte[] rowKey = (HashTool.hashMurmur3_32(key) + "|" + key).getBytes(StandardCharsets.UTF_8);
+            Put put = new Put(rowKey);
+            for (int j = 0; j < 5; j++) {
+                byte[] column = String.valueOf(j).getBytes(StandardCharsets.UTF_8);
+                put.addColumn("X".getBytes(StandardCharsets.UTF_8),
+                        column,
+                        column);
+            }
+            put.setDurability(Durability.SKIP_WAL);
+            putList.add(put);
+        }
+        try (Table table = connection.getTable(TableName.valueOf(TABLE))) {
+            table.put(putList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void append() {
         String key = "one";
         byte[] rowKey = (HashTool.hashMurmur3_32(key) + "-" + key).getBytes(StandardCharsets.UTF_8);
@@ -84,6 +107,7 @@ public class OneHBaseClient {
             e.printStackTrace();
         }
     }
+
 
     public void getRow() {
         long start = TimeTool.currentTimeMillis();

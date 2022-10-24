@@ -41,6 +41,7 @@ public class ScanHBase {
         oneHBaseClient.close();
         String msg = TABLE_NAME.getNameAsString() + " row number: " + COUNT.get() + ", scan cost: " + (TimeTool.currentTimeMillis() - start) / 1000 + "s";
         System.out.println(msg);
+        executor.shutdown();
     }
 
     static class ScanRegionTask implements Runnable {
