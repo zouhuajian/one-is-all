@@ -5,12 +5,15 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.coastline.one.core.tool.HashTool;
 import org.coastline.one.core.tool.TimeTool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * create 'test_table', {NAME => 'X', COMPRESSION => 'SNAPPY', TTL=>'604800', DATA_BLOCK_ENCODING => 'FAST_DIFF', BLOCKCACHE => FALSE}, {NUMREGIONS => 4, SPLITALGO => 'HexStringSplit'}
@@ -19,6 +22,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date 2022/10/14
  */
 public class OneHBaseClient {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OneHBaseClient.class);
 
     private static final String TABLE = "test_table";
 
@@ -30,6 +35,7 @@ public class OneHBaseClient {
     // private BufferedMutator bufferedMutator;
     private static final AtomicInteger COLUMN_COUNT = new AtomicInteger();
     private static final AtomicInteger RPC_COUNT = new AtomicInteger();
+    private static final AtomicLong SERIALIZED_SIZE = new AtomicLong();
 
     public OneHBaseClient() throws IOException {
         connection = ConnectionFactory.createConnection();
@@ -108,12 +114,12 @@ public class OneHBaseClient {
         }
     }
 
-
     public void getRow() {
         long start = TimeTool.currentTimeMillis();
         Get get = new Get(ROW_KEY);
         try (Table table = connection.getTable(TableName.valueOf(TABLE))) {
-            decode(table.get(get));
+            Result result = table.get(get);
+            decode(result);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -126,7 +132,7 @@ public class OneHBaseClient {
         //.setMaxResultSize(128L) // 对单行没有意义
         scan.withStartRow(ROW_KEY)
                 .withStopRow(ROW_KEY, true)
-                .setMaxResultSize(1024 * 1024)
+                //.setAllowPartialResults(true);
                 .setBatch(5000);
         try (Table table = connection.getTable(TableName.valueOf(TABLE))) {
             ResultScanner scanner = table.getScanner(scan);
@@ -137,7 +143,7 @@ public class OneHBaseClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("cost time = " + (TimeTool.currentTimeMillis() - start) + "ms");
+        LOGGER.info("cost time={}ms", TimeTool.currentTimeMillis() - start);
     }
 
     private void decode(Result result) {
@@ -145,23 +151,21 @@ public class OneHBaseClient {
         if (cells == null || cells.isEmpty()) {
             return;
         }
-        System.err.println("cell number: " + cells.size());
+        LOGGER.info("cell number={}", cells.size());
         // System.out.print(new String(result.getRow()) + ",\t");
-        long serializeSize = 0;
         for (Cell cell : cells) {
             COLUMN_COUNT.incrementAndGet();
             //System.out.println("family: " + new String(CellUtil.cloneFamily(cell)));
             //System.out.println("qualifier: " + new String(CellUtil.cloneQualifier(cell)));
             //System.out.print(", value: " + new String(CellUtil.cloneValue(cell)));
-            serializeSize += cell.getSerializedSize();
+            SERIALIZED_SIZE.addAndGet(cell.getSerializedSize());
         }
-        System.out.println("cells serialize size: " + (serializeSize / 1024.0 / 1024.0));
     }
 
     public static void main(String[] args) throws IOException {
         OneHBaseClient oneHBaseClient = new OneHBaseClient();
         oneHBaseClient.getRowByScan();
-        System.out.println("rpc_count=" + RPC_COUNT.get() + ", column_count=" + COLUMN_COUNT.get());
+        LOGGER.info("rpc_count={}, column_count={}, serialized_size={}MB", RPC_COUNT.get(), COLUMN_COUNT.get(), SERIALIZED_SIZE.get() / 1024 / 1024);
         oneHBaseClient.close();
     }
 
