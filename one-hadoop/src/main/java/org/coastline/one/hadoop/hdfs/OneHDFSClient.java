@@ -2,6 +2,7 @@ package org.coastline.one.hadoop.hdfs;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.coastline.one.hadoop.hbase.OneHBaseClient;
@@ -85,10 +86,26 @@ public class OneHDFSClient {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        OneHDFSClient oneHDFSClient = new OneHDFSClient();
-        boolean result = oneHDFSClient.rename("","");
-        System.out.println(result);
+    public FileStatus[] list(String path) {
+        try {
+            return fileSystem.listStatus(new Path(path));
+        } catch (Exception e) {
+            LOGGER.error("rename path failed.", e);
+            return new FileStatus[0];
+        }
+    }
 
+    public boolean delete(String path) {
+        try {
+            return fileSystem.delete(new Path(path), true);
+        } catch (Exception e) {
+            LOGGER.error("rename path failed.", e);
+            return false;
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+       /* OneHDFSClient oneHDFSClient = new OneHDFSClient();
+        System.out.println(oneHDFSClient.delete("/a"));*/
     }
 }
