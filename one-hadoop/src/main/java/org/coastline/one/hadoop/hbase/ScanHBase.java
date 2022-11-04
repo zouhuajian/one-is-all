@@ -17,15 +17,13 @@ import java.util.concurrent.atomic.AtomicLong;
  * @date 2022/10/21
  */
 public class ScanHBase {
-    private static final TableName TABLE_NAME = TableName.valueOf("tp221016");
+    private static final TableName TABLE_NAME = TableName.valueOf("test_table");
     private static final int CORE = Runtime.getRuntime().availableProcessors();
     private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(CORE + 1, CORE + 1,
             1, TimeUnit.HOURS, new ArrayBlockingQueue<>(1550));
     private static final AtomicLong COUNT = new AtomicLong();
 
-
     public static void main(String[] args) throws Exception {
-
         long start = TimeTool.currentTimeMillis();
         OneHBaseClient oneHBaseClient = new OneHBaseClient();
         Connection connection = oneHBaseClient.getConnection();
@@ -35,7 +33,9 @@ public class ScanHBase {
         System.out.println(startMsg);
         CountDownLatch countDownLatch = new CountDownLatch(regions.size());
         for (RegionInfo region : regions) {
-            executor.submit(new ScanRegionTask(connection, region, countDownLatch));
+            executor.submit(new ScanRegionTask(connection, region, countDownLatch, result -> {
+               // String rowkey = Bytes.toString(result.getRow());
+            }));
         }
         countDownLatch.await();
         oneHBaseClient.close();
@@ -49,11 +49,13 @@ public class ScanHBase {
         private final Connection connection;
         private final RegionInfo region;
         private final CountDownLatch countDown;
+        private final ProcessResultCallback callback;
 
-        public ScanRegionTask(Connection connection, RegionInfo region, CountDownLatch countDown) {
+        public ScanRegionTask(Connection connection, RegionInfo region, CountDownLatch countDown, ProcessResultCallback callback) {
             this.connection = connection;
             this.region = region;
             this.countDown = countDown;
+            this.callback = callback;
         }
 
         @Override
@@ -72,6 +74,7 @@ public class ScanHBase {
             try (Table table = connection.getTable(TABLE_NAME)) {
                 ResultScanner scanner = table.getScanner(scan);
                 for (Result r = scanner.next(); r != null; r = scanner.next()) {
+                    callback.process(r);
                     COUNT.incrementAndGet();
                 }
             } catch (Exception e) {
@@ -81,6 +84,15 @@ public class ScanHBase {
             String msg = "current number=" + COUNT.get() + ", scan region " + regionName + " finished, cost: " + (TimeTool.currentTimeMillis() - start) / 1000 + "s";
             System.out.println(msg);
             countDown.countDown();
+        }
+    }
+
+    interface ProcessResultCallback {
+        void process(Result result);
+    }
+
+    static class DefaultProcessResultCallback implements ProcessResultCallback {
+        public void process(Result result) {
         }
     }
 }

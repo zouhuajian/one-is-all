@@ -84,6 +84,9 @@ subprojects {
         // spark
         sparkVersion = '3.3.0'
 
+        // hudi
+        hudiVersion = '0.12.0'
+
         // compress
         zstdVersion = '1.5.2-3'
         snappyVersion = '1.1.8.4'
