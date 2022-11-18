@@ -5,7 +5,7 @@ dependencies {
 
     implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
     implementation "com.google.code.gson:gson:${gsonVersion}"
-    implementation "com.google.guava:guava:${guavaVersion}"
+    compileOnly "com.google.guava:guava:${guavaVersion}"
     implementation "io.protostuff:protostuff-core:${protostuffVersion}"
     implementation "io.protostuff:protostuff-runtime:${protostuffVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"

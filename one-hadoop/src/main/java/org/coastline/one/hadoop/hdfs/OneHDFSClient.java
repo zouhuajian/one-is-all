@@ -1,10 +1,7 @@
 package org.coastline.one.hadoop.hdfs;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataOutputStream;
-import org.apache.hadoop.fs.FileStatus;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.*;
 import org.coastline.one.hadoop.hbase.OneHBaseClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +19,7 @@ public class OneHDFSClient {
     private static final String NN1 = "hdfs://xxx:4007";
     private static final String NN2 = "hdfs://yyy:4007";
 
-    private FileSystem fileSystem;
+    private final FileSystem fileSystem;
 
     public OneHDFSClient() throws IOException {
         Configuration conf = new Configuration();
@@ -88,7 +85,9 @@ public class OneHDFSClient {
 
     public FileStatus[] list(String path) {
         try {
-            return fileSystem.listStatus(new Path(path));
+            Path hdfsPath = new Path(path);
+            ContentSummary contentSummary = fileSystem.getContentSummary(hdfsPath);
+            return fileSystem.listStatus(hdfsPath);
         } catch (Exception e) {
             LOGGER.error("rename path failed.", e);
             return new FileStatus[0];
@@ -105,7 +104,11 @@ public class OneHDFSClient {
     }
 
     public static void main(String[] args) throws IOException {
-       /* OneHDFSClient oneHDFSClient = new OneHDFSClient();
-        System.out.println(oneHDFSClient.delete("/a"));*/
+       OneHDFSClient oneHDFSClient = new OneHDFSClient();
+        for (FileStatus fileStatus : oneHDFSClient.list("/")) {
+            System.out.println(fileStatus);
+            System.out.println();
+        }
+
     }
 }

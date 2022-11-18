@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+
 @RequestMapping("/item")
 @RestController
 public class ItemController {
@@ -22,6 +24,7 @@ public class ItemController {
     @GetMapping(value = "/get")
     public ResponseEntity<String> getList(@RequestParam("key") String key) {
         String item = itemService.getItem(key);
+        System.out.println(Instant.now() + ", " + item);
         return ResponseEntity.ok(item);
     }
 
