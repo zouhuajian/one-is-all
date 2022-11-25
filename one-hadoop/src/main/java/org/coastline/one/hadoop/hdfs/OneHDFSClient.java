@@ -106,6 +106,7 @@ public class OneHDFSClient {
     public static void main(String[] args) throws IOException {
        OneHDFSClient oneHDFSClient = new OneHDFSClient();
         for (FileStatus fileStatus : oneHDFSClient.list("/")) {
+            long accessTime = fileStatus.getAccessTime();
             System.out.println(fileStatus);
             System.out.println();
         }

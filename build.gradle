@@ -76,7 +76,7 @@ subprojects {
         kafkaVersion = '3.2.3'
 
         // flink
-        flinkVersion = '1.15.2'
+        flinkVersion = '1.16.0'
         scalaVersion = '2.12'
         log4jVersion = '2.17.2'
         hudiVersion = '0.12.0'

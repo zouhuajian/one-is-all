@@ -9,6 +9,7 @@ dependencies {
     implementation "org.apache.flink:flink-table-planner_${scalaVersion}:${flinkVersion}"
 
     implementation "org.apache.flink:flink-json:${flinkVersion}"
+    implementation "org.apache.flink:flink-csv:${flinkVersion}"
 
     implementation "org.apache.flink:flink-connector-kafka:${flinkVersion}"
     implementation "io.protostuff:protostuff-core:${protostuffVersion}"
