@@ -87,6 +87,9 @@ subprojects {
         // hudi
         hudiVersion = '0.12.0'
 
+        // juicefs
+        juicefsHadoopVersion = '1.0.2'
+
         // compress
         zstdVersion = '1.5.2-3'
         snappyVersion = '1.1.8.4'
