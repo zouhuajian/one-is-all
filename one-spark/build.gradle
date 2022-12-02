@@ -6,7 +6,7 @@ dependencies {
     api project(':one-core')
 
     implementation "org.apache.spark:spark-streaming_$scalaVersion:$sparkVersion"
-    implementation "org.apache.spark:spark-hive_$scalaVersion:$sparkVersion"
+    // implementation "org.apache.spark:spark-hive_$scalaVersion:$sparkVersion"
     implementation 'org.apache.spark:spark-streaming-kafka_2.11:1.6.3'
 
     implementation 'io.acryl:datahub-spark-lineage:0.8.43'
