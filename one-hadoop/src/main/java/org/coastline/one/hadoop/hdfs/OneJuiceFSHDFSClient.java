@@ -2,12 +2,12 @@ package org.coastline.one.hadoop.hdfs;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
+import org.apache.hadoop.io.IOUtils;
 import org.coastline.one.hadoop.hbase.OneHBaseClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author Jay.H.Zou
@@ -20,9 +20,11 @@ public class OneJuiceFSHDFSClient {
     private final FileSystem fileSystem;
 
     public OneJuiceFSHDFSClient() throws IOException {
+        System.setProperty("HADOOP_USER_NAME", "root");
         Configuration conf = new Configuration();
         conf.set("fs.jfs.impl", "io.juicefs.JuiceFileSystem");
         conf.set("juicefs.meta", "mysql://root:xxx@(xxx:3306)/juicefs");  // JuiceFS 元数据引擎地址
+        conf.set("juicefs.superuser", "root");
         //conf.set("juicefs.debug", "true");
         Path p = new Path("jfs://onefs/");  // 请替换 {JFS_NAME} 为正确的值
         fileSystem = p.getFileSystem(conf);
@@ -72,30 +74,30 @@ public class OneJuiceFSHDFSClient {
     }
 
     public byte[] read(String path) {
-        FSDataOutputStream outputStream = null;
-    /*    try {
+        FSDataInputStream inputStream = null;
+        try {
             Path hdfsPath = new Path(path);
             if (!fileSystem.exists(hdfsPath)) {
                 return new byte[0];
             }
-            if (!fileSystem.getFileStatus(hdfsPath).isDirectory()) {
+            if (fileSystem.getFileStatus(hdfsPath).isDirectory()) {
                 return new byte[0];
             }
-            outputStream = fileSystem.create(new Path(path));
-            outputStream.write(data);
+            inputStream = fileSystem.open(hdfsPath);
+            byte[] bytes = IOUtils.readFullyToByteArray(inputStream);
+            return bytes;
         } catch (Exception e) {
-            LOGGER.error("write data failed.", e);
-            return false;
+            LOGGER.error("read data failed, path: {}.", path, e);
+            return new byte[0];
         } finally {
-            if (outputStream != null) {
+            if (inputStream != null) {
                 try {
-                    outputStream.close();
+                    inputStream.close();
                 } catch (Exception e) {
                     LOGGER.error("close stream failed.", e);
                 }
             }
-        }*/
-        return new byte[0];
+        }
     }
 
     public boolean rename(String oldPath, String newPath) {
@@ -130,7 +132,9 @@ public class OneJuiceFSHDFSClient {
 
     public static void main(String[] args) throws IOException {
         OneJuiceFSHDFSClient oneHDFSClient = new OneJuiceFSHDFSClient();
-        boolean write = oneHDFSClient.write("test file".getBytes(StandardCharsets.UTF_8), "/", "test.txt");
+        //boolean write = oneHDFSClient.write("test file".getBytes(StandardCharsets.UTF_8), "/", "test.txt");
         oneHDFSClient.listRoot();
+        byte[] read = oneHDFSClient.read("/test.txt");
+        System.out.println(new String(read));
     }
 }

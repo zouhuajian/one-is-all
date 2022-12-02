@@ -86,7 +86,6 @@ public class OneHDFSClient {
     public FileStatus[] list(String path) {
         try {
             Path hdfsPath = new Path(path);
-            ContentSummary contentSummary = fileSystem.getContentSummary(hdfsPath);
             return fileSystem.listStatus(hdfsPath);
         } catch (Exception e) {
             LOGGER.error("rename path failed.", e);
