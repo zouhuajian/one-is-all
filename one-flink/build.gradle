@@ -20,8 +20,8 @@ dependencies {
     // http
     implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
 
-    implementation "org.apache.flink:flink-hadoop-compatibility_2.12:${flinkVersion}"
-    implementation 'org.apache.hadoop:hadoop-client:2.10.1'
+    // implementation "org.apache.flink:flink-hadoop-compatibility_2.12:${flinkVersion}"
+    // implementation 'org.apache.hadoop:hadoop-client:2.10.1'
 
     implementation "org.apache.flink:flink-state-processor-api:${flinkVersion}"
 

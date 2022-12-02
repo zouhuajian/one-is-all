@@ -52,7 +52,7 @@ subprojects {
         junitVersion = '4.13.1'
 
         // tool
-        guavaVersion = '30.1.1-jre'
+        guavaVersion = '31.1-jre'
         cglibVersion = '3.3.0'
         aspectjVersion = '1.9.9'
         lombokVersion = '1.18.22'

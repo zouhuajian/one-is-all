@@ -18,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MonitorData implements Serializable {
     private static final long serialVersionUID = 1L;
+    private long index;
     private long time;
     private long timeNano;
     private String traceId;
