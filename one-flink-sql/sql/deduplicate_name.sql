@@ -20,16 +20,37 @@ CREATE TABLE datagen (
  'fields.one_key.length'='8'
 );
 
-SELECT * FROM (
-    SELECT
-        one_sequence,
-        one_id,
-        one_key,
-        one_time,
-        ROW_NUMBER() OVER (
-            PARTITION BY one_key ORDER BY one_time
-        ) AS rownum
-    FROM datagen
+CREATE TABLE print_table WITH (
+ 'connector' = 'print'
 )
-WHERE rownum = 1;
+LIKE datagen (EXCLUDING ALL);
+
+CREATE TABLE print_table (
+ one_sequence INT,
+ one_id INT,
+ one_key STRING,
+ one_time TIMESTAMP(3)
+) WITH (
+ 'connector' = 'print'
+);
+
+INSERT INTO print_table (
+    SELECT one_sequence,
+           one_id,
+           one_key,
+           one_time
+    FROM (
+        SELECT
+            one_sequence,
+            one_id,
+            one_key,
+            one_time,
+            ROW_NUMBER() OVER (
+                PARTITION BY one_key ORDER BY one_time
+            ) AS rownum
+        FROM datagen
+    )
+    WHERE rownum = 1
+);
+
 

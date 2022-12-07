@@ -4,7 +4,6 @@ dependencies {
     implementation "org.apache.flink:flink-runtime-web:${flinkVersion}"
     implementation "org.apache.flink:flink-java:${flinkVersion}"
     implementation "org.apache.flink:flink-streaming-java:${flinkVersion}"
-    //implementation "org.apache.flink:flink-streaming-scala_${scalaVersion}:${flinkVersion}"
     implementation "org.apache.flink:flink-table-runtime:${flinkVersion}"
     implementation "org.apache.flink:flink-table-planner_${scalaVersion}:${flinkVersion}"
 
@@ -15,9 +14,9 @@ dependencies {
     implementation "io.protostuff:protostuff-core:${protostuffVersion}"
     implementation "io.protostuff:protostuff-runtime:${protostuffVersion}"
 
-    implementation "org.apache.hudi:hudi-flink-client:${hudiVersion}"
-    implementation "org.apache.hudi:hudi-flink1.14.x:${hudiVersion}"
-    implementation "org.apache.hudi:hudi-flink:${hudiVersion}"
+    //implementation "org.apache.hudi:hudi-flink-client:${hudiVersion}"
+    //implementation "org.apache.hudi:hudi-flink1.14.x:${hudiVersion}"
+    //implementation "org.apache.hudi:hudi-flink:${hudiVersion}"
 
     // hudi
     // implementation "org.apache.hudi:hudi-flink:${hudiVersion}"
