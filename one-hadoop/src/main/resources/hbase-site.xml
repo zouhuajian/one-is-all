@@ -1,7 +1,7 @@
 <configuration>
     <property>
         <name>hbase.zookeeper.quorum</name>
-        <value>xxx</value>
+        <value>192.168.71.14</value>
     </property>
 
     <property>
