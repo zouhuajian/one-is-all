@@ -1,14 +1,12 @@
-ext {
-    scalaVersion = '2.13'
-}
-
 dependencies {
     api project(':one-core')
 
     implementation "org.apache.spark:spark-streaming_$scalaVersion:$sparkVersion"
-    // implementation "org.apache.spark:spark-hive_$scalaVersion:$sparkVersion"
-    implementation 'org.apache.spark:spark-streaming-kafka_2.11:1.6.3'
-
-    implementation 'io.acryl:datahub-spark-lineage:0.8.43'
-
+    implementation "org.apache.spark:spark-sql_$scalaVersion:$sparkVersion"
+    implementation "org.apache.spark:spark-streaming-kafka_2.11:1.6.3"
+    // gradle classifier
+    implementation ("org.apache.hbase.connectors.spark:hbase-spark:1.0.0") {
+        exclude group: 'org.apache.avro', module: 'avro-mapred'
+    }
+    implementation 'org.apache.avro:avro-mapred:1.11.0'
 }

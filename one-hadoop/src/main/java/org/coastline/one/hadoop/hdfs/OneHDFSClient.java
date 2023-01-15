@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Jay.H.Zou
@@ -22,6 +23,7 @@ public class OneHDFSClient {
     private final FileSystem fileSystem;
 
     public OneHDFSClient() throws IOException {
+        System.setProperty("HADOOP_USER_NAME", "root");
         Configuration conf = new Configuration();
         conf.setInt("io.file.buffer.size", 65536); // 64kB
         // 默认文件系统的名称
@@ -36,7 +38,8 @@ public class OneHDFSClient {
         conf.set("dfs.namenode.rpc-address.coastline.nn2", NN2);
         // 配置读取失败自动切换的实现方式
         conf.set("dfs.client.failover.proxy.provider.coastline", "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider");
-        fileSystem = FileSystem.get(conf);
+        //fileSystem = FileSystem.get(conf);
+        fileSystem = FileSystem.get(new Configuration());
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     }
 
@@ -57,7 +60,7 @@ public class OneHDFSClient {
             if (!fileSystem.exists(hdfsPath)) {
                 fileSystem.mkdirs(hdfsPath);
             }
-            outputStream = fileSystem.append(new Path(path + file));
+            outputStream = fileSystem.create(new Path(path + file));
             outputStream.write(data);
         } catch (Exception e) {
             LOGGER.error("write data failed.", e);
@@ -104,11 +107,13 @@ public class OneHDFSClient {
 
     public static void main(String[] args) throws IOException {
        OneHDFSClient oneHDFSClient = new OneHDFSClient();
-        for (FileStatus fileStatus : oneHDFSClient.list("/")) {
+       /* for (FileStatus fileStatus : oneHDFSClient.list("/")) {
             long accessTime = fileStatus.getAccessTime();
             System.out.println(fileStatus);
             System.out.println();
-        }
+        }*/
 
+        oneHDFSClient.write("one is all".getBytes(StandardCharsets.UTF_8), "/data/test/", "one.txt");
+        oneHDFSClient.close();
     }
 }

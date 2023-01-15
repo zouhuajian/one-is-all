@@ -1,5 +1,5 @@
 rootProject.name = 'one-is-all'
-include 'one-core'
+include "one-core"
 include 'one-common'
 include 'one-flink'
 include 'one-zookeeper'
@@ -10,4 +10,5 @@ include 'one-flink-sql'
 include 'one-spark'
 include 'one-datahub'
 include 'one-kafka'
+include 'one-hadoop-core'
 

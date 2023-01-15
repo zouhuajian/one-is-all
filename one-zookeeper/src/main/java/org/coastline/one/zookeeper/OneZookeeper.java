@@ -31,9 +31,9 @@ public class OneZookeeper {
         client.start();
 
         String path = config.getPath();
-        if (client.checkExists().forPath(path) == null) {
+        /*if (client.checkExists().forPath(path) == null) {
             client.create().creatingParentContainersIfNeeded().forPath(path, CONTENT);
-        }
+        }*/
 
         nodeCache = new NodeCache(client, path);
         nodeCache.start();

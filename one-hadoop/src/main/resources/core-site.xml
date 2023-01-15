@@ -4,8 +4,7 @@
 <configuration>
     <property>
         <name>fs.defaultFS</name>
-        <value>hdfs://onehadoop</value>
+        <value>hdfs://coastline-4:9000</value>
     </property>
-
 
 </configuration>

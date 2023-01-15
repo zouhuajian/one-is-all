@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
  * @date 2021/9/14
  */
 public class HashTool {
-    private static final HashFunction hashFunctionMurmur3_32 = Hashing.murmur3_32();
+    private static final HashFunction hashFunctionMurmur3_32 = Hashing.murmur3_32_fixed();
     private static final HashFunction hashFunctionMurmur3_128 = Hashing.murmur3_128();
 
     private HashTool(){}
@@ -22,7 +22,7 @@ public class HashTool {
     }
 
     public static String hashMurmur3_32(String origin, int seed) {
-        HashCode hashCode = Hashing.murmur3_32(seed).hashString(origin, StandardCharsets.UTF_8);
+        HashCode hashCode = Hashing.murmur3_32_fixed(seed).hashString(origin, StandardCharsets.UTF_8);
         return hashCode.toString();
     }
 

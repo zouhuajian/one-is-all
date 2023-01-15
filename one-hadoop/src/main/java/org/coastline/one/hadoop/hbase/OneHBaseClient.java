@@ -194,6 +194,7 @@ public class OneHBaseClient {
         if (cells == null || cells.isEmpty()) {
             return;
         }
+
         // LOGGER.info("cell number={}", cells.size());
         System.out.println(Bytes.toString(result.getRow()) + "---\t\t---" + cells.size());
         for (Cell cell : cells) {
