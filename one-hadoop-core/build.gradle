@@ -1,7 +1,12 @@
+apply plugin: "com.github.johnrengelman.shadow"
+
 dependencies {
 
-}
+    // hadoop
+    api ("org.apache.hadoop:hadoop-client:${hadoopVersion}") {
+        exclude group: 'org.slf4j'
+        exclude group: 'log4j'
+    }
+   // api "org.apache.hadoop:hadoop-hdfs:${hadoopVersion}"
 
-test {
-    useJUnitPlatform()
 }

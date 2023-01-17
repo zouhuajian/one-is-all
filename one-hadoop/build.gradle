@@ -2,14 +2,13 @@ apply plugin: "com.github.johnrengelman.shadow"
 
 dependencies {
     api project(':one-core')
+    api project(':one-hadoop-core')
+
     implementation ("org.apache.hbase:hbase-client:${hbaseVersion}") {
         exclude group: 'org.slf4j'
         exclude group: 'log4j'
     }
-    implementation ("org.apache.hadoop:hadoop-client:${hdfsVersion}") {
-        exclude group: 'org.slf4j'
-        exclude group: 'log4j'
-    }
+
     implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
     implementation "io.juicefs:juicefs-hadoop:${juicefsHadoopVersion}"
 }

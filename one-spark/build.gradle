@@ -1,12 +1,27 @@
 dependencies {
     api project(':one-core')
+    api project(':one-hadoop-core')
 
     implementation "org.apache.spark:spark-streaming_$scalaVersion:$sparkVersion"
     implementation "org.apache.spark:spark-sql_$scalaVersion:$sparkVersion"
-    implementation "org.apache.spark:spark-streaming-kafka_2.11:1.6.3"
-    // gradle classifier
-    implementation ("org.apache.hbase.connectors.spark:hbase-spark:1.0.0") {
-        exclude group: 'org.apache.avro', module: 'avro-mapred'
+
+    // hive
+    implementation("org.apache.spark:spark-hive_$scalaVersion:$sparkVersion") {
+        //exclude group: 'org.apache.hive', module: 'hive-exec'
+        //exclude group: 'org.apache.hive', module: 'hive-metastore'
+        //exclude group: 'org.apache.hive', module: 'hive-common'
+        //exclude group: 'org.apache.commons', module: 'commons-lang3'
     }
-    implementation 'org.apache.avro:avro-mapred:1.11.0'
+
+    /*implementation "org.apache.hive:hive-metastore:${hiveVersion}"
+    implementation "org.apache.hive:hive-common:${hiveVersion}"*/
+
+    // mysql
+    implementation "mysql:mysql-connector-java:${mysqlVersion}"
+
+    // gradle classifier
+    /*implementation ("org.apache.hbase.connectors.spark:hbase-spark:1.0.0") {
+        exclude group: 'org.apache.avro', module: 'avro-mapred'
+    }*/
+    //implementation 'org.apache.avro:avro-mapred:1.11.0'
 }

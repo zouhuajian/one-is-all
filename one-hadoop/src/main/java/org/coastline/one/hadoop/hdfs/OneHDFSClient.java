@@ -23,8 +23,8 @@ public class OneHDFSClient {
     private final FileSystem fileSystem;
 
     public OneHDFSClient() throws IOException {
-        System.setProperty("HADOOP_USER_NAME", "root");
-        Configuration conf = new Configuration();
+        //System.setProperty("HADOOP_USER_NAME", "root");
+        /*Configuration conf = new Configuration();
         conf.setInt("io.file.buffer.size", 65536); // 64kB
         // 默认文件系统的名称
         conf.set("fs.defaultFS", "hdfs://coastline");
@@ -37,7 +37,7 @@ public class OneHDFSClient {
         // nn2 的 http 通信地址
         conf.set("dfs.namenode.rpc-address.coastline.nn2", NN2);
         // 配置读取失败自动切换的实现方式
-        conf.set("dfs.client.failover.proxy.provider.coastline", "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider");
+        conf.set("dfs.client.failover.proxy.provider.coastline", "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider");*/
         //fileSystem = FileSystem.get(conf);
         fileSystem = FileSystem.get(new Configuration());
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));
@@ -77,6 +77,19 @@ public class OneHDFSClient {
         return true;
     }
 
+    public boolean mkdir(String path) {
+        try {
+            Path hdfsPath = new Path(path);
+            if (!fileSystem.exists(hdfsPath)) {
+                fileSystem.mkdirs(hdfsPath);
+            }
+            return true;
+        } catch (Exception e) {
+            LOGGER.error("mkdir failed.", e);
+            return false;
+        }
+    }
+
     public boolean rename(String oldPath, String newPath) {
         try {
             return fileSystem.rename(new Path(oldPath), new Path(newPath));
@@ -106,14 +119,19 @@ public class OneHDFSClient {
     }
 
     public static void main(String[] args) throws IOException {
-       OneHDFSClient oneHDFSClient = new OneHDFSClient();
+        OneHDFSClient oneHDFSClient = new OneHDFSClient();
        /* for (FileStatus fileStatus : oneHDFSClient.list("/")) {
             long accessTime = fileStatus.getAccessTime();
             System.out.println(fileStatus);
             System.out.println();
         }*/
 
-        oneHDFSClient.write("one is all".getBytes(StandardCharsets.UTF_8), "/data/test/", "one.txt");
+        //oneHDFSClient.write("one is all".getBytes(StandardCharsets.UTF_8), "/data/test/", "one.txt");
+        FileStatus[] list = oneHDFSClient.list("/data/warehouse/bigdata.db/tmall_order_report_tbl");
+        for (FileStatus fileStatus : list) {
+            System.out.println(fileStatus.getPath());
+        }
+        oneHDFSClient.mkdir("/data/warehouse/bigdata.db/tmall_order_report_tbl/test");
         oneHDFSClient.close();
     }
 }

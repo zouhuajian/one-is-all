@@ -24,7 +24,7 @@ import org.apache.spark.sql.SparkSession;
 public final class ParseFSImageJob {
 
     public static void main(String[] args) throws Exception {
-        String  path = "file:///Users/zouhuajian/Jay/project/zouhuajian/one-is-all/one-spark/sql/fsimage.csv";
+        String path = "file:///Users/zouhuajian/data/projects/jay/one-is-all/one-data/fsimage/fsimage.csv";
         SparkSession spark = SparkSession
                 .builder()
                 .appName("parse-fsimage")
@@ -34,7 +34,7 @@ public final class ParseFSImageJob {
                 .option("header", "true")
                 .option("delimiter", "\t")
                 .csv(path);
-        csv.show( Integer.MAX_VALUE);
+        csv.show(Integer.MAX_VALUE);
     }
 
 }
