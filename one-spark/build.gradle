@@ -6,15 +6,7 @@ dependencies {
     implementation "org.apache.spark:spark-sql_$scalaVersion:$sparkVersion"
 
     // hive
-    implementation("org.apache.spark:spark-hive_$scalaVersion:$sparkVersion") {
-        //exclude group: 'org.apache.hive', module: 'hive-exec'
-        //exclude group: 'org.apache.hive', module: 'hive-metastore'
-        //exclude group: 'org.apache.hive', module: 'hive-common'
-        //exclude group: 'org.apache.commons', module: 'commons-lang3'
-    }
-
-    /*implementation "org.apache.hive:hive-metastore:${hiveVersion}"
-    implementation "org.apache.hive:hive-common:${hiveVersion}"*/
+    implementation "org.apache.spark:spark-hive_$scalaVersion:$sparkVersion"
 
     // mysql
     implementation "mysql:mysql-connector-java:${mysqlVersion}"
@@ -23,5 +15,4 @@ dependencies {
     /*implementation ("org.apache.hbase.connectors.spark:hbase-spark:1.0.0") {
         exclude group: 'org.apache.avro', module: 'avro-mapred'
     }*/
-    //implementation 'org.apache.avro:avro-mapred:1.11.0'
 }
