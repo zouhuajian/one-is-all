@@ -1,12 +1,16 @@
 //apply plugin: 'io.freefair.aspectj.post-compile-weaving'
 
 dependencies {
+    api project(':one-core')
+
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testImplementation "junit:junit:${junitVersion}"
+
     // implementation 'org.openjdk.jmh:jmh-core:1.35'
     // annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.35'
 
-    api project(':one-core')
 
     /*implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
     implementation 'org.apache.logging.log4j:log4j-api:2.14.1'*/
@@ -21,5 +25,8 @@ dependencies {
     // low level rest client of elasticsearch
     implementation 'org.elasticsearch.client:elasticsearch-rest-client:8.4.3'
     implementation 'net.sf.json-lib:json-lib:2.4:jdk15'
-    implementation 'net.sf.json-lib:json-lib:2.4:jdk15'
+
+    // chinese to pinyin
+    implementation 'com.belerweb:pinyin4j:2.5.1'
+
 }
