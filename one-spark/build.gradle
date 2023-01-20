@@ -1,3 +1,5 @@
+apply plugin: 'scala'
+
 dependencies {
     api project(':one-core')
     api project(':one-hadoop-core')
@@ -11,8 +13,6 @@ dependencies {
     // mysql
     implementation "mysql:mysql-connector-java:${mysqlVersion}"
 
-    // gradle classifier
-    /*implementation ("org.apache.hbase.connectors.spark:hbase-spark:1.0.0") {
-        exclude group: 'org.apache.avro', module: 'avro-mapred'
-    }*/
+    //implementation "org.apache.hbase.connectors.spark:hbase-spark:1.0.0"
 }
+

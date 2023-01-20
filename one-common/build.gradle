@@ -1,12 +1,12 @@
-//apply plugin: 'io.freefair.aspectj.post-compile-weaving'
+apply plugin: 'io.freefair.aspectj.post-compile-weaving'
 
 dependencies {
     api project(':one-core')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-
     testImplementation "junit:junit:${junitVersion}"
+
 
     // implementation 'org.openjdk.jmh:jmh-core:1.35'
     // annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.35'

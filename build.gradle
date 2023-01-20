@@ -1,7 +1,10 @@
-//声明gradle脚本自身需要使用的资源
+// buildScript 是用来加载Gradle脚本自身需要使用的资源，
+// 可以声明的资源包括依赖项、第三方插件、maven仓库地址等
 buildscript {
     ext {
         springbootVersion = '2.5.2'
+        shadowVersion = '7.1.2'
+        aspectjVersion = '6.5.1'
     }
 
     repositories {
@@ -13,10 +16,11 @@ buildscript {
         maven { url 'https://repo.gradle.org/gradle/libs-releases' }
         mavenCentral()
     }
+
     dependencies {
-        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:${shadowVersion}"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springbootVersion}"
-        classpath "io.freefair.gradle:aspectj-plugin:6.5.1"
+        classpath "io.freefair.gradle:aspectj-plugin:${aspectjVersion}"
     }
 }
 
@@ -34,31 +38,27 @@ allprojects {
         maven { url 'https://repository.cloudera.com/artifactory/cloudera-repos/' }
         mavenCentral()
     }
+
 }
 
 subprojects {
+    // apply plugin: 'idea'
     apply plugin: 'java'
-    apply plugin: 'idea'
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-    tasks.withType(JavaCompile) {
-        options.encoding = 'UTF-8'
-    }
-
     ext {
-
         log4jVersion = '2.17.2'
         junitVersion = '4.13.1'
 
         // tool
+        lombokVersion = '1.18.22'
         guavaVersion = '31.1-jre'
         cglibVersion = '3.3.0'
         aspectjVersion = '1.9.9'
-        lombokVersion = '1.18.22'
         jmhVersion = '1.35'
         log4jVersion = '2.17.2'
 
@@ -102,7 +102,15 @@ subprojects {
 
         mybatisSpring = '2.2.1'
     }
+
     dependencies {
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        testImplementation "junit:junit:${junitVersion}"
+
+        // scala
+        /*implementation 'org.scala-lang:scala-library:2.13.10'
+        implementation "org.scala-lang:scala-compiler:2.13.10"
+        implementation "org.scala-lang:scala-reflect:2.13.10"*/
     }
 }

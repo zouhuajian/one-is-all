@@ -30,7 +30,7 @@ public class OneConsumer {
         while (true) {
             ConsumerRecords<byte[], byte[]> records = consumer.poll(Duration.ofSeconds(1));
             for (ConsumerRecord<byte[], byte[]> record : records)
-                System.out.printf("offset = %d, key = %s, value = %s", record.offset(), record.key(), record.value());
+                System.out.printf("offset = %d, key = %s, value = %s", record.offset(), Arrays.toString(record.key()), Arrays.toString(record.value()));
         }
     }
 }
