@@ -93,6 +93,9 @@ subprojects {
         // hudi
         hudiVersion = '0.12.0'
 
+        // iceberg
+        icebergVersion = '1.1.0'
+
         // juicefs
         juicefsHadoopVersion = '1.0.2'
 
