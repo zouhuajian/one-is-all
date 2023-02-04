@@ -21,7 +21,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * create 'test_table', {NAME => 'X', COMPRESSION => 'SNAPPY', TTL=>'604800', DATA_BLOCK_ENCODING => 'FAST_DIFF', BLOCKCACHE => FALSE}, {NUMREGIONS => 4, SPLITALGO => 'HexStringSplit'}
  * <p>
  * create 'test_table', {NAME => 'X', TTL=>'604800', DATA_BLOCK_ENCODING => 'FAST_DIFF' }, {NUMREGIONS => 8, SPLITALGO => 'HexStringSplit'}
- *
  * @author Jay.H.Zou
  * @date 2022/10/14
  */

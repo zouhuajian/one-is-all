@@ -82,7 +82,8 @@ subprojects {
         hbaseVersion = '2.4.5'
         kafkaVersion = '3.2.3'
 
-        scalaVersion = '2.12'
+        scalaCompileVersion = '2.12'
+        scalaVersion = '2.12.15'
 
         // flink
         flinkVersion = '1.16.0'
@@ -104,6 +105,14 @@ subprojects {
         snappyVersion = '1.1.8.4'
 
         mybatisSpring = '2.2.1'
+    }
+
+    configurations {
+        // 自定义 configuration, 用于区分打包依赖和本地运行依赖
+        // 被 localDependency 修饰的依赖主要用于本地运行
+        implementation.extendsFrom(localDependency)
+        // 被 packageDependency 修饰的依赖才会被打包
+        implementation.extendsFrom(packageDependency)
     }
 
     dependencies {
