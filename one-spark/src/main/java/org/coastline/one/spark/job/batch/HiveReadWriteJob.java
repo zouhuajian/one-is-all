@@ -5,6 +5,7 @@ import org.apache.spark.sql.types.StructType;
 import org.coastline.one.core.tool.TimeTool;
 import org.coastline.one.spark.core.model.OrderReport;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,12 +36,15 @@ public class HiveReadWriteJob {
                 .builder()
                 .appName("hdfs-to-hive")
                 .enableHiveSupport()
-                //.config("hive.exec.dynamic.partition", true)
-                .config("hive.exec.dynamic.partition.mode", "nonstrict")
+                .config("hive.exec.dynamic.partition", true)
+                //.config("hive.exec.dynamic.partition.mode", "nonstrict")
+                .config("spark.sql.sources.partitionOverwriteMode", "dynamic")
+                .config("spark.sql.parquet.output.committer.class", "org.apache.parquet.hadoop.ParquetOutputCommitter")
+                .config("spark.sql.sources.commitProtocolClass", "org.apache.spark.sql.execution.datasources.SQLHadoopMapReduceCommitProtocol")
                 .master("local[2]")
                 //.master("spark://xxx:7077")
                 .getOrCreate();
-        unionAll(spark);
+        dayPartition(spark);
     }
 
     /**
@@ -49,9 +53,12 @@ public class HiveReadWriteJob {
      * @param spark
      */
     private static void readHive(SparkSession spark) {
+        spark.conf().set("spark.sql.warehouse.dir", "/data/warehouse/");
         String srcPath = "bigdata.tmall_order_report_tbl";
 
         spark.read()
+                .option("delimiter", "\t")
+                .option("header", "true")
                 .schema(BASE_SCHEMA)
                 .csv(srcPath)
                 .toDF(BASE_SCHEMA.names())
@@ -64,7 +71,8 @@ public class HiveReadWriteJob {
     }
 
     /**
-     * hive 写入另一张分区 hive 表
+     * hive 写入另一张分区 hive 表 <p/>
+     * 以数据时间作为分区时间
      *
      * @param spark
      */
@@ -72,7 +80,6 @@ public class HiveReadWriteJob {
         String srcPath = "bigdata.tmall_order_report_tbl";
         String destPartitionTbl = "bigdata.tmall_order_report_partition_tbl";
 
-        // "order_id", "total_amount", "actual_amount", "address", "creation_time", "payment_time", "refund_amount"
         spark.sql(String.format("SELECT order_id, " +
                         "total_amount, " +
                         "actual_amount, " +
@@ -113,7 +120,7 @@ public class HiveReadWriteJob {
                 .write()
                 .partitionBy("creation_date")
                 .mode(SaveMode.Overwrite)
-                .format("orc")
+                .format("parquet")
                 .saveAsTable(destPartitionTbl);
         // parquet(path), orc(path) 适合写入全路径
     }
@@ -146,5 +153,33 @@ public class HiveReadWriteJob {
                         "JOIN in_memory_order m " +
                         "ON h.order_id = m.orderId", srcPath))
                 .show(Integer.MAX_VALUE);
+    }
+
+    /**
+     * 以处理时间生成天表，用于测试动态分区 overwrite 写入丢失数据问题
+     *
+     * @param spark
+     */
+    private static void dayPartition(SparkSession spark) {
+        String srcPath = "bigdata.tmall_order_report_tbl";
+        String destTbl = "bigdata.dws_order_amount_agg_1d";
+        int lastSomeDays = 4;
+
+        for (int i = 0; i < lastSomeDays; i++) {
+            LocalDateTime dateTime = TimeTool.currentLocalDateTime().plusDays(i - lastSomeDays + 1);
+            String dt = dateTime.format(TimeTool.DEFAULT_DATE_FORMATTER);
+            spark.sql(String.format("SELECT " +
+                            "'static' AS part, " +
+                            "'%s' AS dt, " +
+                            "address, " +
+                            "sum(cast(total_amount as decimal(15,2))) AS total_amount " +
+                            "FROM %s " +
+                            "GROUP BY address", dt, srcPath))
+                    .write()
+                    .partitionBy("dt")
+                    .format("parquet")
+                    .mode(SaveMode.Overwrite)
+                    .saveAsTable(destTbl);
+        }
     }
 }

@@ -1,3 +1,4 @@
+/*
 package org.coastline.one.spark.job.batch;
 
 import org.apache.hadoop.conf.Configuration;
@@ -8,6 +9,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.coastline.one.spark.core.SparkExecutor;
@@ -17,16 +19,22 @@ import scala.Tuple2;
 
 import java.nio.charset.StandardCharsets;
 
+*/
 /**
  * HBase Read Write Job
- *
+ * <p>
+ *     create 'one_order', {NAME => 'X', TTL=>'604800', DATA_BLOCK_ENCODING => 'FAST_DIFF' }, {NUMREGIONS => 4, SPLITALGO => 'HexStringSplit'}
+ * </p>
  * @author Jay.H.Zou
  * @date 2023/01/27
- */
+ *//*
+
 public class HBaseReadWriteJob {
     private static final Logger LOGGER = LoggerFactory.getLogger(HBaseReadWriteJob.class);
 
-    private static final byte[] FAMILY = Bytes.toBytes("f");
+    private static final TableName TABLE_NAME = TableName.valueOf("one_order");
+
+    private static final byte[] FAMILY = Bytes.toBytes("X");
 
     public static void main(String[] args) {
         String srcPath = "bigdata.tmall_order_report_tbl";
@@ -51,8 +59,16 @@ public class HBaseReadWriteJob {
             }
         }, true, source.getNumPartitions());
 
+        sortedRDD.foreach(new VoidFunction<Tuple2<String, Double>>() {
+            @Override
+            public void call(Tuple2<String, Double> tuple2) throws Exception {
+                System.out.println(tuple2);
+            }
+        });
+
         // 将用于将数据转换为HBase可识别的Put类型.
-        Function<Tuple2<String, Double>, Put> putFunction = (Tuple2<String, Double> tuple2) -> {
+        */
+/*Function<Tuple2<String, Double>, Put> putFunction = (Tuple2<String, Double> tuple2) -> {
             byte[] rowKey = tuple2._1().getBytes(StandardCharsets.UTF_8);
             Put put = new Put(rowKey);
             put.addColumn(FAMILY, Bytes.toBytes("total_amount"), Bytes.toBytes(tuple2._2()));
@@ -64,6 +80,8 @@ public class HBaseReadWriteJob {
         JavaHBaseContext hbaseContext = new JavaHBaseContext(jsc, new Configuration());
 
         // autoFlush(最后一个参数), 设置为false为批量写入, 能大大提高写入性能. 设置为true时, HBase写入性能极低.
-        hbaseContext.bulkPut(sortedRDD, TableName.valueOf("test_table"), putFunction);
+        hbaseContext.bulkPut(sortedRDD, TABLE_NAME, putFunction);*//*
+
     }
 }
+*/

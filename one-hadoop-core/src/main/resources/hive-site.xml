@@ -312,13 +312,17 @@
   </property>
   <property>
     <name>hive.exec.dynamic.partition</name>
-    <value>true</value>
-    <description>Whether or not to allow dynamic partitions in DML/DDL.</description>
+    <value>false</value>
+    <description>
+      Default false.
+      Whether or not to allow dynamic partitions in DML/DDL.
+    </description>
   </property>
   <property>
     <name>hive.exec.dynamic.partition.mode</name>
     <value>strict</value>
     <description>
+      Default strict.
       In strict mode, the user must specify at least one static partition
       in case the user accidentally overwrites all partitions.
       In nonstrict mode all partitions are allowed to be dynamic.

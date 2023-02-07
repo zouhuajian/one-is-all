@@ -34,6 +34,9 @@ public final class ParseFSImageJob {
                 .option("header", "true")
                 .option("delimiter", "\t")
                 .csv(path);
+        /*JavaRDD<Row> rowJavaRDD = csv.javaRDD();
+        int numPartitions = rowJavaRDD.getNumPartitions();
+        System.out.println(numPartitions);*/
         csv.show(Integer.MAX_VALUE);
     }
 

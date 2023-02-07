@@ -3,22 +3,23 @@ apply plugin: 'scala'
 dependencies {
     api project(':one-core')
     api project(':one-hadoop-core')
+    // scala
+    implementation "org.scala-lang:scala-library:${scalaVersion}"
 
-    //implementation "org.apache.spark:spark-core_$scalaVersion:$sparkVersion"
-    implementation "org.apache.spark:spark-streaming_$scalaVersion:$sparkVersion"
-    implementation "org.apache.spark:spark-sql_$scalaVersion:$sparkVersion"
+    // spark
+    //implementation "org.apache.spark:spark-core_$scalaCompileVersion:$sparkVersion"
+    implementation "org.apache.spark:spark-streaming_$scalaCompileVersion:$sparkVersion"
+    implementation "org.apache.spark:spark-sql_$scalaCompileVersion:$sparkVersion"
 
     // hive
-    implementation ("org.apache.spark:spark-hive_$scalaVersion:$sparkVersion") {
-        exclude group: 'org.apache.avro', module: 'avro-mapred'
-    }
+    implementation "org.apache.spark:spark-hive_$scalaCompileVersion:$sparkVersion"
 
     // mysql
     implementation "mysql:mysql-connector-java:${mysqlVersion}"
 
-    implementation('org.apache.hbase.connectors.spark:hbase-spark:1.0.0') {
+    /*implementation('org.apache.hbase.connectors.spark:hbase-spark:1.0.0') {
         exclude group: 'org.apache.avro', module: 'avro-mapred'
-    }
+    }*/
 
     // iceberg
     implementation "org.apache.iceberg:iceberg-core:${icebergVersion}"

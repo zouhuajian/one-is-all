@@ -11,8 +11,7 @@ public class SparkExecutor {
     public static SparkSession getSparkSession(String appname, boolean local, boolean withHive) {
         System.setProperty("HADOOP_USER_NAME", "root");
         SparkSession.Builder sparkBuilder = SparkSession.builder();
-        sparkBuilder.appName(appname)
-                .getOrCreate();
+        sparkBuilder.appName(appname);
         if (withHive) {
             sparkBuilder.enableHiveSupport()
                     //.config("hive.exec.dynamic.partition", true)

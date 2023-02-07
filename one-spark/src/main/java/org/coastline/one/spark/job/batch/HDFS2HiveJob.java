@@ -27,7 +27,7 @@ public class HDFS2HiveJob {
                 .builder()
                 .appName("hdfs-to-hive")
                 .enableHiveSupport()
-                //.config("spark.sql.warehouse.dir", "/data/warehouse/")
+                .config("spark.sql.warehouse.dir", "/data/warehouse/")
                 .master("local[2]")
                 //.master("spark://xxx:7077")
                 .getOrCreate();
@@ -42,6 +42,7 @@ public class HDFS2HiveJob {
                 .add("refund_amount", DoubleType);
 
         Dataset<Row> sourceDataSet = spark.read()
+                .option("delimiter", ",")
                 .option("header", "true")
                 .schema(schema)
                 .csv(srcPath)
@@ -55,3 +56,57 @@ public class HDFS2HiveJob {
                 .saveAsTable(destTbl);
     }
 }
+/*
+CREATE TABLE `tmall_order_report_tbl`
+    (
+    `order_id`      string,
+    `total_amount`  double,
+    `actual_amount` double,
+    `address`       string,
+    `creation_time` timestamp,
+    `payment_time`  timestamp,
+    `refund_amount` double
+    )
+    ROW FORMAT SERDE
+    'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+    STORED AS INPUTFORMAT
+    'org.apache.hadoop.mapred.TextInputFormat'
+    OUTPUTFORMAT
+    'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+    LOCATION
+    'hdfs://coastline-4:9000/data/warehouse/bigdata.db/tmall_order_report_tbl'
+    TBLPROPERTIES (
+    'spark.sql.create.version' = '3.3.0',
+    'spark.sql.sources.schema' =
+    '{type:struct,fields:[{name:order_id,type:string,nullable:true,metadata:{}},{name:total_amount,type:double,nullable:true,metadata:{}},{name:actual_amount,type:double,nullable:true,metadata:{}},{name:address,type:string,nullable:true,metadata:{}},{name:creation_time,type:timestamp,nullable:true,metadata:{}},{name:payment_time,type:timestamp,nullable:true,metadata:{}},{name:refund_amount,type:double,nullable:true,metadata:{}}]}',
+    'transient_lastDdlTime' = '1674054191');
+*/
+/*
+CREATE TABLE `tmall_order_report_partition_tbl`
+    (
+    `order_id`      string,
+    `total_amount`  string,
+    `actual_amount` string,
+    `address`       string,
+    `creation_time` string,
+    `payment_time`  string,
+    `refund_amount` string
+    )
+    PARTITIONED BY (
+    `creation_date` string)
+    ROW FORMAT SERDE
+    'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+    STORED AS INPUTFORMAT
+    'org.apache.hadoop.mapred.TextInputFormat'
+    OUTPUTFORMAT
+    'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+    LOCATION
+    'hdfs://coastline-4:9000/data/warehouse/bigdata.db/tmall_order_report_partition_tbl'
+    TBLPROPERTIES (
+    'spark.sql.create.version' = '3.3.0',
+    'spark.sql.sources.schema' =
+    '{type:struct,fields:[{name:order_id,type:string,nullable:true,metadata:{}},{name:total_amount,type:string,nullable:true,metadata:{}},{name:actual_amount,type:string,nullable:true,metadata:{}},{name:address,type:string,nullable:true,metadata:{}},{name:creation_time,type:string,nullable:true,metadata:{}},{name:payment_time,type:string,nullable:true,metadata:{}},{name:refund_amount,type:string,nullable:true,metadata:{}},{name:creation_date,type:string,nullable:true,metadata:{}}]}',
+    'spark.sql.sources.schema.numPartCols' = '1',
+    'spark.sql.sources.schema.partCol.0' = 'creation_date',
+    'transient_lastDdlTime' = '1674052639');
+*/
