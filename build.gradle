@@ -89,7 +89,7 @@ subprojects {
         flinkVersion = '1.16.0'
 
         // spark
-        sparkVersion = '3.3.0'
+        sparkVersion = '3.2.3'
 
         // hudi
         hudiVersion = '0.12.0'

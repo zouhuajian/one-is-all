@@ -36,11 +36,11 @@ public class HiveReadWriteJob {
                 .builder()
                 .appName("hdfs-to-hive")
                 .enableHiveSupport()
-                .config("hive.exec.dynamic.partition", true)
+                //.config("hive.exec.dynamic.partition", true)
                 //.config("hive.exec.dynamic.partition.mode", "nonstrict")
                 .config("spark.sql.sources.partitionOverwriteMode", "dynamic")
-                .config("spark.sql.parquet.output.committer.class", "org.apache.parquet.hadoop.ParquetOutputCommitter")
-                .config("spark.sql.sources.commitProtocolClass", "org.apache.spark.sql.execution.datasources.SQLHadoopMapReduceCommitProtocol")
+                //.config("spark.sql.parquet.output.committer.class", "org.apache.parquet.hadoop.ParquetOutputCommitter")
+                //.config("spark.sql.sources.commitProtocolClass", "org.apache.spark.sql.execution.datasources.SQLHadoopMapReduceCommitProtocol")
                 .master("local[2]")
                 //.master("spark://xxx:7077")
                 .getOrCreate();
@@ -48,26 +48,30 @@ public class HiveReadWriteJob {
     }
 
     /**
-     * read hive
+     * 以处理时间生成天表，用于测试动态分区 overwrite 写入丢失数据问题
      *
      * @param spark
      */
-    private static void readHive(SparkSession spark) {
-        spark.conf().set("spark.sql.warehouse.dir", "/data/warehouse/");
+    private static void dayPartition(SparkSession spark) {
         String srcPath = "bigdata.tmall_order_report_tbl";
-
-        spark.read()
-                .option("delimiter", "\t")
-                .option("header", "true")
-                .schema(BASE_SCHEMA)
-                .csv(srcPath)
-                .toDF(BASE_SCHEMA.names())
-                .where("address='上海' and actual_amount>250")
-                //.select("address", "total_amount", "actual_amount", "creation_time")
-                .orderBy(new Column("actual_amount").desc())
-                //.coalesce(2)
-                //.repartition(2)
-                .show(Integer.MAX_VALUE);
+        String destTbl = "bigdata.dws_order_amount_agg_1d";
+        int lastSomeDays = 2;
+        for (int i = 0; i < lastSomeDays; i++) {
+            LocalDateTime dateTime = TimeTool.currentLocalDateTime().plusDays(i - lastSomeDays + 1);
+            String dt = dateTime.format(TimeTool.DEFAULT_DATE_FORMATTER);
+            spark.sql(String.format("SELECT " +
+                            "'static' AS part, " +
+                            "'%s' AS dt, " +
+                            "address, " +
+                            "sum(cast(total_amount as decimal(15,2))) AS total_amount " +
+                            "FROM %s " +
+                            "GROUP BY address", dt, srcPath))
+                    .write()
+                    .partitionBy("dt")
+                    .format("parquet")
+                    .mode(SaveMode.Overwrite)
+                    .saveAsTable(destTbl);
+        }
     }
 
     /**
@@ -126,6 +130,30 @@ public class HiveReadWriteJob {
     }
 
     /**
+     * read hive
+     *
+     * @param spark
+     */
+    private static void readHive(SparkSession spark) {
+        spark.conf().set("spark.sql.warehouse.dir", "/data/warehouse/");
+        String srcPath = "bigdata.tmall_order_report_tbl";
+
+        spark.read()
+                .option("delimiter", "\t")
+                .option("header", "true")
+                .schema(BASE_SCHEMA)
+                .csv(srcPath)
+                .toDF(BASE_SCHEMA.names())
+                .where("address='上海' and actual_amount>250")
+                //.select("address", "total_amount", "actual_amount", "creation_time")
+                .orderBy(new Column("actual_amount").desc())
+                //.coalesce(2)
+                //.repartition(2)
+                .show(Integer.MAX_VALUE);
+    }
+
+
+    /**
      * hive 聚合后写入另一张表 hive(parquet/orc) 表
      *
      * @param spark
@@ -155,31 +183,4 @@ public class HiveReadWriteJob {
                 .show(Integer.MAX_VALUE);
     }
 
-    /**
-     * 以处理时间生成天表，用于测试动态分区 overwrite 写入丢失数据问题
-     *
-     * @param spark
-     */
-    private static void dayPartition(SparkSession spark) {
-        String srcPath = "bigdata.tmall_order_report_tbl";
-        String destTbl = "bigdata.dws_order_amount_agg_1d";
-        int lastSomeDays = 4;
-
-        for (int i = 0; i < lastSomeDays; i++) {
-            LocalDateTime dateTime = TimeTool.currentLocalDateTime().plusDays(i - lastSomeDays + 1);
-            String dt = dateTime.format(TimeTool.DEFAULT_DATE_FORMATTER);
-            spark.sql(String.format("SELECT " +
-                            "'static' AS part, " +
-                            "'%s' AS dt, " +
-                            "address, " +
-                            "sum(cast(total_amount as decimal(15,2))) AS total_amount " +
-                            "FROM %s " +
-                            "GROUP BY address", dt, srcPath))
-                    .write()
-                    .partitionBy("dt")
-                    .format("parquet")
-                    .mode(SaveMode.Overwrite)
-                    .saveAsTable(destTbl);
-        }
-    }
 }
