@@ -21,6 +21,11 @@ dependencies {
     // hudi
     // implementation "org.apache.hudi:hudi-flink:${hudiVersion}"
 
+    implementation "org.apache.iceberg:iceberg-flink:${icebergVersion}"
+
+    implementation "org.apache.iceberg:iceberg-flink-runtime-1.16:${icebergVersion}"
+
+
     // clickhouse
     //implementation 'org.apache.flink:flink-connector-clickhouse:1.14.3-SNAPSHOT'
     //implementation 'org.apache.hudi:hudi-flink:0.12.0'

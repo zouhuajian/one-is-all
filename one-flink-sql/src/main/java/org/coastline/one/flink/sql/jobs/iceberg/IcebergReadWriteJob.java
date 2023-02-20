@@ -1,4 +1,4 @@
-package org.coastline.one.flink.sql.jobs;
+package org.coastline.one.flink.sql.jobs.iceberg;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -11,9 +11,9 @@ import org.apache.flink.types.Row;
 
 /**
  * @author Jay.H.Zou
- * @date 2022/7/12
+ * @date 2023/2/15
  */
-public class HudiToClickhouseJob {
+public class IcebergReadWriteJob {
 
     public static void main(String[] args) throws Exception {
         Configuration devConfig = new Configuration();
@@ -26,12 +26,10 @@ public class HudiToClickhouseJob {
                 //.inBatchMode()
                 .build();*/
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
-        /* Configuration configuration = tableEnv.getConfig().getConfiguration();
+        // Configuration conf = tableEnv.getConfig().getConfiguration();
         // set low-level key-value options
-        configuration.setString("table.exec.state.ttl", "1h");
-        configuration.setBoolean("state.backend.incremental", true);*/
-
-        //tableEnv.executeSql("CREATE TEMPORARY FUNCTION DATA_KIND_MAPPING AS 'com.csoss.processor.sql.function.DataKindFunction'");
+        // conf.setString("table.exec.state.ttl", "1h");
+        // conf.setBoolean("state.backend.incremental", true);
 
         tableEnv.executeSql("CREATE TABLE metric_meta_hudi (\n" +
                 "    appname STRING,\n" +
@@ -101,10 +99,11 @@ public class HudiToClickhouseJob {
                 "    FROM metric_meta_hudi\n" +
                 ")");
         DataStream<Row> rowDataStream = tableEnv.toChangelogStream(table, Schema.newBuilder()
-                        .column("dataKind", DataTypes.INT())
+                .column("dataKind", DataTypes.INT())
                 .build());
 
         rowDataStream.print();
         env.execute();
     }
+
 }

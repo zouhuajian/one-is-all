@@ -4,7 +4,7 @@ import org.apache.spark.sql.{Dataset, Row, SparkSession}
 import org.coastline.one.spark.scala.core.SparkExecutor
 
 /**
- *
+ * 读取 oiv 解析后的 fsimage
  * @author Jay.H.Zou
  * @date 2023/2/11
  */

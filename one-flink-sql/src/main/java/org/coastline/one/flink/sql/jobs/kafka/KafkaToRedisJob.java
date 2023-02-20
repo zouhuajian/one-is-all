@@ -1,4 +1,4 @@
-package org.coastline.one.flink.sql.jobs;
+package org.coastline.one.flink.sql.jobs.kafka;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;

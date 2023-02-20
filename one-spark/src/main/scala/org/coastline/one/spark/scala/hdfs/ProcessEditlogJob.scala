@@ -3,6 +3,11 @@ package org.coastline.one.spark.scala.hdfs
 import org.apache.spark.sql.types.{IntegerType, LongType, StringType, StructType}
 import org.coastline.one.spark.scala.core.SparkExecutor
 
+/**
+ * 读取 oev 解析后的 editlogs
+ *
+ * @author Jay.H.Zou
+ */
 object ProcessEditlogJob {
 
   def main(args: Array[String]): Unit = {
