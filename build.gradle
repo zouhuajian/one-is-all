@@ -2,9 +2,8 @@
 // 可以声明的资源包括依赖项、第三方插件、maven仓库地址等
 buildscript {
     ext {
-        springbootVersion = '2.5.2'
         shadowVersion = '7.1.2'
-        aspectjVersion = '6.5.1'
+        //aspectjVersion = '6.5.1'
     }
 
     repositories {
@@ -19,8 +18,7 @@ buildscript {
 
     dependencies {
         classpath "gradle.plugin.com.github.johnrengelman:shadow:${shadowVersion}"
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springbootVersion}"
-        classpath "io.freefair.gradle:aspectj-plugin:${aspectjVersion}"
+        //classpath "io.freefair.gradle:aspectj-plugin:${aspectjVersion}"
     }
 }
 
@@ -47,13 +45,7 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-
     ext {
-        log4jVersion = '2.17.2'
-        junitVersion = '4.13.1'
-
         // tool
         lombokVersion = '1.18.22'
         guavaVersion = '31.1-jre'
@@ -61,12 +53,14 @@ subprojects {
         aspectjVersion = '1.9.9'
         jmhVersion = '1.35'
         log4jVersion = '2.17.2'
+        junitVersion = '4.13.1'
 
         // json
         gsonVersion = '2.8.7'
         jacksonVersion = '2.13.3'
 
         protostuffVersion = '1.7.4'
+
         mysqlVersion = '8.0.25'
         hikariCPVersion = '4.0.3'
 

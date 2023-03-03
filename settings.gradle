@@ -8,7 +8,7 @@ include 'one-hadoop'
 include 'one-rpc'
 include 'one-flink-sql'
 include 'one-spark'
-include 'one-datahub'
 include 'one-kafka'
 include 'one-hadoop-core'
+include 'one-spring-3'
 

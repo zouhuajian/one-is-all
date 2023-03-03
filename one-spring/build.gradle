@@ -1,3 +1,23 @@
+buildscript {
+    ext {
+        springbootVersion = '2.6.6'
+    }
+
+    repositories {
+        mavenLocal()
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://maven.aliyun.com/repository/spring/' }
+        maven { url 'https://repo.gradle.org/gradle/libs-releases' }
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springbootVersion}"
+    }
+}
+
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
@@ -9,6 +29,6 @@ dependencies {
     //implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpring}"
 }
 
-configurations.all {
+configurations.configureEach {
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
 }

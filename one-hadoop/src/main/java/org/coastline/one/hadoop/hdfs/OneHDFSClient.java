@@ -1,7 +1,10 @@
 package org.coastline.one.hadoop.hdfs;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.*;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.coastline.one.hadoop.hbase.OneHBaseClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,21 +26,6 @@ public class OneHDFSClient {
 
     public OneHDFSClient() throws IOException {
         //System.setProperty("HADOOP_USER_NAME", "root");
-        /*Configuration conf = new Configuration();
-        conf.setInt("io.file.buffer.size", 65536); // 64kB
-        // 默认文件系统的名称
-        conf.set("fs.defaultFS", "hdfs://coastline");
-        // namenode 集群的名字
-        conf.set("dfs.nameservices", "coastline");
-        // ns1 下有两个 NameNode，逻辑地址分别是 nn1，nn2
-        conf.set("dfs.ha.namenodes.coastline", "nn1,nn2");
-        // nn1 的 http 通信地址
-        conf.set("dfs.namenode.rpc-address.coastline.nn1", NN1);
-        // nn2 的 http 通信地址
-        conf.set("dfs.namenode.rpc-address.coastline.nn2", NN2);
-        // 配置读取失败自动切换的实现方式
-        conf.set("dfs.client.failover.proxy.provider.coastline", "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider");*/
-        //fileSystem = FileSystem.get(conf);
         fileSystem = FileSystem.get(new Configuration());
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     }

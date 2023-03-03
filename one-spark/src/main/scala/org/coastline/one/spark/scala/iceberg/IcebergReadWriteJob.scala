@@ -1,9 +1,6 @@
 package org.coastline.one.spark.scala.iceberg
 
-import org.apache.iceberg.SnapshotsTable
 import org.apache.iceberg.exceptions.NoSuchTableException
-import org.apache.iceberg.expressions.Expressions
-import org.apache.iceberg.spark.actions.SparkActions
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{Row, SparkSession}
@@ -68,13 +65,13 @@ object IcebergReadWriteJob {
    *
    * @param spark
    */
-  private def maintenanceFiles(spark: SparkSession): Unit = {
+  /*private def maintenanceFiles(spark: SparkSession): Unit = {
     SparkActions.get(spark)
       .rewriteDataFiles(new SnapshotsTable())
       .filter(Expressions.equal("date", "2020-08-18"))
       .option("target-file-size-bytes", String.valueOf(500 * 1024 * 1024)) // 500 MB
       .execute();
-  }
+  }*/
 
   private def readIceberg(spark: SparkSession, table: String): Unit = {
     println("************* history *************")
