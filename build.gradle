@@ -40,7 +40,6 @@ allprojects {
 }
 
 subprojects {
-    // apply plugin: 'idea'
     apply plugin: 'java'
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
@@ -54,6 +53,7 @@ subprojects {
         jmhVersion = '1.35'
         log4jVersion = '2.17.2'
         junitVersion = '4.13.1'
+        mockitoVersion = '5.1.1'
 
         // json
         gsonVersion = '2.8.7'
@@ -83,7 +83,7 @@ subprojects {
         flinkVersion = '1.16.0'
 
         // spark
-        sparkVersion = '3.2.3'
+        sparkVersion = '3.3.2'
 
         // hudi
         hudiVersion = '0.12.0'
@@ -113,6 +113,7 @@ subprojects {
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
         testImplementation "junit:junit:${junitVersion}"
+        testImplementation "org.mockito:mockito-core:${mockitoVersion}"
 
         // scala
         /*implementation 'org.scala-lang:scala-library:2.13.10'

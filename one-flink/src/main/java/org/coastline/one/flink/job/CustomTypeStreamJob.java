@@ -14,9 +14,9 @@ import java.io.IOException;
  * @author Jay.H.Zou
  * @date 2021/8/5
  */
-public class CommonStreamJob extends StreamJobExecutor {
+public class CustomTypeStreamJob extends StreamJobExecutor {
 
-    private CommonStreamJob(String[] args) throws IOException {
+    private CustomTypeStreamJob(String[] args) throws IOException {
         super(args);
     }
 
@@ -31,12 +31,24 @@ public class CommonStreamJob extends StreamJobExecutor {
     public void buildJob(final StreamExecutionEnvironment env) throws Exception {
         env.addSource(MemorySourceFunction.create()).name("memory_source")
                 .rebalance()
+                // test type
+                .map(new MyMap<>(), TypeInformation.of(MonitorData.class))
+                .map(new MyMap<MonitorData, MonitorData>())
+                .map(value -> value)
+                //.returns(MonitorData.class)
                 .print().name("default_sink");
     }
 
+    static class MyMap<T, O> implements MapFunction<T, O> {
+
+        @Override
+        public O map(T value) throws Exception {
+            return (O) value;
+        }
+    }
+
     public static void main(String[] args) throws Exception {
-        System.out.println(System.getProperty("java.version"));
-        CommonStreamJob job = new CommonStreamJob(args);
+        CustomTypeStreamJob job = new CustomTypeStreamJob(args);
         job.execute("common_stream");
     }
 }

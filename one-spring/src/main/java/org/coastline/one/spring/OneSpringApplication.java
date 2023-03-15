@@ -16,7 +16,6 @@ public class OneSpringApplication {
         SpringApplication.run(OneSpringApplication.class, args);
     }
 
-
     // Spring AOP
     //@Bean
     public TimerHandler initTimerHandler() {

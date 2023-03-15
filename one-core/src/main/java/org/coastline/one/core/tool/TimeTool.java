@@ -26,6 +26,10 @@ public class TimeTool {
         return Instant.now().toEpochMilli();
     }
 
+    public static long nanoTime() {
+        return System.nanoTime();
+    }
+
     /**
      * TODO: 动态获取时区
      * @return

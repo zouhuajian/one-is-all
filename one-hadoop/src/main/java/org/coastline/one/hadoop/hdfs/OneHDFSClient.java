@@ -25,6 +25,7 @@ public class OneHDFSClient {
     private final FileSystem fileSystem;
 
     public OneHDFSClient() throws IOException {
+
         //System.setProperty("HADOOP_USER_NAME", "root");
         fileSystem = FileSystem.get(new Configuration());
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));

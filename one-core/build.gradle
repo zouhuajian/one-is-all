@@ -1,23 +1,31 @@
 apply plugin: "com.github.johnrengelman.shadow"
 
 dependencies {
-    testImplementation 'junit:junit:4.13.2'
-
     implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
-    implementation "com.google.code.gson:gson:${gsonVersion}"
+
+    // common tool
     api "com.google.guava:guava:${guavaVersion}"
 
+    // codec
     implementation "io.protostuff:protostuff-core:${protostuffVersion}"
     implementation "io.protostuff:protostuff-runtime:${protostuffVersion}"
+
+    // json
+    implementation "com.google.code.gson:gson:${gsonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
+    // http client
     implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+
+    // compressor
     implementation "com.github.luben:zstd-jni:${zstdVersion}"
     implementation "org.xerial.snappy:snappy-java:${snappyVersion}"
 
+    // aspect
     implementation "org.aspectj:aspectjweaver:${aspectjVersion}"
     implementation "org.aspectj:aspectjrt:${aspectjVersion}"
 
+    // benchmark
     annotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}"
     implementation "org.openjdk.jmh:jmh-core:${jmhVersion}"
 }

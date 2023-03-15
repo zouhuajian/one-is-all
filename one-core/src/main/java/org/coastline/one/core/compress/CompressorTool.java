@@ -1,4 +1,4 @@
-package org.coastline.one.core.tool;
+package org.coastline.one.core.compress;
 
 import com.github.luben.zstd.Zstd;
 import org.xerial.snappy.Snappy;
@@ -9,9 +9,9 @@ import java.io.IOException;
  * @author Jay.H.Zou
  * @date 2022/5/16
  */
-public class CompressionTool {
+public class CompressorTool {
 
-    private CompressionTool() {
+    private CompressorTool() {
     }
 
     public static byte[] compressSnappy(byte[] origin) throws IOException {
