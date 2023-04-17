@@ -1,0 +1,8 @@
+apply plugin: 'scala'
+
+dependencies {
+    api project(':one-core')
+    // scala
+    implementation "org.scala-lang:scala-library:${scalaVersion}"
+}
+

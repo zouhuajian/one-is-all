@@ -11,4 +11,5 @@ include 'one-spark'
 include 'one-kafka'
 include 'one-hadoop-core'
 include 'one-spring-3'
+include 'one-scala'
 

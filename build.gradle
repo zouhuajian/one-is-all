@@ -113,7 +113,6 @@ subprojects {
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
         testImplementation "junit:junit:${junitVersion}"
-        testImplementation "org.mockito:mockito-core:${mockitoVersion}"
 
         // scala
         /*implementation 'org.scala-lang:scala-library:2.13.10'

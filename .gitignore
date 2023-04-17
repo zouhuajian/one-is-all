@@ -28,10 +28,12 @@ out/
 /nbdist/
 /.nb-gradle/
 build/
-out/
 
 ### VS Code ###
 .vscode/
 
 ### gradle ###
 .gradle
+
+### one-is-all ###
+one-data/*

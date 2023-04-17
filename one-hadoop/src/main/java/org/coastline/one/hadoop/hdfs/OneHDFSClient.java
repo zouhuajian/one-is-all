@@ -25,9 +25,10 @@ public class OneHDFSClient {
     private final FileSystem fileSystem;
 
     public OneHDFSClient() throws IOException {
-
         //System.setProperty("HADOOP_USER_NAME", "root");
-        fileSystem = FileSystem.get(new Configuration());
+        Configuration configuration = new Configuration();
+        configuration.set("dfs.replication", "1");
+        fileSystem = FileSystem.get(configuration);
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     }
 
@@ -65,6 +66,30 @@ public class OneHDFSClient {
         return true;
     }
 
+    public boolean append(byte[] data, String path, String file) {
+        FSDataOutputStream outputStream = null;
+        try {
+            Path hdfsPath = new Path(path);
+            if (!fileSystem.exists(hdfsPath)) {
+                fileSystem.mkdirs(hdfsPath);
+            }
+            outputStream = fileSystem.append(new Path(path + file));
+            outputStream.write(data);
+        } catch (Exception e) {
+            LOGGER.error("append data failed.", e);
+            return false;
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (Exception e) {
+                    LOGGER.error("close stream failed.", e);
+                }
+            }
+        }
+        return true;
+    }
+
     public boolean mkdir(String path) {
         try {
             Path hdfsPath = new Path(path);
@@ -87,13 +112,23 @@ public class OneHDFSClient {
         }
     }
 
-    public FileStatus[] list(String path) {
+    public FileStatus[] listStatus(String path) {
         try {
             Path hdfsPath = new Path(path);
             return fileSystem.listStatus(hdfsPath);
         } catch (Exception e) {
             LOGGER.error("rename path failed.", e);
             return new FileStatus[0];
+        }
+    }
+
+    public FileStatus status(String path) {
+        try {
+            Path hdfsPath = new Path(path);
+            return fileSystem.getFileStatus(hdfsPath);
+        } catch (Exception e) {
+            LOGGER.error("rename path failed.", e);
+            return null;
         }
     }
 
@@ -106,20 +141,4 @@ public class OneHDFSClient {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        OneHDFSClient oneHDFSClient = new OneHDFSClient();
-       /* for (FileStatus fileStatus : oneHDFSClient.list("/")) {
-            long accessTime = fileStatus.getAccessTime();
-            System.out.println(fileStatus);
-            System.out.println();
-        }*/
-
-        //oneHDFSClient.write("one is all".getBytes(StandardCharsets.UTF_8), "/data/test/", "one.txt");
-        FileStatus[] list = oneHDFSClient.list("/data/warehouse/bigdata.db/tmall_order_report_tbl");
-        for (FileStatus fileStatus : list) {
-            System.out.println(fileStatus.getPath());
-        }
-        oneHDFSClient.mkdir("/data/warehouse/bigdata.db/tmall_order_report_tbl/test");
-        oneHDFSClient.close();
-    }
 }
