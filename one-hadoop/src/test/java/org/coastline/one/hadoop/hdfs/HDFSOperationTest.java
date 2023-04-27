@@ -24,7 +24,17 @@ public class HDFSOperationTest {
     @Test
     public void testListStatus() {
         String path = "/user/root/bigdata.tmall_order_report_agg_partition_tbl";
+        FileStatus[] fileStatuses = hdfsClient.listStatus("/data/test/");
+        for (FileStatus fileStatus : fileStatuses) {
+            System.out.println(fileStatus);
+        }
         FileStatus status = hdfsClient.status(path);
+        System.out.println(status);
+    }
+
+    @Test
+    public void testGetStatus() {
+        FileStatus status = hdfsClient.status("/");
         System.out.println(status);
     }
 
@@ -37,7 +47,9 @@ public class HDFSOperationTest {
         }*/
         byte[] content = "123".getBytes(StandardCharsets.UTF_8);
         System.out.println("file size = " + content.length);
-        hdfsClient.write(content, "/data/test/", "one.txt");
+        boolean write = hdfsClient.write(content, "/data/test/", "one.txt");
+        System.out.println("write status: " + write);
+
         FileStatus[] list = hdfsClient.listStatus("/data/test");
         for (FileStatus fileStatus : list) {
             System.out.println(fileStatus);

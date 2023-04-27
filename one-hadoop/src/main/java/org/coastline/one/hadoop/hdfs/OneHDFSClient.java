@@ -117,7 +117,7 @@ public class OneHDFSClient {
             Path hdfsPath = new Path(path);
             return fileSystem.listStatus(hdfsPath);
         } catch (Exception e) {
-            LOGGER.error("rename path failed.", e);
+            LOGGER.error("list path status failed.", e);
             return new FileStatus[0];
         }
     }
@@ -127,7 +127,7 @@ public class OneHDFSClient {
             Path hdfsPath = new Path(path);
             return fileSystem.getFileStatus(hdfsPath);
         } catch (Exception e) {
-            LOGGER.error("rename path failed.", e);
+            LOGGER.error("get path status failed.", e);
             return null;
         }
     }

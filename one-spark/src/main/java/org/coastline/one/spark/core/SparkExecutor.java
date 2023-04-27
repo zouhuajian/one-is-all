@@ -15,7 +15,9 @@ public class SparkExecutor {
         if (withHive) {
             sparkBuilder.enableHiveSupport()
                     //.config("hive.exec.dynamic.partition", true)
-                    .config("hive.exec.dynamic.partition.mode", "nonstrict");
+                    .config("hive.exec.dynamic.partition.mode", "nonstrict")
+                    // 设置使用当前启动 SparkSession 的配置，而不用 View 的 Properties 中的配置
+                    .config("spark.sql.legacy.useCurrentConfigsForView", "true");
         }
         if (local) {
             sparkBuilder.master("local[2]");
