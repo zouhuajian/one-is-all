@@ -5,7 +5,7 @@ dependencies {
     implementation "org.apache.flink:flink-java:${flinkVersion}"
     implementation "org.apache.flink:flink-streaming-java:${flinkVersion}"
     implementation "org.apache.flink:flink-table-runtime:${flinkVersion}"
-    implementation "org.apache.flink:flink-table-planner_${scalaCompileVersion}:${flinkVersion}"
+    implementation "org.apache.flink:flink-table-planner_${scalaBinaryVersion}:${flinkVersion}"
 
     implementation "org.apache.flink:flink-json:${flinkVersion}"
     implementation "org.apache.flink:flink-csv:${flinkVersion}"

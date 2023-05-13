@@ -2,6 +2,7 @@ package org.coastline.one.core.test.tool;
 
 import org.junit.Test;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,6 +28,13 @@ public class TestTimeTool {
         System.out.println(now);
         System.out.println(firstDay);
         System.out.println(lastDay);
+    }
 
+
+    @Test
+    public void testDateTimeToTimestamp() {
+        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
+        System.out.println(timestamp.getTime());
+        System.out.println("yyyy-MM-dd HH:mm:ss".substring(11, 13));
     }
 }

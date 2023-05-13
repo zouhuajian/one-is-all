@@ -1,6 +1,9 @@
 package org.coastline.one.hadoop.hdfs;
 
 import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.permission.AclStatus;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,5 +59,13 @@ public class HDFSOperationTest {
         }
     }
 
+
+    @Test
+    public void testCommand() throws IOException {
+        FileSystem fileSystem = hdfsClient.getFileSystem();
+        AclStatus aclStatus = fileSystem.getAclStatus(new Path("/data/test/new_dir"));
+        System.out.println(aclStatus);
+
+    }
 
 }

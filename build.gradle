@@ -76,7 +76,7 @@ subprojects {
         hbaseVersion = '2.4.5'
         kafkaVersion = '3.2.3'
 
-        scalaCompileVersion = '2.12'
+        scalaBinaryVersion = '2.12'
         scalaVersion = '2.12.15'
 
         // flink

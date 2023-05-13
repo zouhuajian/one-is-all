@@ -8,12 +8,12 @@ dependencies {
 
     // spark
     //implementation "org.apache.spark:spark-core_$scalaCompileVersion:$sparkVersion"
-    implementation "org.apache.spark:spark-streaming_$scalaCompileVersion:$sparkVersion"
-    implementation "org.apache.spark:spark-sql_$scalaCompileVersion:$sparkVersion"
+    implementation "org.apache.spark:spark-streaming_$scalaBinaryVersion:$sparkVersion"
+    implementation "org.apache.spark:spark-sql_$scalaBinaryVersion:$sparkVersion"
     implementation 'com.databricks:spark-xml_2.12:0.16.0'
 
     // hive
-    implementation "org.apache.spark:spark-hive_$scalaCompileVersion:$sparkVersion"
+    implementation "org.apache.spark:spark-hive_$scalaBinaryVersion:$sparkVersion"
 
     // mysql
     implementation "mysql:mysql-connector-java:${mysqlVersion}"
@@ -23,7 +23,7 @@ dependencies {
     }*/
 
     // iceberg
-    implementation "org.apache.iceberg:iceberg-core:${icebergVersion}"
+    //implementation "org.apache.iceberg:iceberg-core:${icebergVersion}"
     //implementation "org.apache.iceberg:iceberg-parquet:${icebergVersion}"
 
     implementation 'org.apache.iceberg:iceberg-spark-runtime-3.2_2.12:1.1.0'

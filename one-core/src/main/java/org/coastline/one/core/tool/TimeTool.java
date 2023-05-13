@@ -66,4 +66,9 @@ public class TimeTool {
         return new Timestamp(currentTimeMillis());
     }
 
+    public static long dateTimeToTimestamp(LocalDateTime dateTime) {
+        Timestamp timestamp = Timestamp.valueOf(dateTime);
+        return timestamp.getTime();
+    }
+
 }

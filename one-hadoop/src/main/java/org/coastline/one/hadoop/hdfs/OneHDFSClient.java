@@ -5,6 +5,8 @@ import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapred.lib.CombineFileInputFormat;
+import org.apache.hadoop.mapred.lib.CombineSequenceFileInputFormat;
 import org.coastline.one.hadoop.hbase.OneHBaseClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +42,10 @@ public class OneHDFSClient {
                 LOGGER.error("close file system error", e);
             }
         }
+    }
+
+    public FileSystem getFileSystem() {
+        return fileSystem;
     }
 
     public boolean write(byte[] data, String path, String file) {
@@ -141,4 +147,7 @@ public class OneHDFSClient {
         }
     }
 
+    public void command(String path) {
+        CombineFileInputFormat<String, String> fileInputFormat = new CombineSequenceFileInputFormat<>();
+    }
 }
