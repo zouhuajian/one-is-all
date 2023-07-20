@@ -16,11 +16,6 @@ dependencies {
     implementation 'org.roaringbitmap:RoaringBitmap:0.9.25'
     
     implementation 'io.kubernetes:client-java:15.0.1'
-    // low level rest client of elasticsearch
-    implementation 'org.elasticsearch.client:elasticsearch-rest-client:8.4.3'
     implementation 'net.sf.json-lib:json-lib:2.4:jdk15'
-
-    // chinese to pinyin
-    implementation 'com.belerweb:pinyin4j:2.5.1'
 
 }

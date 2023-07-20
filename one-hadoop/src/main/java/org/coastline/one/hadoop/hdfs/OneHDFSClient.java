@@ -1,10 +1,10 @@
 package org.coastline.one.hadoop.hdfs;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataOutputStream;
-import org.apache.hadoop.fs.FileStatus;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.*;
+import org.apache.hadoop.fs.statistics.IOStatistics;
+import org.apache.hadoop.io.IOUtils;
+import org.apache.hadoop.ipc.CallerContext;
 import org.apache.hadoop.mapred.lib.CombineFileInputFormat;
 import org.apache.hadoop.mapred.lib.CombineSequenceFileInputFormat;
 import org.coastline.one.hadoop.hbase.OneHBaseClient;
@@ -31,6 +31,10 @@ public class OneHDFSClient {
         Configuration configuration = new Configuration();
         configuration.set("dfs.replication", "1");
         fileSystem = FileSystem.get(configuration);
+        CallerContext callerContext = new CallerContext.Builder("one")
+                .setSignature("test".getBytes())
+                .build();
+        CallerContext.setCurrent(callerContext);
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     }
 
@@ -80,6 +84,7 @@ public class OneHDFSClient {
                 fileSystem.mkdirs(hdfsPath);
             }
             outputStream = fileSystem.append(new Path(path + file));
+            IOStatistics ioStatistics = outputStream.getIOStatistics();
             outputStream.write(data);
         } catch (Exception e) {
             LOGGER.error("append data failed.", e);
@@ -94,6 +99,19 @@ public class OneHDFSClient {
             }
         }
         return true;
+    }
+
+    public void cat(String path) {
+        FSDataInputStream in = null;
+        try {
+            in = fileSystem.open(new Path(path));
+            IOStatistics ioStatistics = in.getIOStatistics();
+            IOUtils.copyBytes(in, System.out, 4096, false);
+        } catch (IOException e) {
+            LOGGER.error("cat data failed.", e);
+        } finally {
+            IOUtils.closeStream(in);
+        }
     }
 
     public boolean mkdir(String path) {

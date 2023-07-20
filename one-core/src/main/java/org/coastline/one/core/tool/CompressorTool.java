@@ -1,4 +1,4 @@
-package org.coastline.one.core.compress;
+package org.coastline.one.core.tool;
 
 import com.github.luben.zstd.Zstd;
 import org.xerial.snappy.Snappy;
