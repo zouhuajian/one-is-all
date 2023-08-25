@@ -1,9 +1,9 @@
 package org.coastline.one.core.tool;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
+import com.google.common.collect.Lists;
+import com.google.gson.*;
+
+import java.util.List;
 
 /**
  * @author Jay.H.Zou
@@ -16,7 +16,7 @@ public class JsonTool {
     // 下划线转驼峰
     public static final Gson GSON_LOWER_CASE_WITH_UNDERSCORES = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                    .create();
+            .create();
     // '-' 转驼峰
     public static final Gson GSON_LOWER_CASE_WITH_DASHES = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
@@ -33,15 +33,26 @@ public class JsonTool {
         return GSON_COMMON.toJson(value);
     }
 
-    public static JsonObject toJsonObject(String json) {
-        return GSON_COMMON.fromJson(json, JsonObject.class);
+    public static JsonElement toJsonElement(String json) {
+        return GSON_COMMON.fromJson(json, JsonElement.class);
     }
 
     public static <T> T toJavaObject(String json, Class<T> clazz) {
         return GSON_COMMON.fromJson(json, clazz);
     }
 
-    public static <T> T toJavaObject(JsonObject json, Class<T> clazz) {
+    public static <T> T toJavaObject(JsonElement json, Class<T> clazz) {
         return GSON_COMMON.fromJson(json, clazz);
     }
+
+    public static <T> List<T> toJavaList(JsonArray json, Class<T[]> clazz) {
+        T[] ts = GSON_COMMON.fromJson(json, clazz);
+        return Lists.newArrayList(ts);
+    }
+
+    public static <T> List<T> toJavaList(String json, Class<T[]> clazz) {
+        T[] ts = GSON_COMMON.fromJson(json, clazz);
+        return Lists.newArrayList(ts);
+    }
+
 }

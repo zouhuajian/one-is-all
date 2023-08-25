@@ -36,7 +36,6 @@ allprojects {
         maven { url 'https://repository.cloudera.com/artifactory/cloudera-repos/' }
         mavenCentral()
     }
-
 }
 
 subprojects {
@@ -97,7 +96,6 @@ subprojects {
         // compress
         zstdVersion = '1.5.2-3'
         snappyVersion = '1.1.8.4'
-
         mybatisSpring = '2.2.1'
     }
 

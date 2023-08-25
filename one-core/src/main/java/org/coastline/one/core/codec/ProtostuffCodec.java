@@ -9,20 +9,23 @@ import io.protostuff.runtime.RuntimeSchema;
  * @author Jay.H.Zou
  * @date 2021/7/31
  */
-public class ProtostuffCodecI<T> implements ICodec<T> {
+public class ProtostuffCodec<T> implements ICodec<T> {
 
     private final Schema<T> schema;
 
-    private ProtostuffCodecI(Class<T> clazz) {
+    private ProtostuffCodec(Class<T> clazz) {
         this.schema = RuntimeSchema.getSchema(clazz);
     }
 
-    public static <T> ProtostuffCodecI<T> create(Class<T> clazz) {
-        return new ProtostuffCodecI<>(clazz);
+    public static <T> ProtostuffCodec<T> create(Class<T> clazz) {
+        return new ProtostuffCodec<>(clazz);
     }
 
     @Override
     public byte[] encode(T data) {
+        if (data == null) {
+            return null;
+        }
         // Re-use (manage) this buffer to avoid allocating on every serialization
         LinkedBuffer buffer = LinkedBuffer.allocate(512);
         final byte[] bytes;
@@ -36,6 +39,9 @@ public class ProtostuffCodecI<T> implements ICodec<T> {
 
     @Override
     public T decode(byte[] data) {
+        if (data == null) {
+            return null;
+        }
         T result = schema.newMessage();
         ProtostuffIOUtil.mergeFrom(data, result, schema);
         return result;
