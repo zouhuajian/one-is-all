@@ -50,13 +50,33 @@ public class HDFSOperationTest {
         }*/
         byte[] content = "123".getBytes(StandardCharsets.UTF_8);
         System.out.println("file size = " + content.length);
-        boolean write = hdfsClient.write(content, "/data/test/", "one.txt");
+        boolean write = hdfsClient.write(content, "/tmp/", "one_1.xml");
         System.out.println("write status: " + write);
 
-        FileStatus[] list = hdfsClient.listStatus("/data/test");
+        FileStatus[] list = hdfsClient.listStatus("/tmp/");
         for (FileStatus fileStatus : list) {
             System.out.println(fileStatus);
         }
+    }
+
+    @Test
+    public void testAppend() throws IOException {
+        byte[] content = "1234567".getBytes(StandardCharsets.UTF_8);
+        System.out.println("file size = " + content.length);
+        boolean write = hdfsClient.append(content, "/tmp/", "one_1.xml");
+        System.out.println("write status: " + write);
+
+        FileStatus[] list = hdfsClient.listStatus("/tmp/");
+        for (FileStatus fileStatus : list) {
+            System.out.println(fileStatus);
+        }
+    }
+
+
+    @Test
+    public void testRename() throws IOException {
+        boolean rename = hdfsClient.rename("/tmp/one_1.xml", "/tmp/two.xml");
+        System.out.println(rename);
     }
 
 

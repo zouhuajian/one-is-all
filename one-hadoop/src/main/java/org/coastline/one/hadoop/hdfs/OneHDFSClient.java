@@ -1,5 +1,6 @@
 package org.coastline.one.hadoop.hdfs;
 
+import lombok.Getter;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.fs.statistics.IOStatistics;
@@ -17,6 +18,7 @@ import java.io.IOException;
  * @author Jay.H.Zou
  * @date 2021/10/14
  */
+@Getter
 public class OneHDFSClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OneHBaseClient.class);
@@ -27,7 +29,7 @@ public class OneHDFSClient {
     private final FileSystem fileSystem;
 
     public OneHDFSClient() throws IOException {
-        //System.setProperty("HADOOP_USER_NAME", "root");
+        System.setProperty("HADOOP_USER_NAME", "root");
         Configuration configuration = new Configuration();
         configuration.set("dfs.replication", "1");
         fileSystem = FileSystem.get(configuration);
@@ -105,7 +107,6 @@ public class OneHDFSClient {
         FSDataInputStream in = null;
         try {
             in = fileSystem.open(new Path(path));
-            IOStatistics ioStatistics = in.getIOStatistics();
             IOUtils.copyBytes(in, System.out, 4096, false);
         } catch (IOException e) {
             LOGGER.error("cat data failed.", e);
