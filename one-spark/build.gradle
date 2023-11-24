@@ -14,6 +14,8 @@ dependencies {
 
     // hive
     implementation "org.apache.spark:spark-hive_$scalaBinaryVersion:$sparkVersion"
+    // format
+    implementation "org.apache.spark:spark-avro_$scalaBinaryVersion:$sparkVersion"
 
     // mysql
     implementation "mysql:mysql-connector-java:${mysqlVersion}"

@@ -5,6 +5,7 @@ import org.coastline.one.core.codec.ProtostuffCodec;
 import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
+import org.rocksdb.WriteOptions;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,14 +37,15 @@ public class TestRocksDB {
 
     private static void put(User user) throws RocksDBException {
         byte[] key = user.getName().getBytes();
-        db.put(key, codec.encode(user));
+        WriteOptions writeOptions = new WriteOptions();
+        writeOptions.disableWAL();
+        db.put(writeOptions, key, codec.encode(user));
     }
 
-    private static User get(String key) throws RocksDBException {
+    private static void get(String key) throws RocksDBException {
         byte[] bytes = db.get(key.getBytes());
         User user = codec.decode(bytes);
         System.out.println(user);
-        return user;
     }
 
     private static void initialize() throws IOException, RocksDBException {

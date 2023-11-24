@@ -43,14 +43,14 @@ public class HDFSOperationTest {
 
     @Test
     public void testWrite() throws IOException {
-       /* for (FileStatus fileStatus : oneHDFSClient.list("/")) {
+       /*for (FileStatus fileStatus : oneHDFSClient.list("/")) {
             long accessTime = fileStatus.getAccessTime();
             System.out.println(fileStatus);
             System.out.println();
         }*/
         byte[] content = "123".getBytes(StandardCharsets.UTF_8);
         System.out.println("file size = " + content.length);
-        boolean write = hdfsClient.write(content, "/tmp/", "one_1.xml");
+        boolean write = hdfsClient.write(content, "/tmp/", "one_1.text");
         System.out.println("write status: " + write);
 
         FileStatus[] list = hdfsClient.listStatus("/tmp/");
@@ -72,13 +72,11 @@ public class HDFSOperationTest {
         }
     }
 
-
     @Test
     public void testRename() throws IOException {
         boolean rename = hdfsClient.rename("/tmp/one_1.xml", "/tmp/two.xml");
         System.out.println(rename);
     }
-
 
     @Test
     public void testCommand() throws IOException {

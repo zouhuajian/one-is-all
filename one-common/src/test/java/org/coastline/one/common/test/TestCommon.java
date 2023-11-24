@@ -23,4 +23,13 @@ public class TestCommon {
             ByteBuffer bb = ByteBuffer.allocateDirect(1024);
         }
     }
+
+    @Test
+    public void testStr() {
+        String[] names = "/".split("/");
+        for (String name : names) {
+            System.err.println("--" +name);
+        }
+
+    }
 }
