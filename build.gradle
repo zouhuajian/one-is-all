@@ -79,16 +79,16 @@ subprojects {
         scalaVersion = '2.12.15'
 
         // flink
-        flinkVersion = '1.16.0'
+        flinkVersion = '1.18.0'
+        flinkKafkaVersion = '3.0.2-1.18'
+        flinkJDBCVersion = '3.1.1-1.17'
+        flinkHBaseVersion = '3.0.0-1.17'
 
         // spark
         sparkVersion = '3.3.2'
 
-        // hudi
-        hudiVersion = '0.12.0'
-
         // iceberg
-        icebergVersion = '1.1.0'
+        icebergVersion = '1.4.2'
 
         // juicefs
         juicefsHadoopVersion = '1.0.2'

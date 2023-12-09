@@ -9,14 +9,14 @@ dependencies {
     implementation "org.apache.flink:flink-runtime-web:${flinkVersion}"
     implementation "org.apache.flink:flink-statebackend-rocksdb:${flinkVersion}"
 
-    implementation "org.apache.flink:flink-connector-kafka:${flinkVersion}"
+    implementation "org.apache.flink:flink-connector-kafka:${flinkKafkaVersion}"
 
-    implementation "org.apache.flink:flink-connector-jdbc:${flinkVersion}"
+    implementation "org.apache.flink:flink-connector-jdbc:${flinkJDBCVersion}"
 
-    implementation "com.zaxxer:HikariCP:${hikariCPVersion}"
     // mysql
+    implementation "com.zaxxer:HikariCP:${hikariCPVersion}"
     implementation "mysql:mysql-connector-java:${mysqlVersion}"
-    implementation "org.apache.flink:flink-connector-hbase-2.2:${flinkVersion}"
+    implementation "org.apache.flink:flink-connector-hbase-2.2:${flinkHBaseVersion}"
     // http
     implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
 
