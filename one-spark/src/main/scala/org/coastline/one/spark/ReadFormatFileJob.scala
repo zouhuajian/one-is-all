@@ -1,12 +1,12 @@
-package org.coastline.one.spark.scala
+package org.coastline.one.spark
 
-import org.coastline.one.spark.scala.core.SparkExecutor
+import org.coastline.one.spark.core.SparkExecutor
 
 object ReadFormatFileJob {
 
   def main(args: Array[String]): Unit = {
 
-    val spark = SparkExecutor.getSparkSessionLocal("read_format_file")
+    val spark = core.SparkExecutor.getSparkSessionLocal("read_format_file")
     /*spark.read
       .format("avro")
       .load("file:///Users/zouhuajian/data/projects/jay/one-is-all/one-data/avro")

@@ -1,4 +1,4 @@
-package org.coastline.one.spark.scala
+package org.coastline.one.spark
 
 import org.apache.spark.{SparkConf, SparkContext}
 

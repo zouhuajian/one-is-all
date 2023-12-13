@@ -1,7 +1,8 @@
-package org.coastline.one.spark.scala.hdfs
+package org.coastline.one.spark.hdfs
 
 import org.apache.spark.sql.types.{IntegerType, LongType, StringType, StructType}
-import org.coastline.one.spark.scala.core.SparkExecutor
+import org.coastline.one.spark.core
+import org.coastline.one.spark.core.SparkExecutor
 
 /**
  * 读取 oev 解析后的 editlogs
@@ -14,7 +15,7 @@ object ProcessEditlogJob {
 
     val path: String = "file:///Users/zouhuajian/data/projects/jay/one-is-all/one-data/fsimage/editlog.xml"
 
-    val spark = SparkExecutor.getSparkSessionLocal("process-edit-logs")
+    val spark = core.SparkExecutor.getSparkSessionLocal("process-edit-logs")
 
     val schema = new StructType()
       .add("OPCODE", StringType)

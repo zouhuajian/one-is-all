@@ -1,4 +1,4 @@
-package org.coastline.one.spark.scala.core
+package org.coastline.one.spark.core
 
 import org.apache.spark.launcher.JavaModuleOptions
 

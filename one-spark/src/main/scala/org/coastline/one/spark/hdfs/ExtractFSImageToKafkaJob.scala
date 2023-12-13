@@ -1,4 +1,4 @@
-package org.coastline.one.spark.scala.hdfs
+package org.coastline.one.spark.hdfs
 
 /**
  * 使用 oiv 解析 fsimage，并将解析结果发 Kafka

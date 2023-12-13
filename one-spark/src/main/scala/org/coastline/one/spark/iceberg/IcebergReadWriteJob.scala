@@ -1,4 +1,4 @@
-package org.coastline.one.spark.scala.iceberg
+package org.coastline.one.spark.iceberg
 
 import org.apache.iceberg.exceptions.NoSuchTableException
 import org.apache.spark.sql.streaming.Trigger

@@ -1,7 +1,8 @@
-package org.coastline.one.spark.scala.hdfs
+package org.coastline.one.spark.hdfs
 
 import org.apache.spark.sql.{Dataset, Row, SparkSession}
-import org.coastline.one.spark.scala.core.SparkExecutor
+import org.coastline.one.spark.core
+import org.coastline.one.spark.core.SparkExecutor
 
 /**
  * 读取 oiv 解析后的 fsimage
@@ -14,7 +15,7 @@ object AggPathJob {
   @throws[Exception]
   def main(args: Array[String]): Unit = {
 
-    val spark: SparkSession = SparkExecutor.getSparkSessionLocal("agg-path")
+    val spark: SparkSession = core.SparkExecutor.getSparkSessionLocal("agg-path")
 
     import spark.implicits._
     Seq(("/a", "/", 1), ("/a/1", "/a", 1), ("/a/2", "/a", 1), ("/a/2/1", "/a/2", 1), ("/b/1", "/b", 1), ("/b", "/", 1))
