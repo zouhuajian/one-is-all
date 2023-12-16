@@ -50,10 +50,6 @@ public class OneHDFSClient {
         }
     }
 
-    public FileSystem getFileSystem() {
-        return fileSystem;
-    }
-
     public boolean write(byte[] data, String path, String file) {
         FSDataOutputStream outputStream = null;
         try {
