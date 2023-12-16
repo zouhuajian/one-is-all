@@ -1,4 +1,4 @@
-package org.coastline.one.flink.sql.jobs;
+package org.coastline.one.flink.sql.jobs.common;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;

@@ -28,12 +28,15 @@ allprojects {
 
     repositories {
         mavenLocal()
+        maven { url 'https://maven.aliyun.com/repository/central' }
         maven { url 'https://maven.aliyun.com/repository/public/' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         maven { url 'https://maven.aliyun.com/repository/spring/' }
         maven { url 'https://repo.gradle.org/gradle/libs-releases' }
         maven { url 'https://repository.cloudera.com/artifactory/cloudera-repos/' }
+        // jindo data
+        maven { url 'https://jindodata-binary.oss-cn-shanghai.aliyuncs.com/mvn-repo/' }
         mavenCentral()
     }
 }

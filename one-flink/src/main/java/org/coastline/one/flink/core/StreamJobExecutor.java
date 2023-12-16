@@ -6,11 +6,13 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.coastline.one.flink.core.config.LocalConfigLoader;
 
+import java.io.Serializable;
+
 /**
  * @author Jay.H.Zou
  * @date 2021/8/4
  */
-public abstract class StreamJobExecutor {
+public abstract class StreamJobExecutor implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

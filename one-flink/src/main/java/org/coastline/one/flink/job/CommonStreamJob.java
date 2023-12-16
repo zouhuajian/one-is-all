@@ -1,10 +1,7 @@
 package org.coastline.one.flink.job;
 
 import org.apache.flink.api.common.RuntimeExecutionMode;
-import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.coastline.one.flink.common.model.MonitorData;
 import org.coastline.one.flink.core.StreamJobExecutor;
 import org.coastline.one.flink.core.functions.source.MemorySourceFunction;
 

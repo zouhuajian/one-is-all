@@ -1,21 +1,23 @@
 dependencies {
     implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
     // flink
-    implementation "org.apache.flink:flink-runtime-web:${flinkVersion}"
-    implementation "org.apache.flink:flink-java:${flinkVersion}"
-    implementation "org.apache.flink:flink-streaming-java:${flinkVersion}"
+    implementation "org.apache.flink:flink-clients:${flinkVersion}"
+    implementation "org.apache.flink:flink-table-api-java-bridge:${flinkVersion}"
     implementation "org.apache.flink:flink-table-runtime:${flinkVersion}"
-    implementation "org.apache.flink:flink-table-planner_${scalaBinaryVersion}:${flinkVersion}"
+    implementation "org.apache.flink:flink-table-planner-loader:${flinkVersion}"
+    implementation "org.apache.flink:flink-runtime-web:${flinkVersion}"
 
+    // connectors
+    implementation "org.apache.flink:flink-connector-kafka:${flinkKafkaVersion}"
+
+    // format
     implementation "org.apache.flink:flink-json:${flinkVersion}"
     implementation "org.apache.flink:flink-csv:${flinkVersion}"
-
-    implementation "org.apache.flink:flink-connector-kafka:${flinkKafkaVersion}"
     implementation "io.protostuff:protostuff-core:${protostuffVersion}"
     implementation "io.protostuff:protostuff-runtime:${protostuffVersion}"
 
+    // iceberg
     implementation "org.apache.iceberg:iceberg-flink:${icebergVersion}"
-
     implementation "org.apache.iceberg:iceberg-flink-runtime-1.16:${icebergVersion}"
 
 

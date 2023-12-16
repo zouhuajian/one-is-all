@@ -3,26 +3,25 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
     api project(':one-core')
-    //implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
-    implementation "org.apache.flink:flink-java:${flinkVersion}"
+    implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
+
+    // flink
+    implementation "org.apache.flink:flink-clients:${flinkVersion}"
+    implementation "org.apache.flink:flink-core:${flinkVersion}"
     implementation "org.apache.flink:flink-streaming-java:${flinkVersion}"
     implementation "org.apache.flink:flink-runtime-web:${flinkVersion}"
+    // state
     implementation "org.apache.flink:flink-statebackend-rocksdb:${flinkVersion}"
+    implementation "org.apache.flink:flink-state-processor-api:${flinkVersion}"
 
+    // connectors
     implementation "org.apache.flink:flink-connector-kafka:${flinkKafkaVersion}"
-
     implementation "org.apache.flink:flink-connector-jdbc:${flinkJDBCVersion}"
-
-    // mysql
     implementation "com.zaxxer:HikariCP:${hikariCPVersion}"
     implementation "mysql:mysql-connector-java:${mysqlVersion}"
     implementation "org.apache.flink:flink-connector-hbase-2.2:${flinkHBaseVersion}"
     // http
     implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
 
-    // implementation "org.apache.flink:flink-hadoop-compatibility_2.12:${flinkVersion}"
-    // implementation 'org.apache.hadoop:hadoop-client:2.10.1'
-
-    implementation "org.apache.flink:flink-state-processor-api:${flinkVersion}"
 
 }
