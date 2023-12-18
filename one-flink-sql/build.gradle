@@ -1,4 +1,5 @@
 dependencies {
+    api project(':one-hadoop-core')
     implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
     // flink
     implementation "org.apache.flink:flink-clients:${flinkVersion}"
@@ -8,6 +9,7 @@ dependencies {
     implementation "org.apache.flink:flink-runtime-web:${flinkVersion}"
 
     // connectors
+    implementation "org.apache.flink:flink-connector-files:${flinkVersion}"
     implementation "org.apache.flink:flink-connector-kafka:${flinkKafkaVersion}"
 
     // format
@@ -17,13 +19,12 @@ dependencies {
     implementation "io.protostuff:protostuff-runtime:${protostuffVersion}"
 
     // iceberg
-    implementation "org.apache.iceberg:iceberg-flink:${icebergVersion}"
-    implementation "org.apache.iceberg:iceberg-flink-runtime-1.16:${icebergVersion}"
+    // implementation "org.apache.iceberg:iceberg-flink:${icebergVersion}"
+    // implementation "org.apache.iceberg:iceberg-flink-runtime-1.16:${icebergVersion}"
 
-
-    // clickhouse
-    //implementation 'org.apache.flink:flink-connector-clickhouse:1.14.3-SNAPSHOT'
-    //implementation 'org.apache.hudi:hudi-flink:0.12.0'
+    // paimon
+    implementation files("${projectDir}/lib/paimon-flink-1.18-0.7-20231217.002229-28.jar")
+    implementation files("${projectDir}/lib/paimon-oss-0.7-20231217.002229-28.jar")
 
 
 }

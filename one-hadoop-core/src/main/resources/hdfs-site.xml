@@ -17,20 +17,9 @@
 <!-- Put site-specific property overrides in this file. -->
 
 <configuration>
-    <property>
-        <name>fs.defaultFS</name>
-        <value>hdfs://coastline-4:9000</value>
-    </property>
-    <property>
-        <name>dfs.namenode.name.dir</name>
-        <value>file:/data/hadoop/hadoop-3.3.3/hdfs/name</value>
-    </property>
-    <property>
-        <name>dfs.datanode.data.dir</name>
-        <value>file:/data/hadoop/hadoop-3.3.3/hdfs/data</value>
-    </property>
+    <!-- 指定HDFS副本的数量 -->
     <property>
         <name>dfs.replication</name>
-        <value>3</value>
+        <value>1</value>
     </property>
 </configuration>

@@ -24,10 +24,9 @@ buildscript {
 
 allprojects {
     group 'org.coastline.one'
-    version '0.0.4'
+    version '0.1.0'
 
     repositories {
-        mavenLocal()
         maven { url 'https://maven.aliyun.com/repository/central' }
         maven { url 'https://maven.aliyun.com/repository/public/' }
         maven { url 'https://maven.aliyun.com/repository/google' }
@@ -37,6 +36,7 @@ allprojects {
         maven { url 'https://repository.cloudera.com/artifactory/cloudera-repos/' }
         // jindo data
         maven { url 'https://jindodata-binary.oss-cn-shanghai.aliyuncs.com/mvn-repo/' }
+        mavenLocal()
         mavenCentral()
     }
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+	<property>
+		<name>dfs.ha.namenodes.onehadoop</name>
+		<value>nn2,nn1</value>
+	</property>
+
+	<property>
+		<name>dfs.namenode.rpc-address.onehadoop.nn1</name>
+		<value>xxx:4007</value>
+	</property>
+	
+	<property>
+		<name>dfs.namenode.rpc-address.onehadoop.nn2</name>
+		<value>xxx:4007</value>
+	</property>
+	
+	<property>
+		<name>dfs.namenode.shared.edits.dir</name>
+		<value>qjournal://xxx:4005;xxx:4005;xxx:4005/hadoop</value>
+	</property>
+	
+	<property>
+		<name>dfs.nameservices</name>
+		<value>onehadoop</value>
+	</property>
+	
+	<property>
+		<name>dfs.replication</name>
+		<value>2</value>
+	</property>
+
+	<property>
+		<name>dfs.webhdfs.enabled</name>
+		<value>true</value>
+	</property>
+
+	<property>
+		<name>ha.zookeeper.quorum</name>
+		<value>xxx:2181,xxx:2181,xxx:2181</value>
+	</property>
+
+	
+</configuration>

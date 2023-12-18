@@ -17,20 +17,45 @@
 <!-- Put site-specific property overrides in this file. -->
 
 <configuration>
-    <property>
+    <!--<property>
         <name>fs.defaultFS</name>
-        <value>hdfs://coastline-4:9000</value>
-    </property>
+        &lt;!&ndash;替换为主机名或localhost&ndash;&gt;
+        <value>hdfs://localhost:9000</value>
+    </property>-->
+
+    <!--<property>
+        <name>fs.oss.bucket.coastline.endpoint</name>
+        <value>cn-shanghai.oss-dls.aliyuncs.com</value>
+    </property>-->
+
     <property>
+        <name>fs.oss.endpoint</name>
+        <value>cn-shanghai.oss.aliyuncs.com</value>
+    </property>
+
+    <property>
+        <name>fs.AbstractFileSystem.oss.impl</name>
+        <value>com.aliyun.jindodata.oss.JindoOSS</value>
+    </property>
+
+    <property>
+        <name>fs.oss.impl</name>
+        <value>com.aliyun.jindodata.oss.JindoOssFileSystem</value>
+    </property>
+
+    <property>
+        <name>fs.oss.accessKeyId</name>
+        <value>xx</value>
+    </property>
+
+    <property>
+        <name>fs.oss.accessKeySecret</name>
+        <value>xx</value>
+    </property>
+
+    <!--<property>
         <name>hadoop.tmp.dir</name>
-        <value>file:/tmp/hadoop</value>
-    </property>
-    <property>
-        <name>hadoop.proxyuser.hadoop.hosts</name>
-        <value>*</value>
-    </property>
-    <property>
-        <name>hadoop.proxyuser.hadoop.groups</name>
-        <value>*</value>
-    </property>
+        <value>./cache/${user.name}</value>
+        <description>A base for other temporary directories.</description>
+    </property>-->
 </configuration>
